@@ -19,6 +19,16 @@
 		7E02EA14188AF05A001A41C7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E02E9F0188AF05A001A41C7 /* Cocoa.framework */; };
 		7E02EA1C188AF05A001A41C7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7E02EA1A188AF05A001A41C7 /* InfoPlist.strings */; };
 		7E02EA1E188AF05A001A41C7 /* SinisterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E02EA1D188AF05A001A41C7 /* SinisterTests.m */; };
+		7E02EA2C188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E02EA2A188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m */; };
+		7E02EA2D188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E02EA2B188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib */; };
+		7E448F86188B0B6F00D88D5A /* SRSMavenHandFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448F85188B0B6F00D88D5A /* SRSMavenHandFileParser.m */; };
+		7E448F88188B0C1D00D88D5A /* SRSMavenLogParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448F87188B0C1D00D88D5A /* SRSMavenLogParserTest.m */; };
+		7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FB4188F5EC800D88D5A /* Action+Constants.m */; };
+		7E448FD61890B25400D88D5A /* Hand.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FD51890B25400D88D5A /* Hand.m */; };
+		7E448FD91890B25500D88D5A /* Seat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FD81890B25500D88D5A /* Seat.m */; };
+		7E448FDC1890B25500D88D5A /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FDB1890B25500D88D5A /* Player.m */; };
+		7E448FDF1890B25500D88D5A /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FDE1890B25500D88D5A /* Card.m */; };
+		7E448FE21890B25500D88D5A /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FE11890B25500D88D5A /* Action.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +62,24 @@
 		7E02EA19188AF05A001A41C7 /* SinisterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SinisterTests-Info.plist"; sourceTree = "<group>"; };
 		7E02EA1B188AF05A001A41C7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7E02EA1D188AF05A001A41C7 /* SinisterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SinisterTests.m; sourceTree = "<group>"; };
+		7E02EA29188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSHandHistoriesLocationWindowController.h; path = UI/SRSHandHistoriesLocationWindowController.h; sourceTree = "<group>"; };
+		7E02EA2A188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSHandHistoriesLocationWindowController.m; path = UI/SRSHandHistoriesLocationWindowController.m; sourceTree = "<group>"; };
+		7E02EA2B188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SRSHandHistoriesLocationWindowController.xib; path = UI/SRSHandHistoriesLocationWindowController.xib; sourceTree = "<group>"; };
+		7E448F84188B0B6F00D88D5A /* SRSMavenHandFileParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSMavenHandFileParser.h; sourceTree = "<group>"; };
+		7E448F85188B0B6F00D88D5A /* SRSMavenHandFileParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSMavenHandFileParser.m; sourceTree = "<group>"; };
+		7E448F87188B0C1D00D88D5A /* SRSMavenLogParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSMavenLogParserTest.m; sourceTree = "<group>"; };
+		7E448FB3188F5EC800D88D5A /* Action+Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Action+Constants.h"; path = "Models/Action+Constants.h"; sourceTree = "<group>"; };
+		7E448FB4188F5EC800D88D5A /* Action+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Action+Constants.m"; path = "Models/Action+Constants.m"; sourceTree = "<group>"; };
+		7E448FD41890B25400D88D5A /* Hand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hand.h; path = Models/Hand.h; sourceTree = "<group>"; };
+		7E448FD51890B25400D88D5A /* Hand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Hand.m; path = Models/Hand.m; sourceTree = "<group>"; };
+		7E448FD71890B25500D88D5A /* Seat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Seat.h; path = Models/Seat.h; sourceTree = "<group>"; };
+		7E448FD81890B25500D88D5A /* Seat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Seat.m; path = Models/Seat.m; sourceTree = "<group>"; };
+		7E448FDA1890B25500D88D5A /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Models/Player.h; sourceTree = "<group>"; };
+		7E448FDB1890B25500D88D5A /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Models/Player.m; sourceTree = "<group>"; };
+		7E448FDD1890B25500D88D5A /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Card.h; path = Models/Card.h; sourceTree = "<group>"; };
+		7E448FDE1890B25500D88D5A /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Card.m; path = Models/Card.m; sourceTree = "<group>"; };
+		7E448FE01890B25500D88D5A /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Action.h; path = Models/Action.h; sourceTree = "<group>"; };
+		7E448FE11890B25500D88D5A /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Action.m; path = Models/Action.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,8 +149,25 @@
 				7E02EA03188AF05A001A41C7 /* SRSAppDelegate.m */,
 				7E02EA05188AF05A001A41C7 /* MainMenu.xib */,
 				7E02EA0B188AF05A001A41C7 /* Images.xcassets */,
+				7E448FD41890B25400D88D5A /* Hand.h */,
+				7E448FE01890B25500D88D5A /* Action.h */,
+				7E448FE11890B25500D88D5A /* Action.m */,
+				7E448FDD1890B25500D88D5A /* Card.h */,
+				7E448FDE1890B25500D88D5A /* Card.m */,
+				7E448FDA1890B25500D88D5A /* Player.h */,
+				7E448FDB1890B25500D88D5A /* Player.m */,
+				7E448FD71890B25500D88D5A /* Seat.h */,
+				7E448FD81890B25500D88D5A /* Seat.m */,
+				7E448FD51890B25400D88D5A /* Hand.m */,
 				7E02EA08188AF05A001A41C7 /* Sinister.xcdatamodeld */,
+				7E448FB3188F5EC800D88D5A /* Action+Constants.h */,
+				7E448FB4188F5EC800D88D5A /* Action+Constants.m */,
 				7E02E9F7188AF05A001A41C7 /* Supporting Files */,
+				7E02EA29188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.h */,
+				7E02EA2A188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m */,
+				7E02EA2B188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib */,
+				7E448F84188B0B6F00D88D5A /* SRSMavenHandFileParser.h */,
+				7E448F85188B0B6F00D88D5A /* SRSMavenHandFileParser.m */,
 			);
 			path = Sinister;
 			sourceTree = "<group>";
@@ -144,6 +189,7 @@
 			children = (
 				7E02EA1D188AF05A001A41C7 /* SinisterTests.m */,
 				7E02EA18188AF05A001A41C7 /* Supporting Files */,
+				7E448F87188B0C1D00D88D5A /* SRSMavenLogParserTest.m */,
 			);
 			path = SinisterTests;
 			sourceTree = "<group>";
@@ -234,6 +280,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E02EA2D188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib in Resources */,
 				7E02E9FB188AF05A001A41C7 /* InfoPlist.strings in Resources */,
 				7E02EA0C188AF05A001A41C7 /* Images.xcassets in Resources */,
 				7E02EA01188AF05A001A41C7 /* Credits.rtf in Resources */,
@@ -257,8 +304,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E02EA0A188AF05A001A41C7 /* Sinister.xcdatamodeld in Sources */,
+				7E02EA2C188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m in Sources */,
 				7E02E9FD188AF05A001A41C7 /* main.m in Sources */,
+				7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */,
 				7E02EA04188AF05A001A41C7 /* SRSAppDelegate.m in Sources */,
+				7E448FDC1890B25500D88D5A /* Player.m in Sources */,
+				7E448FD61890B25400D88D5A /* Hand.m in Sources */,
+				7E448FE21890B25500D88D5A /* Action.m in Sources */,
+				7E448F86188B0B6F00D88D5A /* SRSMavenHandFileParser.m in Sources */,
+				7E448FDF1890B25500D88D5A /* Card.m in Sources */,
+				7E448FD91890B25500D88D5A /* Seat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +321,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E448F88188B0C1D00D88D5A /* SRSMavenLogParserTest.m in Sources */,
 				7E02EA1E188AF05A001A41C7 /* SinisterTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -469,6 +525,7 @@
 				7E02EA23188AF05A001A41C7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7E02EA24188AF05A001A41C7 /* Build configuration list for PBXNativeTarget "SinisterTests" */ = {
 			isa = XCConfigurationList;
@@ -477,6 +534,7 @@
 				7E02EA26188AF05A001A41C7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

@@ -17,6 +17,17 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    NSArray *handPaths = [def arrayForKey:@"HandPaths"];
+    if ([handPaths count] == 0) {
+        SRSHandHistoriesLocationWindowController *hhl = [[SRSHandHistoriesLocationWindowController alloc] initWithWindowNibName:@"SRSHandHistoriesLocationWindowController"];
+        self.handLocController = hhl;
+        [hhl showWindow:nil];
+        
+        self.logLocations = hhl.window;
+    }
+    
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "as.bizn.srs.Sinister" in the user's Application Support directory.
