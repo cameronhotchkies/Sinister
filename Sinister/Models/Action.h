@@ -2,7 +2,7 @@
 //  Action.h
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 1/22/14.
+//  Created by Cameron Hotchkies on 1/27/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
@@ -16,7 +16,7 @@
 @property (nonatomic) int16_t action;
 @property (nonatomic, retain) NSDecimalNumber * bet;
 @property (nonatomic) int16_t stage;
-@property (nonatomic, retain) Player *player;
 @property (nonatomic, retain) Hand *hand;
+@property (nonatomic, retain) Player *player;
 
 @end

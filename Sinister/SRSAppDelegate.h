@@ -9,6 +9,9 @@
 #import <Cocoa/Cocoa.h>
 
 #import "SRSHandHistoriesLocationWindowController.h"
+#import "SRSPreferencesWindowController.h"
+#import "SRSParseEngineWindowController.h"
+#import "SRSPlayerStatsWindowController.h"
 
 @interface SRSAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -16,11 +19,16 @@
 @property (assign) NSWindow *logLocations;
 
 @property (strong) SRSHandHistoriesLocationWindowController *handLocController;
+@property (strong) SRSPreferencesWindowController *preferences;
+@property (strong) SRSParseEngineWindowController *parseEngine;
+@property (strong) SRSPlayerStatsWindowController *playerStats;
 
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 - (IBAction)saveAction:(id)sender;
+
+- (IBAction)preferencesAction:(id)sender;
 
 @end

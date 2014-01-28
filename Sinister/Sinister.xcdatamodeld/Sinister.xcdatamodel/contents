@@ -10,7 +10,7 @@
     <entity name="Card" representedClassName="Card" syncable="YES">
         <attribute name="rank" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="suit" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="inHole" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Hand" inverseName="holeCards" inverseEntity="Hand" syncable="YES"/>
+        <relationship name="inHole" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Seat" inverseName="holeCards" inverseEntity="Seat" syncable="YES"/>
         <relationship name="onFlop" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Hand" inverseName="flop" inverseEntity="Hand" syncable="YES"/>
         <relationship name="onRiver" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Hand" inverseName="river" inverseEntity="Hand" syncable="YES"/>
         <relationship name="onTurn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Hand" inverseName="turn" inverseEntity="Hand" syncable="YES"/>
@@ -19,20 +19,22 @@
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="game" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="handID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="site" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rake" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="table" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="actions" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Action" inverseName="hand" inverseEntity="Action" syncable="YES"/>
         <relationship name="activePlayer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="playedHands" inverseEntity="Player" syncable="YES"/>
         <relationship name="flop" optional="YES" toMany="YES" minCount="3" maxCount="3" deletionRule="Nullify" destinationEntity="Card" inverseName="onFlop" inverseEntity="Card" syncable="YES"/>
-        <relationship name="holeCards" optional="YES" toMany="YES" minCount="2" maxCount="2" deletionRule="Nullify" destinationEntity="Card" inverseName="inHole" inverseEntity="Card" syncable="YES"/>
         <relationship name="river" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Card" inverseName="onRiver" inverseEntity="Card" syncable="YES"/>
         <relationship name="seats" optional="YES" toMany="YES" maxCount="9" deletionRule="Nullify" ordered="YES" destinationEntity="Seat" inverseName="hand" inverseEntity="Seat" syncable="YES"/>
+        <relationship name="site" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Site" inverseName="hands" inverseEntity="Site" syncable="YES"/>
         <relationship name="turn" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Card" inverseName="onTurn" inverseEntity="Card" syncable="YES"/>
     </entity>
     <entity name="Player" representedClassName="Player" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="actions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Action" inverseName="player" inverseEntity="Action" syncable="YES"/>
         <relationship name="playedHands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Hand" inverseName="activePlayer" inverseEntity="Hand" syncable="YES"/>
+        <relationship name="seats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Seat" inverseName="player" inverseEntity="Seat" syncable="YES"/>
+        <relationship name="site" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Site" inverseName="players" inverseEntity="Site" syncable="YES"/>
     </entity>
     <entity name="Seat" representedClassName="Seat" syncable="YES">
         <attribute name="isBigBlind" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -41,7 +43,13 @@
         <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="startingChips" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <relationship name="hand" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Hand" inverseName="seats" inverseEntity="Hand" syncable="YES"/>
-        <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" syncable="YES"/>
+        <relationship name="holeCards" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" destinationEntity="Card" inverseName="inHole" inverseEntity="Card" syncable="YES"/>
+        <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="seats" inverseEntity="Player" syncable="YES"/>
+    </entity>
+    <entity name="Site" representedClassName="Site" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="hands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Hand" inverseName="site" inverseEntity="Hand" syncable="YES"/>
+        <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="site" inverseEntity="Player" syncable="YES"/>
     </entity>
     <elements>
         <element name="Action" positionX="0" positionY="0" width="0" height="0"/>
@@ -49,5 +57,6 @@
         <element name="Hand" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Player" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Seat" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Site" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

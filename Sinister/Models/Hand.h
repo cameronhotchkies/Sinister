@@ -2,33 +2,43 @@
 //  Hand.h
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 1/22/14.
+//  Created by Cameron Hotchkies on 1/27/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Action, Card, Player, Seat;
+@class Action, Card, Player, Seat, Site;
 
 @interface Hand : NSManagedObject
 
 @property (nonatomic) NSTimeInterval date;
 @property (nonatomic, retain) NSString * game;
 @property (nonatomic, retain) NSString * handID;
-@property (nonatomic, retain) NSString * site;
+@property (nonatomic, retain) NSDecimalNumber * rake;
 @property (nonatomic, retain) NSString * table;
-@property (nonatomic, retain) NSSet *flop;
-@property (nonatomic, retain) NSOrderedSet *seats;
-@property (nonatomic, retain) Card *river;
-@property (nonatomic, retain) Card *turn;
-@property (nonatomic, retain) Player *activePlayer;
-@property (nonatomic, retain) NSSet *holeCards;
 @property (nonatomic, retain) NSOrderedSet *actions;
+@property (nonatomic, retain) Player *activePlayer;
+@property (nonatomic, retain) NSSet *flop;
+@property (nonatomic, retain) Card *river;
+@property (nonatomic, retain) NSOrderedSet *seats;
+@property (nonatomic, retain) Site *site;
+@property (nonatomic, retain) Card *turn;
 @end
 
 @interface Hand (CoreDataGeneratedAccessors)
 
+- (void)insertObject:(Action *)value inActionsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromActionsAtIndex:(NSUInteger)idx;
+- (void)insertActions:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeActionsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInActionsAtIndex:(NSUInteger)idx withObject:(Action *)value;
+- (void)replaceActionsAtIndexes:(NSIndexSet *)indexes withActions:(NSArray *)values;
+- (void)addActionsObject:(Action *)value;
+- (void)removeActionsObject:(Action *)value;
+- (void)addActions:(NSOrderedSet *)values;
+- (void)removeActions:(NSOrderedSet *)values;
 - (void)addFlopObject:(Card *)value;
 - (void)removeFlopObject:(Card *)value;
 - (void)addFlop:(NSSet *)values;
@@ -44,19 +54,4 @@
 - (void)removeSeatsObject:(Seat *)value;
 - (void)addSeats:(NSOrderedSet *)values;
 - (void)removeSeats:(NSOrderedSet *)values;
-- (void)addHoleCardsObject:(Card *)value;
-- (void)removeHoleCardsObject:(Card *)value;
-- (void)addHoleCards:(NSSet *)values;
-- (void)removeHoleCards:(NSSet *)values;
-
-- (void)insertObject:(Action *)value inActionsAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromActionsAtIndex:(NSUInteger)idx;
-- (void)insertActions:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeActionsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInActionsAtIndex:(NSUInteger)idx withObject:(Action *)value;
-- (void)replaceActionsAtIndexes:(NSIndexSet *)indexes withActions:(NSArray *)values;
-- (void)addActionsObject:(Action *)value;
-- (void)removeActionsObject:(Action *)value;
-- (void)addActions:(NSOrderedSet *)values;
-- (void)removeActions:(NSOrderedSet *)values;
 @end

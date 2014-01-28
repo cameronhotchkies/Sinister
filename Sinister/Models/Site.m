@@ -1,22 +1,20 @@
 //
-//  Action.m
+//  Site.m
 //  Sinister
 //
 //  Created by Cameron Hotchkies on 1/27/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
-#import "Action.h"
+#import "Site.h"
 #import "Hand.h"
 #import "Player.h"
 
 
-@implementation Action
+@implementation Site
 
-@dynamic action;
-@dynamic bet;
-@dynamic stage;
-@dynamic hand;
-@dynamic player;
+@dynamic name;
+@dynamic hands;
+@dynamic players;
 
 @end

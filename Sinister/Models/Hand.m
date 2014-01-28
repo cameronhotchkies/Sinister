@@ -2,7 +2,7 @@
 //  Hand.m
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 1/22/14.
+//  Created by Cameron Hotchkies on 1/27/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
@@ -11,6 +11,7 @@
 #import "Card.h"
 #import "Player.h"
 #import "Seat.h"
+#import "Site.h"
 
 
 @implementation Hand
@@ -18,14 +19,14 @@
 @dynamic date;
 @dynamic game;
 @dynamic handID;
-@dynamic site;
+@dynamic rake;
 @dynamic table;
-@dynamic flop;
-@dynamic seats;
-@dynamic river;
-@dynamic turn;
-@dynamic activePlayer;
-@dynamic holeCards;
 @dynamic actions;
+@dynamic activePlayer;
+@dynamic flop;
+@dynamic river;
+@dynamic seats;
+@dynamic site;
+@dynamic turn;
 
 @end

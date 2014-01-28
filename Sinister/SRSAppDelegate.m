@@ -26,6 +26,16 @@
         [hhl showWindow:nil];
         
         self.logLocations = hhl.window;
+    } else {
+        // TODO: this may need to start differently
+        SRSParseEngineWindowController* pe = [[SRSParseEngineWindowController alloc] initWithWindowNibName:@"SRSParseEngineWindowController"];
+        self.parseEngine = pe;
+        [pe showWindow:nil];
+        
+        SRSPlayerStatsWindowController* psw = [[SRSPlayerStatsWindowController alloc] initWithWindowNibName:@"SRSPlayerStatsWindowController"];
+        self.playerStats = psw;
+        [psw showWindow:nil];
+        
     }
     
 }
@@ -94,7 +104,7 @@
     
     NSURL *url = [applicationFilesDirectory URLByAppendingPathComponent:@"Sinister.storedata"];
     NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
-    if (![coordinator addPersistentStoreWithType:NSXMLStoreType configuration:nil URL:url options:nil error:&error]) {
+    if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:nil error:&error]) {
         [[NSApplication sharedApplication] presentError:error];
         return nil;
     }
@@ -189,6 +199,15 @@
     }
 
     return NSTerminateNow;
+}
+
+- (IBAction)preferencesAction:(id)sender {
+    NSLog(@"Prefs selected!");
+    
+    SRSPreferencesWindowController* prefs = [[SRSPreferencesWindowController alloc] initWithWindowNibName:@"SRSPreferencesWindowController"];
+    
+    [prefs showWindow:self];
+    self.preferences = prefs;
 }
 
 @end

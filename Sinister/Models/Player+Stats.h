@@ -1,22 +1,20 @@
 //
-//  Action.m
+//  Player+Stats.h
 //  Sinister
 //
 //  Created by Cameron Hotchkies on 1/27/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
-#import "Action.h"
-#import "Hand.h"
 #import "Player.h"
 
+@interface Player (Stats)
 
-@implementation Action
+- (NSInteger)handsPlayed;
 
-@dynamic action;
-@dynamic bet;
-@dynamic stage;
-@dynamic hand;
-@dynamic player;
+- (NSDate*)mostRecentlySeen;
+
+- (NSInteger)vpip;
+- (NSInteger)pfr;
 
 @end

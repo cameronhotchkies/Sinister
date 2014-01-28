@@ -2,23 +2,25 @@
 //  Seat.m
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 1/22/14.
+//  Created by Cameron Hotchkies on 1/27/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
 #import "Seat.h"
+#import "Card.h"
 #import "Hand.h"
 #import "Player.h"
 
 
 @implementation Seat
 
-@dynamic startingChips;
-@dynamic position;
-@dynamic isDealer;
 @dynamic isBigBlind;
+@dynamic isDealer;
 @dynamic isSmallBlind;
-@dynamic player;
+@dynamic position;
+@dynamic startingChips;
 @dynamic hand;
+@dynamic player;
+@dynamic holeCards;
 
 @end
