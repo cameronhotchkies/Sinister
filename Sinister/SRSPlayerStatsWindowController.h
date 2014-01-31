@@ -12,5 +12,6 @@
 @interface SRSPlayerStatsWindowController : NSWindowController
 
 @property (weak) IBOutlet NSManagedObjectContext* aMOC;
+@property (weak) IBOutlet NSArrayController* playerArray;
 
 @end

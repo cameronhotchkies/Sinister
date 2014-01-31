@@ -17,4 +17,12 @@
 - (NSInteger)vpip;
 - (NSInteger)pfr;
 
+- (double)aggressionFactor;
+- (double)aggressionFactorFlop;
+- (double)aggressionFactorTurn;
+- (double)aggressionFactorRiver;
+
+- (NSInteger)wentToShowdown;
+- (NSInteger)wonMoneyAtShowdown;
+
 @end

@@ -35,6 +35,7 @@
 		7E3E7864189766700073A08A /* Hand.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E7863189766700073A08A /* Hand.m */; };
 		7E3E7867189766700073A08A /* Seat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E7866189766700073A08A /* Seat.m */; };
 		7E3E786A189766700073A08A /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E7869189766700073A08A /* Action.m */; };
+		7E3E786D189855F80073A08A /* Hand+Stats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E786C189855F80073A08A /* Hand+Stats.m */; };
 		7E448F86188B0B6F00D88D5A /* SRSMavenHandFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448F85188B0B6F00D88D5A /* SRSMavenHandFileParser.m */; };
 		7E448F88188B0C1D00D88D5A /* SRSMavenLogParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448F87188B0C1D00D88D5A /* SRSMavenLogParserTest.m */; };
 		7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FB4188F5EC800D88D5A /* Action+Constants.m */; };
@@ -99,6 +100,8 @@
 		7E3E7866189766700073A08A /* Seat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Seat.m; path = Models/Seat.m; sourceTree = "<group>"; };
 		7E3E7868189766700073A08A /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Action.h; path = Models/Action.h; sourceTree = "<group>"; };
 		7E3E7869189766700073A08A /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Action.m; path = Models/Action.m; sourceTree = "<group>"; };
+		7E3E786B189855F80073A08A /* Hand+Stats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Hand+Stats.h"; path = "Models/Hand+Stats.h"; sourceTree = "<group>"; };
+		7E3E786C189855F80073A08A /* Hand+Stats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Hand+Stats.m"; path = "Models/Hand+Stats.m"; sourceTree = "<group>"; };
 		7E448F84188B0B6F00D88D5A /* SRSMavenHandFileParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSMavenHandFileParser.h; sourceTree = "<group>"; };
 		7E448F85188B0B6F00D88D5A /* SRSMavenHandFileParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSMavenHandFileParser.m; sourceTree = "<group>"; };
 		7E448F87188B0C1D00D88D5A /* SRSMavenLogParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSMavenLogParserTest.m; sourceTree = "<group>"; };
@@ -246,6 +249,8 @@
 				7E3E78321895EDA40073A08A /* Card+Constants.m */,
 				7E3E7851189757270073A08A /* Player+Stats.h */,
 				7E3E7852189757270073A08A /* Player+Stats.m */,
+				7E3E786B189855F80073A08A /* Hand+Stats.h */,
+				7E3E786C189855F80073A08A /* Hand+Stats.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -363,6 +368,7 @@
 				7E3E7867189766700073A08A /* Seat.m in Sources */,
 				7E3E7861189766700073A08A /* Site.m in Sources */,
 				7E02E9FD188AF05A001A41C7 /* main.m in Sources */,
+				7E3E786D189855F80073A08A /* Hand+Stats.m in Sources */,
 				7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */,
 				7E02EA04188AF05A001A41C7 /* SRSAppDelegate.m in Sources */,
 				7E3E7864189766700073A08A /* Hand.m in Sources */,

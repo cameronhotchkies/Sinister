@@ -31,6 +31,9 @@
     self.aMOC = d.managedObjectContext;
 
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+    
+    NSSortDescriptor* playerSort = [NSSortDescriptor sortDescriptorWithKey:@"mostRecentlySeen" ascending:NO];
+    [self.playerArray setSortDescriptors:[NSArray arrayWithObject:playerSort]];
 }
 
 @end
