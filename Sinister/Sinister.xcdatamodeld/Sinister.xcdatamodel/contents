@@ -6,6 +6,7 @@
         <attribute name="stage" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="hand" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Hand" inverseName="actions" inverseEntity="Hand" syncable="YES"/>
         <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="actions" inverseEntity="Player" syncable="YES"/>
+        <relationship name="seat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Seat" inverseName="actions" inverseEntity="Seat" syncable="YES"/>
     </entity>
     <entity name="Card" representedClassName="Card" syncable="YES">
         <attribute name="rank" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -37,11 +38,13 @@
         <relationship name="site" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Site" inverseName="players" inverseEntity="Site" syncable="YES"/>
     </entity>
     <entity name="Seat" representedClassName="Seat" syncable="YES">
+        <attribute name="chipDelta" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="isBigBlind" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isDealer" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isSmallBlind" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="startingChips" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="actions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Action" inverseName="seat" inverseEntity="Action" syncable="YES"/>
         <relationship name="hand" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Hand" inverseName="seats" inverseEntity="Hand" syncable="YES"/>
         <relationship name="holeCards" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" destinationEntity="Card" inverseName="inHole" inverseEntity="Card" syncable="YES"/>
         <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="seats" inverseEntity="Player" syncable="YES"/>

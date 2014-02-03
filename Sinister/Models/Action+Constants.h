@@ -19,12 +19,13 @@ typedef NS_ENUM(NSInteger, ActionStageType) {
 typedef NS_ENUM(NSInteger, ActionEvent) {
     ActionEventFold = 0,
     ActionEventCheck = 1,
-    ActionEventCall = 2,
-    ActionEventBet = 3,
-    ActionEventRaise = 4,
-    ActionEventShow = 5,
-    ActionEventRefunded = 6,
-    ActionEventWins = 7
+    ActionEventPost = 2,
+    ActionEventCall = 3,
+    ActionEventBet = 4,
+    ActionEventRaise = 5,
+    ActionEventShow = 6,
+    ActionEventRefunded = 7,
+    ActionEventWins = 8
 };
 
 @interface Action (Constants)

@@ -269,11 +269,31 @@
                                                           range:NSMakeRange(0, [smallBlindLine length])];
     
     if (match != nil) {
+        SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
+        NSManagedObjectContext *aMOC = d.managedObjectContext;
+        
         NSString* sbName = [smallBlindLine substringWithRange:[match rangeAtIndex:1]];
+        NSString* ante = [smallBlindLine substringWithRange:[match rangeAtIndex:2]];
+        
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
+                                                  inManagedObjectContext:aMOC];
         
         for (Seat* s in hand.seats) {
             if ([s.player.name isEqualToString:sbName]) {
                 s.isSmallBlind = YES;
+                Action* sbAction = [[Action alloc] initWithEntity:entity
+                                   insertIntoManagedObjectContext:aMOC];
+                
+                sbAction.action = ActionEventPost;
+                NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+                [f setNumberStyle:NSNumberFormatterDecimalStyle];
+                sbAction.bet =  (NSDecimalNumber*)[f numberFromString:ante];
+                
+                sbAction.hand = hand;
+                sbAction.seat = s;
+                sbAction.player = s.player;
+                
+                
                 break;
             }
         }
@@ -291,11 +311,31 @@
                                                       range:NSMakeRange(0, [bigBlindLine length])];
     
     if (match != nil) {
+        SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
+        NSManagedObjectContext *aMOC = d.managedObjectContext;
+        
         NSString* bbName = [bigBlindLine substringWithRange:[match rangeAtIndex:1]];
+        
+        NSString* ante = [bigBlindLine substringWithRange:[match rangeAtIndex:2]];
+        
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
+                                                  inManagedObjectContext:aMOC];
+
         
         for (Seat* s in hand.seats) {
             if ([s.player.name isEqualToString:bbName]) {
                 s.isBigBlind = YES;
+                Action* bbAction = [[Action alloc] initWithEntity:entity
+                                   insertIntoManagedObjectContext:aMOC];
+                
+                bbAction.action = ActionEventPost;
+                NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+                [f setNumberStyle:NSNumberFormatterDecimalStyle];
+                bbAction.bet =  (NSDecimalNumber*)[f numberFromString:ante];
+                
+                bbAction.hand = hand;
+                bbAction.seat = s;
+                bbAction.player = s.player;
                 break;
             }
         }
@@ -380,6 +420,7 @@
                 
                 Player* p = s.player;
                 a.player = p;
+                a.seat = s;
                 
                 NSString* actionS = [actionLine substringWithRange:[match rangeAtIndex:2]];
                 
@@ -728,7 +769,26 @@
         }
     }
     
+    [self calculatePerSeatIncome:rv];
+    
     return rv;
+}
+
+- (void)calculatePerSeatIncome:(Hand*)hand {
+    
+    for (Seat* s in hand.seats) {
+        NSDecimalNumber *sum = [NSDecimalNumber zero];
+        
+        for (Action* a in s.actions) {
+            if (a.action == ActionEventRefunded || a.action == ActionEventWins) {
+                sum = [sum decimalNumberByAdding:a.bet];
+            } else {
+                sum = [sum decimalNumberBySubtracting:a.bet];
+            }
+        }
+        
+        s.chipDelta = sum;
+    }
 }
 
 @end

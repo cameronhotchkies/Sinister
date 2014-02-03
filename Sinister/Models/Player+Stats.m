@@ -143,7 +143,7 @@
         }
     }
     
-    NSPredicate* p = [NSPredicate predicateWithFormat:@"self > %d", ActionEventCheck];
+    NSPredicate* p = [NSPredicate predicateWithFormat:@"self > %d", ActionEventPost];
     
     NSArray* vpipActions = [[compressed allValues] filteredArrayUsingPredicate:p];
     

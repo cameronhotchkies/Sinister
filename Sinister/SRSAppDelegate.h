@@ -12,6 +12,7 @@
 #import "SRSPreferencesWindowController.h"
 #import "SRSParseEngineWindowController.h"
 #import "SRSPlayerStatsWindowController.h"
+#import "SRSHandExpectedValueWindowController.h"
 
 @interface SRSAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -22,6 +23,7 @@
 @property (strong) SRSPreferencesWindowController *preferences;
 @property (strong) SRSParseEngineWindowController *parseEngine;
 @property (strong) SRSPlayerStatsWindowController *playerStats;
+@property (strong) SRSHandExpectedValueWindowController* expectedValues;
 
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

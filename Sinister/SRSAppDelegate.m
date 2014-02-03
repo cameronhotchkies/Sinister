@@ -35,7 +35,13 @@
         SRSPlayerStatsWindowController* psw = [[SRSPlayerStatsWindowController alloc] initWithWindowNibName:@"SRSPlayerStatsWindowController"];
         self.playerStats = psw;
         [psw showWindow:nil];
+
         
+        
+        SRSHandExpectedValueWindowController* evw = [[SRSHandExpectedValueWindowController alloc] initWithWindowNibName:@"SRSHandExpectedValueWindowController"];
+        self.expectedValues = evw;
+        [evw showWindow:nil];
+
     }
     
 }
