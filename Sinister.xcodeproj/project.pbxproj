@@ -21,6 +21,8 @@
 		7E02EA1E188AF05A001A41C7 /* SinisterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E02EA1D188AF05A001A41C7 /* SinisterTests.m */; };
 		7E02EA2C188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E02EA2A188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m */; };
 		7E02EA2D188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E02EA2B188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib */; };
+		7E27A01C18A44C9400240919 /* SRSPlayerHandsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E27A01A18A44C9400240919 /* SRSPlayerHandsWindowController.m */; };
+		7E27A01D18A44C9400240919 /* SRSPlayerHandsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E27A01B18A44C9400240919 /* SRSPlayerHandsWindowController.xib */; };
 		7E3E78331895EDA40073A08A /* Card+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E78321895EDA40073A08A /* Card+Constants.m */; };
 		7E3E78381896F3B20073A08A /* SRSPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E78361896F3B20073A08A /* SRSPreferencesWindowController.m */; };
 		7E3E78391896F3B20073A08A /* SRSPreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E3E78371896F3B20073A08A /* SRSPreferencesWindowController.xib */; };
@@ -78,6 +80,9 @@
 		7E02EA29188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSHandHistoriesLocationWindowController.h; path = UI/SRSHandHistoriesLocationWindowController.h; sourceTree = "<group>"; };
 		7E02EA2A188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSHandHistoriesLocationWindowController.m; path = UI/SRSHandHistoriesLocationWindowController.m; sourceTree = "<group>"; };
 		7E02EA2B188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SRSHandHistoriesLocationWindowController.xib; path = UI/SRSHandHistoriesLocationWindowController.xib; sourceTree = "<group>"; };
+		7E27A01918A44C9400240919 /* SRSPlayerHandsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSPlayerHandsWindowController.h; sourceTree = "<group>"; };
+		7E27A01A18A44C9400240919 /* SRSPlayerHandsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSPlayerHandsWindowController.m; sourceTree = "<group>"; };
+		7E27A01B18A44C9400240919 /* SRSPlayerHandsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SRSPlayerHandsWindowController.xib; sourceTree = "<group>"; };
 		7E3E78311895EDA40073A08A /* Card+Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Card+Constants.h"; path = "Models/Card+Constants.h"; sourceTree = "<group>"; };
 		7E3E78321895EDA40073A08A /* Card+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Card+Constants.m"; path = "Models/Card+Constants.m"; sourceTree = "<group>"; };
 		7E3E78351896F3B20073A08A /* SRSPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSPreferencesWindowController.h; sourceTree = "<group>"; };
@@ -216,6 +221,9 @@
 				7E9C357A189C56BC002C47A2 /* SRSHandExpectedValueWindowController.h */,
 				7E9C357B189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m */,
 				7E9C357C189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib */,
+				7E27A01918A44C9400240919 /* SRSPlayerHandsWindowController.h */,
+				7E27A01A18A44C9400240919 /* SRSPlayerHandsWindowController.m */,
+				7E27A01B18A44C9400240919 /* SRSPlayerHandsWindowController.xib */,
 			);
 			path = Sinister;
 			sourceTree = "<group>";
@@ -347,6 +355,7 @@
 			files = (
 				7E9C357E189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib in Resources */,
 				7E02EA2D188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib in Resources */,
+				7E27A01D18A44C9400240919 /* SRSPlayerHandsWindowController.xib in Resources */,
 				7E02E9FB188AF05A001A41C7 /* InfoPlist.strings in Resources */,
 				7E02EA0C188AF05A001A41C7 /* Images.xcassets in Resources */,
 				7E02EA01188AF05A001A41C7 /* Credits.rtf in Resources */,
@@ -372,6 +381,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E27A01C18A44C9400240919 /* SRSPlayerHandsWindowController.m in Sources */,
 				7E3E7853189757270073A08A /* Player+Stats.m in Sources */,
 				7E02EA0A188AF05A001A41C7 /* Sinister.xcdatamodeld in Sources */,
 				7E3E783D1896FE0C0073A08A /* SRSParseEngineWindowController.m in Sources */,

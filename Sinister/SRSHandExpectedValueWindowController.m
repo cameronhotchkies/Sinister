@@ -105,7 +105,7 @@
                 } else {
                     suit = 'o';
                 }
-            }
+            }   
 
             
             NSString* holeString;

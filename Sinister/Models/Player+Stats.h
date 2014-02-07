@@ -25,4 +25,6 @@
 - (NSInteger)wentToShowdown;
 - (NSInteger)wonMoneyAtShowdown;
 
+- (double)chipsLostToActivePlayer;
+
 @end

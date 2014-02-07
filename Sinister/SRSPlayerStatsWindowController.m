@@ -36,4 +36,25 @@
     [self.playerArray setSortDescriptors:[NSArray arrayWithObject:playerSort]];
 }
 
+
+- (IBAction)moreDetails:(id)sender {
+    NSLog(@"OK");
+    NSButton* btn = sender;
+    
+    NSInteger playerRow = [self.playerTable rowForView:btn];
+    
+    NSArray* arr = self.playerArray.arrangedObjects;
+    Player* p = [arr objectAtIndex:playerRow];
+    
+//    NSString* name = p.name;
+    
+    self.playerHands = [[SRSPlayerHandsWindowController alloc] initWithWindowNibName:@"SRSPlayerHandsWindowController"];
+    self.playerHands.player = p;
+    
+    [self.playerHands showWindow:nil];
+    
+//    -[NSTableView rowForView:]
+    NSLog(@"KO");
+}
+
 @end

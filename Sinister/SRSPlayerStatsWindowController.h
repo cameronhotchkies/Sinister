@@ -9,9 +9,16 @@
 #import <Cocoa/Cocoa.h>
 #import "Player+Stats.h"
 
+#import "SRSPlayerHandsWindowController.h"
+
 @interface SRSPlayerStatsWindowController : NSWindowController
 
 @property (weak) IBOutlet NSManagedObjectContext* aMOC;
 @property (weak) IBOutlet NSArrayController* playerArray;
+@property (weak) IBOutlet NSTableView* playerTable;
+
+@property (strong) SRSPlayerHandsWindowController* playerHands;
+
+- (IBAction)moreDetails:(id)sender;
 
 @end
