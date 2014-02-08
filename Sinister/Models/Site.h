@@ -2,7 +2,7 @@
 //  Site.h
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 1/31/14.
+//  Created by Cameron Hotchkies on 2/7/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
@@ -14,6 +14,8 @@
 @interface Site : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * account;
+@property (nonatomic, retain) NSString * handHistoryLocation;
 @property (nonatomic, retain) NSSet *hands;
 @property (nonatomic, retain) NSSet *players;
 @end

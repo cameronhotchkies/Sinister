@@ -121,11 +121,12 @@
     }
 }
 
-- (Site*)findOrCreateSiteWithName:(NSString*)name {
+// Don't create
+- (Site*)findSiteWithName:(NSString*)name {
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
+    // create the fetch request
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Site"
                                               inManagedObjectContext:aMOC];
@@ -145,24 +146,58 @@
     
     // TODO: check error
     
-    Site *rv;
+    Site *rv = nil;
     
-    if ([sites count] == 0) {
-        rv = [[Site alloc] initWithEntity:entity
-             insertIntoManagedObjectContext:d.managedObjectContext];
-        rv.name = name;
-    } else {
+    if ([sites count] != 0) {
         rv = [sites objectAtIndex:0];
     }
     
     return rv;
 }
 
+//- (Site*)findOrCreateSiteWithName:(NSString*)name {
+//    SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
+//    NSManagedObjectContext *aMOC = d.managedObjectContext;
+//    
+//    // create the fetch request
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Site"
+//                                              inManagedObjectContext:aMOC];
+//    
+//    [fetchRequest setEntity:entity];
+//    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(name == %@)", name]];
+//    
+//    // make sure the results are sorted as well
+//    
+//    NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey: @"name"
+//                                                       ascending:YES];
+//    
+//    [fetchRequest setSortDescriptors: [NSArray arrayWithObject:sd]];
+//    // Execute the fetch
+//    NSError *error;
+//    NSArray *sites = [aMOC executeFetchRequest:fetchRequest error:&error];
+//    
+//    // TODO: check error
+//    
+//    Site *rv;
+//    
+//    if ([sites count] == 0) {
+//        rv = [[Site alloc] initWithEntity:entity
+//           insertIntoManagedObjectContext:d.managedObjectContext];
+//        rv.name = name;
+//    } else {
+//        rv = [sites objectAtIndex:0];
+//    }
+//    
+//    return rv;
+//}
+
+
 - (Card*)findOrCreateCardWithSuit:(CardSuitType)s andRank:(CardRankType)r {
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
+    // create the fetch request
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Card"
                                               inManagedObjectContext:aMOC];
@@ -201,7 +236,7 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
+    // create the fetch request
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Player"
                                               inManagedObjectContext:aMOC];
@@ -633,7 +668,7 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
+    // create the fetch request
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Hand"
                                               inManagedObjectContext:aMOC];
@@ -686,7 +721,7 @@
                  insertIntoManagedObjectContext:d.managedObjectContext];
         rv.handID = title.handID;
         rv.date = title.date;
-        Site* s = [self findOrCreateSiteWithName:siteName];
+        Site* s = [self findSiteWithName:siteName];
         rv.site = s;
     }
     

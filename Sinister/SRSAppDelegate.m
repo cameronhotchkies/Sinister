@@ -14,36 +14,44 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
 
+- (void)registerDefaultPreferences {
+    NSString *defaultPrefsFile = [[NSBundle mainBundle] pathForResource:@"defaultPrefs" ofType:@"plist"];
+    NSDictionary *defaultPreferences = [NSDictionary dictionaryWithContentsOfFile:defaultPrefsFile];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultPreferences];
+}
+
+- (IBAction)showHandExpectedValues:(id)sender {
+    SRSHandExpectedValueWindowController* evw = [[SRSHandExpectedValueWindowController alloc] initWithWindowNibName:@"SRSHandExpectedValueWindowController"];
+    self.expectedValues = evw;
+    [evw showWindow:nil];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    [self registerDefaultPreferences];
     
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    NSArray *handPaths = [def arrayForKey:@"HandPaths"];
-    if ([handPaths count] == 0) {
-        SRSHandHistoriesLocationWindowController *hhl = [[SRSHandHistoriesLocationWindowController alloc] initWithWindowNibName:@"SRSHandHistoriesLocationWindowController"];
-        self.handLocController = hhl;
-        [hhl showWindow:nil];
-        
-        self.logLocations = hhl.window;
+    
+    if ([SRSParseEngine isParseEngineReady:self.managedObjectContext]) {
+        [self initForGeneralUse];
     } else {
-        // TODO: this may need to start differently
-        SRSParseEngineWindowController* pe = [[SRSParseEngineWindowController alloc] initWithWindowNibName:@"SRSParseEngineWindowController"];
-        self.parseEngine = pe;
-        [pe showWindow:nil];
-        
-        SRSPlayerStatsWindowController* psw = [[SRSPlayerStatsWindowController alloc] initWithWindowNibName:@"SRSPlayerStatsWindowController"];
-        self.playerStats = psw;
-        [psw showWindow:nil];
-
-        
-        
-        SRSHandExpectedValueWindowController* evw = [[SRSHandExpectedValueWindowController alloc] initWithWindowNibName:@"SRSHandExpectedValueWindowController"];
-        self.expectedValues = evw;
-        [evw showWindow:nil];
-
+        // TODO: show setup wizard
+        NSLog(@"Not ready");
+        self.initialSetup = [[SRSInitialSetupWindowController alloc] initWithWindowNibName:@"SRSInitialSetupWindowController"];
+        [self.initialSetup showWindow:nil];
     }
     
+}
+
+- (void)initForGeneralUse {
+    SRSParseEngineWindowController* pe = [[SRSParseEngineWindowController alloc] initWithWindowNibName:@"SRSParseEngineWindowController"];
+    self.parseEngine = pe;
+    [pe showWindow:nil];
+    
+    SRSPlayerStatsWindowController* psw = [[SRSPlayerStatsWindowController alloc] initWithWindowNibName:@"SRSPlayerStatsWindowController"];
+    self.playerStats = psw;
+    [psw showWindow:nil];
+
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "as.bizn.srs.Sinister" in the user's Application Support directory.
@@ -208,10 +216,8 @@
 }
 
 - (IBAction)preferencesAction:(id)sender {
-    NSLog(@"Prefs selected!");
-    
     SRSPreferencesWindowController* prefs = [[SRSPreferencesWindowController alloc] initWithWindowNibName:@"SRSPreferencesWindowController"];
-    
+    prefs.aMOC = self.managedObjectContext;
     [prefs showWindow:self];
     self.preferences = prefs;
 }

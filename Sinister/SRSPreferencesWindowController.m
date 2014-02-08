@@ -28,6 +28,7 @@
     [super windowDidLoad];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+    [self.window.contentView addSubview:self.generalView];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
@@ -47,6 +48,17 @@
     } else {
         return key;
     }
+}
+
+
+- (IBAction)generalPreferences:(id)sender {
+    [self.siteView removeFromSuperview];
+    [self.window.contentView addSubview:self.generalView];
+}
+
+- (IBAction)sitePreferences:(id)sender {
+    [self.generalView removeFromSuperview];
+    [self.window.contentView addSubview:self.siteView];
 }
 
 @end

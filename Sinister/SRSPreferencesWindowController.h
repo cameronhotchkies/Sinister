@@ -10,6 +10,11 @@
 
 @interface SRSPreferencesWindowController : NSWindowController <NSTableViewDataSource,NSTableViewDelegate>
 
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
+@property (weak) NSManagedObjectContext* aMOC;
+@property (weak) IBOutlet NSView* siteView;
+@property (weak) IBOutlet NSView* generalView;
+
+- (IBAction)generalPreferences:(id)sender;
+- (IBAction)sitePreferences:(id)sender;
 
 @end

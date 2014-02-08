@@ -50,6 +50,8 @@
         <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="seats" inverseEntity="Player" syncable="YES"/>
     </entity>
     <entity name="Site" representedClassName="Site" syncable="YES">
+        <attribute name="account" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="handHistoryLocation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Hand" inverseName="site" inverseEntity="Hand" syncable="YES"/>
         <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="site" inverseEntity="Player" syncable="YES"/>
