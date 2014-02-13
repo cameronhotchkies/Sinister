@@ -16,7 +16,6 @@
 @property (weak) IBOutlet NSManagedObjectContext* aMOC;
 @property (weak) IBOutlet NSArrayController* playerArray;
 @property (weak) IBOutlet NSTableView* playerTable;
-
 @property (strong) SRSPlayerHandsWindowController* playerHands;
 
 - (IBAction)moreDetails:(id)sender;

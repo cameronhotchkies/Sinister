@@ -36,7 +36,7 @@
 
 - (IBAction)setupForSealsWithClubs:(id)sender {
     AnimationFlipWindow* afw = [[AnimationFlipWindow alloc] init];
-    [self performSelector:@selector(lookForSwcApp:) withObject:nil afterDelay:1.0];
+    [self performSelector:@selector(lookForSwcApp:) withObject:nil afterDelay:0.5];
     
     [afw flip:self.window toBack:self.sealsWindow];
     [self.sealsWindow setMovable:NO];
@@ -139,6 +139,9 @@
     site.handHistoryLocation = self.sealsDetectedPath.stringValue;
     
     [aMOC save:nil];
+    
+    [d initForGeneralUse];
+    [self.window close];
 }
 
 @end

@@ -30,6 +30,12 @@
         <relationship name="site" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Site" inverseName="hands" inverseEntity="Site" syncable="YES"/>
         <relationship name="turn" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Card" inverseName="onTurn" inverseEntity="Card" syncable="YES"/>
     </entity>
+    <entity name="ParsedFile" representedClassName="ParsedFile" syncable="YES">
+        <attribute name="filename" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastModification" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="parseTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="site" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Site" inverseName="parsedHandFiles" inverseEntity="Site" syncable="YES"/>
+    </entity>
     <entity name="Player" representedClassName="Player" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="actions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Action" inverseName="player" inverseEntity="Action" syncable="YES"/>
@@ -54,6 +60,7 @@
         <attribute name="handHistoryLocation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="hands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Hand" inverseName="site" inverseEntity="Hand" syncable="YES"/>
+        <relationship name="parsedHandFiles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ParsedFile" inverseName="site" inverseEntity="ParsedFile" syncable="YES"/>
         <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="site" inverseEntity="Player" syncable="YES"/>
     </entity>
     <elements>
@@ -63,5 +70,6 @@
         <element name="Player" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Seat" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Site" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ParsedFile" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

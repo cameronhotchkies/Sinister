@@ -37,17 +37,19 @@
 		7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FB4188F5EC800D88D5A /* Action+Constants.m */; };
 		7E8E530D18A5825100E8425A /* defaultPrefs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E8E530C18A5825100E8425A /* defaultPrefs.plist */; };
 		7E8E531018A5831500E8425A /* SRSParseEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E530F18A5831500E8425A /* SRSParseEngine.m */; };
-		7E8E531418A585C600E8425A /* Site.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E531318A585C500E8425A /* Site.m */; };
 		7E8E531818A58A4500E8425A /* SRSInitialSetupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E531618A58A4500E8425A /* SRSInitialSetupWindowController.m */; };
 		7E8E531918A58A4500E8425A /* SRSInitialSetupWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E8E531718A58A4500E8425A /* SRSInitialSetupWindowController.xib */; };
 		7E8E531C18A58CD100E8425A /* swc-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E8E531B18A58CD100E8425A /* swc-logo.png */; };
 		7E8E531F18A59A3400E8425A /* AnimationFlipWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E531E18A59A3400E8425A /* AnimationFlipWindow.m */; };
 		7E8E532118A59A9A00E8425A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E8E532018A59A9A00E8425A /* QuartzCore.framework */; };
-		7E9C356A189C505E002C47A2 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C3569189C505E002C47A2 /* Player.m */; };
-		7E9C356D189C505F002C47A2 /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C356C189C505F002C47A2 /* Action.m */; };
-		7E9C3570189C505F002C47A2 /* Hand.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C356F189C505F002C47A2 /* Hand.m */; };
-		7E9C3573189C505F002C47A2 /* Seat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C3572189C505F002C47A2 /* Seat.m */; };
-		7E9C3576189C505F002C47A2 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C3575189C505F002C47A2 /* Card.m */; };
+		7E9390A018A9695A005E9E56 /* Hand.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E93909F18A9695A005E9E56 /* Hand.m */; };
+		7E9390A318A9695B005E9E56 /* ParsedFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390A218A9695B005E9E56 /* ParsedFile.m */; };
+		7E9390A618A9695B005E9E56 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390A518A9695B005E9E56 /* Player.m */; };
+		7E9390A918A9695B005E9E56 /* Site.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390A818A9695B005E9E56 /* Site.m */; };
+		7E9390AC18A9695B005E9E56 /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390AB18A9695B005E9E56 /* Action.m */; };
+		7E9390AF18A9695B005E9E56 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390AE18A9695B005E9E56 /* Card.m */; };
+		7E9390B218A9695B005E9E56 /* Seat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390B118A9695B005E9E56 /* Seat.m */; };
+		7E9390B418A96AC8005E9E56 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E9390B318A96AC8005E9E56 /* CoreServices.framework */; };
 		7E9C357D189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C357B189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m */; };
 		7E9C357E189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C357C189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib */; };
 		7E9C3582189C87D9002C47A2 /* SRSHandExpectedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C3581189C87D9002C47A2 /* SRSHandExpectedValue.m */; };
@@ -113,8 +115,6 @@
 		7E8E530C18A5825100E8425A /* defaultPrefs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = defaultPrefs.plist; sourceTree = "<group>"; };
 		7E8E530E18A5831500E8425A /* SRSParseEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSParseEngine.h; sourceTree = "<group>"; };
 		7E8E530F18A5831500E8425A /* SRSParseEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSParseEngine.m; sourceTree = "<group>"; };
-		7E8E531218A585C500E8425A /* Site.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Site.h; path = Models/Site.h; sourceTree = "<group>"; };
-		7E8E531318A585C500E8425A /* Site.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Site.m; path = Models/Site.m; sourceTree = "<group>"; };
 		7E8E531518A58A4500E8425A /* SRSInitialSetupWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSInitialSetupWindowController.h; path = UI/SRSInitialSetupWindowController.h; sourceTree = "<group>"; };
 		7E8E531618A58A4500E8425A /* SRSInitialSetupWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSInitialSetupWindowController.m; path = UI/SRSInitialSetupWindowController.m; sourceTree = "<group>"; };
 		7E8E531718A58A4500E8425A /* SRSInitialSetupWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SRSInitialSetupWindowController.xib; path = UI/SRSInitialSetupWindowController.xib; sourceTree = "<group>"; };
@@ -122,16 +122,21 @@
 		7E8E531D18A59A3400E8425A /* AnimationFlipWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationFlipWindow.h; path = UI/AnimationFlipWindow.h; sourceTree = "<group>"; };
 		7E8E531E18A59A3400E8425A /* AnimationFlipWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationFlipWindow.m; path = UI/AnimationFlipWindow.m; sourceTree = "<group>"; };
 		7E8E532018A59A9A00E8425A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		7E9C3568189C505E002C47A2 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Models/Player.h; sourceTree = "<group>"; };
-		7E9C3569189C505E002C47A2 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Models/Player.m; sourceTree = "<group>"; };
-		7E9C356B189C505F002C47A2 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Action.h; path = Models/Action.h; sourceTree = "<group>"; };
-		7E9C356C189C505F002C47A2 /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Action.m; path = Models/Action.m; sourceTree = "<group>"; };
-		7E9C356E189C505F002C47A2 /* Hand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hand.h; path = Models/Hand.h; sourceTree = "<group>"; };
-		7E9C356F189C505F002C47A2 /* Hand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Hand.m; path = Models/Hand.m; sourceTree = "<group>"; };
-		7E9C3571189C505F002C47A2 /* Seat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Seat.h; path = Models/Seat.h; sourceTree = "<group>"; };
-		7E9C3572189C505F002C47A2 /* Seat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Seat.m; path = Models/Seat.m; sourceTree = "<group>"; };
-		7E9C3574189C505F002C47A2 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Card.h; path = Models/Card.h; sourceTree = "<group>"; };
-		7E9C3575189C505F002C47A2 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Card.m; path = Models/Card.m; sourceTree = "<group>"; };
+		7E93909E18A9695A005E9E56 /* Hand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hand.h; path = Models/Hand.h; sourceTree = "<group>"; };
+		7E93909F18A9695A005E9E56 /* Hand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Hand.m; path = Models/Hand.m; sourceTree = "<group>"; };
+		7E9390A118A9695B005E9E56 /* ParsedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParsedFile.h; path = Models/ParsedFile.h; sourceTree = "<group>"; };
+		7E9390A218A9695B005E9E56 /* ParsedFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParsedFile.m; path = Models/ParsedFile.m; sourceTree = "<group>"; };
+		7E9390A418A9695B005E9E56 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Models/Player.h; sourceTree = "<group>"; };
+		7E9390A518A9695B005E9E56 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Models/Player.m; sourceTree = "<group>"; };
+		7E9390A718A9695B005E9E56 /* Site.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Site.h; path = Models/Site.h; sourceTree = "<group>"; };
+		7E9390A818A9695B005E9E56 /* Site.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Site.m; path = Models/Site.m; sourceTree = "<group>"; };
+		7E9390AA18A9695B005E9E56 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Action.h; path = Models/Action.h; sourceTree = "<group>"; };
+		7E9390AB18A9695B005E9E56 /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Action.m; path = Models/Action.m; sourceTree = "<group>"; };
+		7E9390AD18A9695B005E9E56 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Card.h; path = Models/Card.h; sourceTree = "<group>"; };
+		7E9390AE18A9695B005E9E56 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Card.m; path = Models/Card.m; sourceTree = "<group>"; };
+		7E9390B018A9695B005E9E56 /* Seat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Seat.h; path = Models/Seat.h; sourceTree = "<group>"; };
+		7E9390B118A9695B005E9E56 /* Seat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Seat.m; path = Models/Seat.m; sourceTree = "<group>"; };
+		7E9390B318A96AC8005E9E56 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		7E9C357A189C56BC002C47A2 /* SRSHandExpectedValueWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSHandExpectedValueWindowController.h; sourceTree = "<group>"; };
 		7E9C357B189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSHandExpectedValueWindowController.m; sourceTree = "<group>"; };
 		7E9C357C189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SRSHandExpectedValueWindowController.xib; sourceTree = "<group>"; };
@@ -144,6 +149,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E9390B418A96AC8005E9E56 /* CoreServices.framework in Frameworks */,
 				7E8E532118A59A9A00E8425A /* QuartzCore.framework in Frameworks */,
 				7E02E9F1188AF05A001A41C7 /* Cocoa.framework in Frameworks */,
 			);
@@ -183,6 +189,7 @@
 		7E02E9EF188AF05A001A41C7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7E9390B318A96AC8005E9E56 /* CoreServices.framework */,
 				7E8E532018A59A9A00E8425A /* QuartzCore.framework */,
 				7E02E9F0188AF05A001A41C7 /* Cocoa.framework */,
 				7E02EA12188AF05A001A41C7 /* XCTest.framework */,
@@ -212,18 +219,20 @@
 				7E02EA05188AF05A001A41C7 /* MainMenu.xib */,
 				7E02EA0B188AF05A001A41C7 /* Images.xcassets */,
 				7E02EA08188AF05A001A41C7 /* Sinister.xcdatamodeld */,
-				7E8E531218A585C500E8425A /* Site.h */,
-				7E8E531318A585C500E8425A /* Site.m */,
-				7E9C3568189C505E002C47A2 /* Player.h */,
-				7E9C3569189C505E002C47A2 /* Player.m */,
-				7E9C356B189C505F002C47A2 /* Action.h */,
-				7E9C356C189C505F002C47A2 /* Action.m */,
-				7E9C356E189C505F002C47A2 /* Hand.h */,
-				7E9C356F189C505F002C47A2 /* Hand.m */,
-				7E9C3571189C505F002C47A2 /* Seat.h */,
-				7E9C3572189C505F002C47A2 /* Seat.m */,
-				7E9C3574189C505F002C47A2 /* Card.h */,
-				7E9C3575189C505F002C47A2 /* Card.m */,
+				7E9390B018A9695B005E9E56 /* Seat.h */,
+				7E9390B118A9695B005E9E56 /* Seat.m */,
+				7E9390AD18A9695B005E9E56 /* Card.h */,
+				7E9390AE18A9695B005E9E56 /* Card.m */,
+				7E9390AA18A9695B005E9E56 /* Action.h */,
+				7E9390AB18A9695B005E9E56 /* Action.m */,
+				7E9390A718A9695B005E9E56 /* Site.h */,
+				7E9390A818A9695B005E9E56 /* Site.m */,
+				7E9390A418A9695B005E9E56 /* Player.h */,
+				7E9390A518A9695B005E9E56 /* Player.m */,
+				7E9390A118A9695B005E9E56 /* ParsedFile.h */,
+				7E9390A218A9695B005E9E56 /* ParsedFile.m */,
+				7E93909E18A9695A005E9E56 /* Hand.h */,
+				7E93909F18A9695A005E9E56 /* Hand.m */,
 				7E02E9F7188AF05A001A41C7 /* Supporting Files */,
 				7E448F84188B0B6F00D88D5A /* SRSMavenHandFileParser.h */,
 				7E448F85188B0B6F00D88D5A /* SRSMavenHandFileParser.m */,
@@ -437,21 +446,22 @@
 				7E3E783D1896FE0C0073A08A /* SRSParseEngineWindowController.m in Sources */,
 				7E3E78381896F3B20073A08A /* SRSPreferencesWindowController.m in Sources */,
 				7E3E78331895EDA40073A08A /* Card+Constants.m in Sources */,
-				7E9C3576189C505F002C47A2 /* Card.m in Sources */,
-				7E9C3570189C505F002C47A2 /* Hand.m in Sources */,
+				7E9390A918A9695B005E9E56 /* Site.m in Sources */,
+				7E9390AF18A9695B005E9E56 /* Card.m in Sources */,
 				7E3E78571897589F0073A08A /* SRSPlayerStatsWindowController.m in Sources */,
-				7E9C3573189C505F002C47A2 /* Seat.m in Sources */,
+				7E9390A018A9695A005E9E56 /* Hand.m in Sources */,
 				7E02EA2C188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m in Sources */,
-				7E8E531418A585C600E8425A /* Site.m in Sources */,
 				7E9C3582189C87D9002C47A2 /* SRSHandExpectedValue.m in Sources */,
+				7E9390A318A9695B005E9E56 /* ParsedFile.m in Sources */,
 				7E02E9FD188AF05A001A41C7 /* main.m in Sources */,
 				7E3E786D189855F80073A08A /* Hand+Stats.m in Sources */,
 				7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */,
 				7E9C357D189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m in Sources */,
+				7E9390B218A9695B005E9E56 /* Seat.m in Sources */,
 				7E02EA04188AF05A001A41C7 /* SRSAppDelegate.m in Sources */,
-				7E9C356D189C505F002C47A2 /* Action.m in Sources */,
-				7E9C356A189C505E002C47A2 /* Player.m in Sources */,
+				7E9390AC18A9695B005E9E56 /* Action.m in Sources */,
 				7E448F86188B0B6F00D88D5A /* SRSMavenHandFileParser.m in Sources */,
+				7E9390A618A9695B005E9E56 /* Player.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

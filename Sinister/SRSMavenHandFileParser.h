@@ -12,6 +12,10 @@
 
 @interface SRSMavenHandFileParser : NSObject
 
+@property (strong) NSMutableDictionary* cardCache;
+@property (strong) NSMutableDictionary* playerCache;
+
 - (Hand*) parseHandData:(NSString*)handData;
+- (void)parseHands:(NSArray*)handDatas;
 
 @end

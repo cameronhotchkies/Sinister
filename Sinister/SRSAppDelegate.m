@@ -44,9 +44,8 @@
 }
 
 - (void)initForGeneralUse {
-    SRSParseEngineWindowController* pe = [[SRSParseEngineWindowController alloc] initWithWindowNibName:@"SRSParseEngineWindowController"];
-    self.parseEngine = pe;
-    [pe showWindow:nil];
+    
+    self.parseEngine = [[SRSParseEngine alloc] initWithManagedObjectContext:self.managedObjectContext];
     
     SRSPlayerStatsWindowController* psw = [[SRSPlayerStatsWindowController alloc] initWithWindowNibName:@"SRSPlayerStatsWindowController"];
     self.playerStats = psw;

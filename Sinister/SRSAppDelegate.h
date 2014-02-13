@@ -23,10 +23,12 @@
 
 @property (strong) SRSHandHistoriesLocationWindowController *handLocController;
 @property (strong) SRSPreferencesWindowController *preferences;
-@property (strong) SRSParseEngineWindowController *parseEngine;
+@property (strong) SRSParseEngineWindowController *parseEngineController;
 @property (strong) SRSPlayerStatsWindowController *playerStats;
 @property (strong) SRSHandExpectedValueWindowController* expectedValues;
 @property (strong) SRSInitialSetupWindowController* initialSetup;
+
+@property (strong) SRSParseEngine* parseEngine;
 
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -37,5 +39,7 @@
 - (IBAction)preferencesAction:(id)sender;
 
 - (IBAction)showHandExpectedValues:(id)sender;
+
+- (void)initForGeneralUse;
 
 @end

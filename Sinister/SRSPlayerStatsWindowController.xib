@@ -113,7 +113,11 @@
                                                 </tableCellView>
                                             </prototypeCellViews>
                                             <connections>
-                                                <binding destination="odR-tL-xJc" name="value" keyPath="arrangedObjects" id="4Kl-kz-VoW"/>
+                                                <binding destination="odR-tL-xJc" name="value" keyPath="arrangedObjects" id="pp1-qO-83e">
+                                                    <dictionary key="options">
+                                                        <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="62.27734375" minWidth="40" maxWidth="1000" id="Gbh-jA-3a8">
@@ -159,7 +163,11 @@
                                                 </tableCellView>
                                             </prototypeCellViews>
                                             <connections>
-                                                <binding destination="odR-tL-xJc" name="value" keyPath="arrangedObjects" id="QEO-fA-K5a"/>
+                                                <binding destination="odR-tL-xJc" name="value" keyPath="arrangedObjects" id="RuE-Ns-IGP">
+                                                    <dictionary key="options">
+                                                        <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="180" minWidth="40" maxWidth="1000" id="hmO-sZ-WPs">
@@ -200,7 +208,11 @@
                                                 </tableCellView>
                                             </prototypeCellViews>
                                             <connections>
-                                                <binding destination="odR-tL-xJc" name="value" keyPath="arrangedObjects" id="87X-GV-HOI"/>
+                                                <binding destination="odR-tL-xJc" name="value" keyPath="arrangedObjects" id="ozC-cl-gOh">
+                                                    <dictionary key="options">
+                                                        <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="44" minWidth="40" maxWidth="1000" id="eJ8-lk-M8a">
@@ -460,7 +472,7 @@
                 <outlet property="delegate" destination="-2" id="4"/>
             </connections>
         </window>
-        <arrayController mode="entity" entityName="Player" automaticallyPreparesContent="YES" id="odR-tL-xJc" userLabel="Player Array Controller">
+        <arrayController mode="entity" entityName="Player" automaticallyPreparesContent="YES" automaticallyRearrangesObjects="YES" id="odR-tL-xJc" userLabel="Player Array Controller">
             <connections>
                 <binding destination="-2" name="managedObjectContext" keyPath="aMOC" id="dtC-kn-Whz"/>
             </connections>

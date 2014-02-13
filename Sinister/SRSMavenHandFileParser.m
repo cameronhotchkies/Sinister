@@ -155,45 +155,17 @@
     return rv;
 }
 
-//- (Site*)findOrCreateSiteWithName:(NSString*)name {
-//    SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
-//    NSManagedObjectContext *aMOC = d.managedObjectContext;
-//    
-//    // create the fetch request
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Site"
-//                                              inManagedObjectContext:aMOC];
-//    
-//    [fetchRequest setEntity:entity];
-//    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(name == %@)", name]];
-//    
-//    // make sure the results are sorted as well
-//    
-//    NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey: @"name"
-//                                                       ascending:YES];
-//    
-//    [fetchRequest setSortDescriptors: [NSArray arrayWithObject:sd]];
-//    // Execute the fetch
-//    NSError *error;
-//    NSArray *sites = [aMOC executeFetchRequest:fetchRequest error:&error];
-//    
-//    // TODO: check error
-//    
-//    Site *rv;
-//    
-//    if ([sites count] == 0) {
-//        rv = [[Site alloc] initWithEntity:entity
-//           insertIntoManagedObjectContext:d.managedObjectContext];
-//        rv.name = name;
-//    } else {
-//        rv = [sites objectAtIndex:0];
-//    }
-//    
-//    return rv;
-//}
 
 
 - (Card*)findOrCreateCardWithSuit:(CardSuitType)s andRank:(CardRankType)r {
+    
+    NSInteger cardKey = s << 4 | r;
+    
+    Card* cached = [self.cardCache objectForKey:[NSNumber numberWithInteger:cardKey]];
+    if (cached != nil) {
+        return cached;
+    }
+    
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
@@ -229,10 +201,18 @@
         rv = [cards objectAtIndex:0];
     }
     
+    [self.cardCache setObject:rv forKey:[NSNumber numberWithInteger:cardKey]];
+    
     return rv;
 }
 
 - (Player*)findOrCreatePlayerWithName:(NSString*)name forSite:(Site*)site {
+    Player* cached = [self.playerCache objectForKey:name];
+    
+    if (cached != nil) {
+        return cached;
+    }
+    
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
@@ -267,6 +247,8 @@
     } else {
         rv = [players objectAtIndex:0];
     }
+    
+    [self.playerCache setObject:rv forKey:name];
     
     return rv;
 }
@@ -602,7 +584,7 @@
     NSString* flopData = [handData substringWithRange:flopRange];
     NSArray* flopAction = [flopData componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
-    // TODO: parse flop cards
+    // parse flop cards
     flopAction = [flopAction subarrayWithRange:NSMakeRange(1, flopAction.count - 1)];
     
     for (NSString* actionLine in flopAction) {
@@ -614,7 +596,7 @@
     NSString* turnData = [handData substringWithRange:turnRange];
     NSArray* turnAction = [turnData componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
-    // TODO: parse turn cards
+    // parse turn cards
     turnAction = [turnAction subarrayWithRange:NSMakeRange(1, turnAction.count - 1)];
     
     for (NSString* actionLine in turnAction) {
@@ -626,7 +608,7 @@
     NSString* riverData = [handData substringWithRange:riverRange];
     NSArray* riverAction = [riverData componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
-    // TODO: parse river cards
+    // parse river cards
     riverAction = [riverAction subarrayWithRange:NSMakeRange(1, riverAction.count - 1)];
     
     for (NSString* actionLine in riverAction) {
@@ -692,6 +674,17 @@
     } else {
         return nil;
     }
+}
+
+- (void)parseHands:(NSArray*)handDatas {
+    self.cardCache = [NSMutableDictionary dictionary];
+    self.playerCache = [NSMutableDictionary dictionary];
+    
+    for (NSString* handData in handDatas) {
+        [self parseHandData:handData];
+    }
+    
+    self.cardCache = nil;
 }
 
 - (Hand*) parseHandData:(NSString*)handData {

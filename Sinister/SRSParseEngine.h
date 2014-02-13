@@ -12,4 +12,8 @@
 
 + (BOOL)isParseEngineReady:(NSManagedObjectContext*)aMOC;
 
+@property (weak) NSManagedObjectContext* aMOC;
+
+- (id)initWithManagedObjectContext:(NSManagedObjectContext*) managedObjectContext;
+
 @end

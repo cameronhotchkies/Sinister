@@ -20,18 +20,25 @@
     self = [super initWithWindow:window];
     if (self) {
         // Initialization code here.
+        SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
+        self.aMOC = d.managedObjectContext;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(managedObjectContextChanged:)
+                                                     name:NSManagedObjectContextDidSaveNotification
+                                                   object:self.aMOC];
     }
     return self;
+}
+
+- (void)managedObjectContextChanged:(NSNotification*)notification {
+    [self.playerArray rearrangeObjects];
+    [self.playerTable reloadData];
 }
 
 - (void)windowDidLoad
 {
     [super windowDidLoad];
-    SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
-    self.aMOC = d.managedObjectContext;
-
-    // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
-    
     NSSortDescriptor* playerSort = [NSSortDescriptor sortDescriptorWithKey:@"mostRecentlySeen" ascending:NO];
     [self.playerArray setSortDescriptors:[NSArray arrayWithObject:playerSort]];
 }
