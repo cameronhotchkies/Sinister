@@ -42,4 +42,7 @@
 
 - (void)initForGeneralUse;
 
+- (void)observeManagedObjectContext:(NSManagedObjectContext*)context;
+- (void)removeObservedManagedObjectContext:(NSManagedObjectContext*)context;
+
 @end

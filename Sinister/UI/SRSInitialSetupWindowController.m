@@ -71,6 +71,8 @@
                 
                 self.sealsDetectedPath.stringValue = hhCandidate;
                 [self.sealsDetectedPath.currentEditor setSelectedRange:NSMakeRange(hhCandidate.length, 0)];
+                [self.accountName becomeFirstResponder];
+
             }
         }
     } else {
@@ -101,6 +103,7 @@
         self.sealsDetectedPath.stringValue = handHistory;
         [self.sealsDetectedPath.currentEditor setSelectedRange:NSMakeRange(handHistory.length, 0)];
         
+        [self.accountName becomeFirstResponder];
     }
 }
 
@@ -138,10 +141,20 @@
     site.account = self.accountName.stringValue;
     site.handHistoryLocation = self.sealsDetectedPath.stringValue;
     
-    [aMOC save:nil];
+    NSError *error = nil;
+    [aMOC save:&error];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(parseEngineInitialized:) name:@"SRSEngineInitialized"
+                                               object:nil];
     
     [d initForGeneralUse];
-    [self.window close];
+    [self.accountName resignFirstResponder];
+    
+}
+
+- (void)parseEngineInitialized:(NSNotification*)notification {
+    [self.sealsWindow close];
 }
 
 @end

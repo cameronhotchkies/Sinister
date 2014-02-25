@@ -35,8 +35,7 @@
     if ([SRSParseEngine isParseEngineReady:self.managedObjectContext]) {
         [self initForGeneralUse];
     } else {
-        // TODO: show setup wizard
-        NSLog(@"Not ready");
+        // show setup wizard
         self.initialSetup = [[SRSInitialSetupWindowController alloc] initWithWindowNibName:@"SRSInitialSetupWindowController"];
         [self.initialSetup showWindow:nil];
     }
@@ -44,13 +43,26 @@
 }
 
 - (void)initForGeneralUse {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(parseEngineInitialized:) name:@"SRSEngineInitialized"
+                                               object:nil];
     
     self.parseEngine = [[SRSParseEngine alloc] initWithManagedObjectContext:self.managedObjectContext];
     
-    SRSPlayerStatsWindowController* psw = [[SRSPlayerStatsWindowController alloc] initWithWindowNibName:@"SRSPlayerStatsWindowController"];
-    self.playerStats = psw;
-    [psw showWindow:nil];
+    
+}
 
+- (void)parseEngineInitialized:(NSNotification*)notification {
+    
+    if (self.playerStats == nil) {
+        if ([NSThread isMainThread] == NO) {
+            [self performSelectorOnMainThread:@selector(parseEngineInitialized:) withObject:nil waitUntilDone:NO];
+        } else {
+            SRSPlayerStatsWindowController* psw = [[SRSPlayerStatsWindowController alloc] initWithWindowNibName:@"SRSPlayerStatsWindowController"];
+            self.playerStats = psw;
+            [psw showWindow:nil];
+        }
+    }
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "as.bizn.srs.Sinister" in the user's Application Support directory.
@@ -219,6 +231,24 @@
     prefs.aMOC = self.managedObjectContext;
     [prefs showWindow:self];
     self.preferences = prefs;
+}
+
+- (void)observedContextChanged:(NSNotification*)notification {
+    //[self.managedObjectContext reset];
+    [self.managedObjectContext mergeChangesFromContextDidSaveNotification:notification];
+}
+
+- (void)observeManagedObjectContext:(NSManagedObjectContext *)context {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(observedContextChanged:)
+                                                 name:NSManagedObjectContextDidSaveNotification
+                                               object:context];
+}
+
+- (void)removeObservedManagedObjectContext:(NSManagedObjectContext*)context {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:NSManagedObjectContextDidSaveNotification
+                                                  object:context];
 }
 
 @end

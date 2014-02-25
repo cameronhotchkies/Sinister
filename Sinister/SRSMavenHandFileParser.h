@@ -14,8 +14,11 @@
 
 @property (strong) NSMutableDictionary* cardCache;
 @property (strong) NSMutableDictionary* playerCache;
+@property (strong) NSMutableDictionary* parsedHandCache;
+@property (strong) NSRegularExpression* actionPattern;
+@property (strong) NSNumberFormatter* moneyFormatter;
 
-- (Hand*) parseHandData:(NSString*)handData;
-- (void)parseHands:(NSArray*)handDatas;
+- (Hand*)parseHandData:(NSString*)handData forSite:(Site*)site inContext:(NSManagedObjectContext*)fastContext;
+- (void)parseHands:(NSArray*)handDatas forSiteID:(NSManagedObjectID*)siteID inContext:(NSManagedObjectContext*)importContext;
 
 @end

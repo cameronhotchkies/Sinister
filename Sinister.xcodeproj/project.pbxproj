@@ -53,6 +53,8 @@
 		7E9C357D189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C357B189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m */; };
 		7E9C357E189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C357C189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib */; };
 		7E9C3582189C87D9002C47A2 /* SRSHandExpectedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C3581189C87D9002C47A2 /* SRSHandExpectedValue.m */; };
+		7EDA52D118AEC96C001D5371 /* SRSLogImportProgressWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA52CF18AEC96C001D5371 /* SRSLogImportProgressWindowController.m */; };
+		7EDA52D218AEC96C001D5371 /* SRSLogImportProgressWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EDA52D018AEC96C001D5371 /* SRSLogImportProgressWindowController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +144,9 @@
 		7E9C357C189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SRSHandExpectedValueWindowController.xib; sourceTree = "<group>"; };
 		7E9C3580189C87D9002C47A2 /* SRSHandExpectedValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSHandExpectedValue.h; path = Models/SRSHandExpectedValue.h; sourceTree = "<group>"; };
 		7E9C3581189C87D9002C47A2 /* SRSHandExpectedValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSHandExpectedValue.m; path = Models/SRSHandExpectedValue.m; sourceTree = "<group>"; };
+		7EDA52CE18AEC96C001D5371 /* SRSLogImportProgressWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSLogImportProgressWindowController.h; path = UI/SRSLogImportProgressWindowController.h; sourceTree = "<group>"; };
+		7EDA52CF18AEC96C001D5371 /* SRSLogImportProgressWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSLogImportProgressWindowController.m; path = UI/SRSLogImportProgressWindowController.m; sourceTree = "<group>"; };
+		7EDA52D018AEC96C001D5371 /* SRSLogImportProgressWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SRSLogImportProgressWindowController.xib; path = UI/SRSLogImportProgressWindowController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,6 +322,9 @@
 				7E8E531718A58A4500E8425A /* SRSInitialSetupWindowController.xib */,
 				7E8E531D18A59A3400E8425A /* AnimationFlipWindow.h */,
 				7E8E531E18A59A3400E8425A /* AnimationFlipWindow.m */,
+				7EDA52CE18AEC96C001D5371 /* SRSLogImportProgressWindowController.h */,
+				7EDA52CF18AEC96C001D5371 /* SRSLogImportProgressWindowController.m */,
+				7EDA52D018AEC96C001D5371 /* SRSLogImportProgressWindowController.xib */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -407,6 +415,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E9C357E189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib in Resources */,
+				7EDA52D218AEC96C001D5371 /* SRSLogImportProgressWindowController.xib in Resources */,
 				7E8E530D18A5825100E8425A /* defaultPrefs.plist in Resources */,
 				7E02EA2D188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib in Resources */,
 				7E27A01D18A44C9400240919 /* SRSPlayerHandsWindowController.xib in Resources */,
@@ -440,6 +449,7 @@
 				7E27A01C18A44C9400240919 /* SRSPlayerHandsWindowController.m in Sources */,
 				7E8E531018A5831500E8425A /* SRSParseEngine.m in Sources */,
 				7E3E7853189757270073A08A /* Player+Stats.m in Sources */,
+				7EDA52D118AEC96C001D5371 /* SRSLogImportProgressWindowController.m in Sources */,
 				7E8E531F18A59A3400E8425A /* AnimationFlipWindow.m in Sources */,
 				7E02EA0A188AF05A001A41C7 /* Sinister.xcdatamodeld in Sources */,
 				7E8E531818A58A4500E8425A /* SRSInitialSetupWindowController.m in Sources */,

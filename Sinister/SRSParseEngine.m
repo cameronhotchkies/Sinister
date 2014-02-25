@@ -11,10 +11,11 @@
 #import "Site.h"
 #import "ParsedFile.h"
 #import "SRSMavenHandFileParser.h"
+#import "SRSAppDelegate.h"
 
 @interface CallBackInfo : NSObject 
     @property (weak) SRSParseEngine* parseEngine;
-    @property (strong) Site* site;
+    @property (strong) NSManagedObjectID* siteID;
 @end
 
 @implementation CallBackInfo
@@ -47,17 +48,20 @@
     return sites.count > 0;
 }
 
-- (void)createDirectoryMonitor:(Site*)site {
-    NSString* scanPath = site.handHistoryLocation;
+- (void)createDirectoryMonitor:(NSManagedObjectID*)siteID {
+    
+    Site* tSite = (Site*)[self.aMOC objectWithID:siteID];
+    NSString* scanPath = tSite.handHistoryLocation;
     /* Define variables and create a CFArray object containing
      CFString objects containing paths to watch.
      */
+    
     CFStringRef mypath = (__bridge CFStringRef) scanPath;
     CFArrayRef pathsToWatch = CFArrayCreate(NULL, (const void **)&mypath, 1, NULL);
     
     
     CallBackInfo* cbi = [[CallBackInfo alloc] init];
-    cbi.site = site;
+    cbi.siteID = siteID;
     cbi.parseEngine = self;
     
     // stream-specific data here.
@@ -86,10 +90,12 @@
     FSEventStreamStart(stream);
 }
 
-- (ParsedFile*)fileByName:(NSString*)filename forSite:(Site*)site {
+- (ParsedFile*)fileByName:(NSString*)filename
+                  forSite:(Site*)site
+                inContext:(NSManagedObjectContext*)context {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"ParsedFile"
-                                              inManagedObjectContext:self.aMOC];
+                                              inManagedObjectContext:context];
     
     [fetchRequest setEntity:entity];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat: @"(filename == %@ and site == %@)", filename, site]];
@@ -97,46 +103,99 @@
                                                                                                 
     // Execute the fetch
     NSError *error;
-    NSArray *files = [self.aMOC executeFetchRequest:fetchRequest error:&error];
+    NSArray *files = [context executeFetchRequest:fetchRequest error:&error];
     
-    if ([files count] > 0) {
-        return [files objectAtIndex:0];
-    } else {
-        ParsedFile* newFile = [[ParsedFile alloc] initWithEntity:entity
-                                  insertIntoManagedObjectContext:self.aMOC];
-        newFile.filename = filename;
-        newFile.lastModification = 0;
-        newFile.parseTime = 0;
-        newFile.site = site;
-        
-        return newFile;
+    @synchronized(self) {
+        if ([files count] > 0) {
+            return [files objectAtIndex:0];
+        } else {
+            ParsedFile* newFile = [[ParsedFile alloc] initWithEntity:entity
+                                      insertIntoManagedObjectContext:context];
+            newFile.filename = filename;
+            newFile.lastModification = 0;
+            newFile.parseTime = 0;
+            newFile.site = site;
+
+            return newFile;
+        }
     }
 
 }
 
-- (void)parseLogFile:(NSString*)filePath forSite:(Site*)site {
-    NSString* filename = [[filePath pathComponents] lastObject];
-    ParsedFile* pf = [self fileByName:filename forSite:site];
+- (Site*)findSiteWithName:(NSString*)name
+                inContext:(NSManagedObjectContext*)fastContext {
     
+    // create the fetch request
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Site"
+                                              inManagedObjectContext:fastContext];
+    
+    [fetchRequest setEntity:entity];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(name == %@)", name]];
+    
+    // make sure the results are sorted as well
+    
+    NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey: @"name"
+                                                       ascending:YES];
+    
+    [fetchRequest setSortDescriptors: [NSArray arrayWithObject:sd]];
+    // Execute the fetch
+    NSError *error;
+    NSArray *sites = [fastContext executeFetchRequest:fetchRequest error:&error];
+    
+    // TODO: check error
+    
+    Site *rv = nil;
+    
+    if ([sites count] != 0) {
+        rv = [sites objectAtIndex:0];
+    }
+    
+    return rv;
+}
+
+- (void)parseLogFile:(NSString*)filePath
+             forSite:(NSManagedObjectID*)siteID
+           inContext:(NSManagedObjectContext*)importContext{
+    NSString* filename = [[filePath pathComponents] lastObject];
+    
+    
+    Site* s = (Site*)[importContext objectWithID:siteID];
+    ParsedFile* pf = [self fileByName:filename forSite:s inContext:importContext];
+
     NSFileManager* fm = [NSFileManager defaultManager];
     NSDictionary* attribs = [fm attributesOfItemAtPath:filePath error:nil];
     
     NSDate* actualMod = [attribs objectForKey:NSFileModificationDate];
     NSDate* storedMod = [NSDate dateWithTimeIntervalSince1970:pf.lastModification];
     
-    if ([actualMod compare:storedMod] == NSOrderedDescending) {
-        // TODO: Parse
-        NSString* f = [NSString stringWithContentsOfURL:[NSURL fileURLWithPath:filePath]
-                                               encoding:NSUTF8StringEncoding
-                                                  error:nil];
-        NSArray* hands = [f componentsSeparatedByString:@"\n\n\n"];
-        NSLog(@"Hand count: %ld", hands.count);
-        
-        SRSMavenHandFileParser *parser = [[SRSMavenHandFileParser alloc] init];
-        [parser parseHands:hands];
-        
-    } else {
-        NSLog(@"File (%@) wasn't actually modified?", filename);
+    @synchronized(self) {
+        if ([actualMod compare:storedMod] == NSOrderedDescending) {
+            // TODO: Parse
+            NSString* f = [NSString stringWithContentsOfURL:[NSURL fileURLWithPath:filePath]
+                                                   encoding:NSUTF8StringEncoding
+                                                      error:nil];
+            NSArray* hands = [f componentsSeparatedByString:@"\n\n\n"];
+            NSLog(@"Hand count: %ld", hands.count);
+            
+            SRSMavenHandFileParser *parser = [[SRSMavenHandFileParser alloc] init];
+            [parser parseHands:hands forSiteID:siteID inContext:importContext];
+            
+            Site* aSite = (Site*)[importContext objectWithID:siteID];
+            
+//            site = [self findSiteWithName:site.name inContext:self.aMOC];
+            
+            pf = [self fileByName:filename forSite:aSite inContext:importContext];
+            
+            pf.lastModification = [actualMod timeIntervalSince1970];
+            pf.parseTime = [NSDate timeIntervalSinceReferenceDate];
+            
+            NSError *error = nil;
+            [importContext save:&error];
+            NSLog(@"Saved");
+        } else {
+           // NSLog(@"File (%@) wasn't actually modified?", filename);
+        }
     }
 
 }
@@ -152,19 +211,32 @@ void myCallbackFunction(ConstFSEventStreamRef streamRef,
     
     
     CallBackInfo* cbi = (__bridge CallBackInfo*)context;
-    Site* site = cbi.site;
+    
+    NSManagedObjectID* siteID = cbi.siteID;
+    
+    NSManagedObjectContext *importContext = [[NSManagedObjectContext alloc] init];
+    SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
+    
+    [d observeManagedObjectContext:importContext];
+    
+    NSPersistentStoreCoordinator *coordinator = d.persistentStoreCoordinator;
+    [importContext setPersistentStoreCoordinator:coordinator];
+    [importContext setUndoManager:nil];
+
+    
     SRSParseEngine* parseEngine = cbi.parseEngine;
     
-    // printf("Callback called\n");
     for (i=0; i<numEvents; i++) {
         NSString* filePath = [NSString stringWithCString:paths[i] encoding:NSUTF8StringEncoding];
         
-        @synchronized(site) {
-            [parseEngine parseLogFile:filePath forSite:site];
-            [parseEngine.aMOC save:nil];
-            
+        @synchronized(parseEngine) {
+            [parseEngine parseLogFile:filePath forSite:siteID inContext:importContext];
+            NSError *error = nil;
+            [importContext save:&error];
         }
     }
+    
+    [d removeObservedManagedObjectContext:importContext];
 }
 
 - (NSArray*)fetchSites {
@@ -182,18 +254,61 @@ void myCallbackFunction(ConstFSEventStreamRef streamRef,
     return sites;
 }
 
-- (void)checkForUpdatesSinceLastLaunch:(Site *)site {
+- (void)initializeProgressWindow {
+    [self.progressWindow showWindow:self];
+    [self.progressWindow.window makeKeyAndOrderFront:self];
+}
+
+- (void)checkForUpdatesSinceLastLaunch:(NSManagedObjectID *)siteID {
     
-    NSString* path = site.handHistoryLocation;
+    
+    Site *ms = (Site*)[self.aMOC objectWithID:siteID];
+    NSString* path = ms.handHistoryLocation;
+    
+    
     NSURL* pathUrl = [NSURL fileURLWithPath:path];
     NSArray *dirContents = [[NSFileManager defaultManager]  contentsOfDirectoryAtURL:pathUrl includingPropertiesForKeys:nil options:0 error:nil];
     
-    @synchronized(site) {
-        for (NSURL* fileName in dirContents) {
-            [self parseLogFile:[fileName path] forSite:site];
+    @synchronized(self) {
+        
+        if (self.progressWindow == nil) {
+            self.progressWindow = [[SRSLogImportProgressWindowController alloc] initWithWindowNibName:@"SRSLogImportProgressWindowController"];
         }
         
-        [self.aMOC save:nil];
+        [self.progressWindow setMax:[dirContents count]];
+        
+        [self performSelectorOnMainThread:@selector(initializeProgressWindow) withObject:nil waitUntilDone:NO];
+        
+        dispatch_queue_t queue = dispatch_queue_create("import hands", NULL);
+        dispatch_async(queue, ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+            });
+            
+            NSManagedObjectContext *importContext = [[NSManagedObjectContext alloc] init];
+            SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
+            NSPersistentStoreCoordinator *coordinator = d.persistentStoreCoordinator;
+            [importContext setPersistentStoreCoordinator:coordinator];
+            [importContext setUndoManager:nil];
+            
+            //Site* importSite = (Site*)[importContext objectWithID:siteID];
+            //[self findSiteWithName:siteName inContext:importContext];
+            
+            for (NSURL* fileName in dirContents) {
+                [self parseLogFile:[fileName path] forSite:siteID inContext:importContext];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.progressWindow incrementProgressIndicator];
+                });
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SRSEngineInitialized"
+                                                                object:nil];
+
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressWindow close];
+            });
+        });
     }
 }
 
@@ -202,14 +317,14 @@ void myCallbackFunction(ConstFSEventStreamRef streamRef,
     
     NSUserDefaults* def = [NSUserDefaults standardUserDefaults];
     if ([def boolForKey:@"autoImport"] == YES) {
-        // TODO: perform imports
-        
+        // perform imports
         for (Site* s in sites) {
-            [self checkForUpdatesSinceLastLaunch:s];
+            [self checkForUpdatesSinceLastLaunch:[s objectID]];
             
-            [self createDirectoryMonitor:s];
+            [self createDirectoryMonitor:s.objectID];
         }
     }
+    
 }
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext*) managedObjectContext {

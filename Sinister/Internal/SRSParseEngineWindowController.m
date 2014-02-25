@@ -84,11 +84,12 @@
         NSString* f = [NSString stringWithContentsOfURL:l encoding:NSUTF8StringEncoding error:nil];
         NSArray* hands = [f componentsSeparatedByString:@"\n\n\n"];
         NSLog(@"Hand count: %ld", hands.count);
-        
-        for (NSString* h in hands) {
-            SRSMavenHandFileParser *parser = [[SRSMavenHandFileParser alloc] init];
-            [parser parseHandData:h];
-        }
+
+        // This code is dead anyways
+//        for (NSString* h in hands) {
+//            SRSMavenHandFileParser *parser = [[SRSMavenHandFileParser alloc] init];
+//            [parser parseHandData:h];
+//        }
     }
     [self.aMOC save:nil];
 }
