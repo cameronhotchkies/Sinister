@@ -297,7 +297,8 @@
                                    insertIntoManagedObjectContext:fastContext];
                 
                 sbAction.action = ActionEventPost;
-                sbAction.bet =  (NSDecimalNumber*)[self.moneyFormatter numberFromString:ante];
+                NSDecimalNumber* dn = (NSDecimalNumber*)[self.moneyFormatter numberFromString:ante];
+                sbAction.bet = dn;
                 
                 sbAction.hand = hand;
                 sbAction.seat = s;
@@ -464,8 +465,26 @@
                     a.bet = (NSDecimalNumber*)[self.moneyFormatter numberFromString:[actionS substringFromIndex:9]];
                 } else if ([actionS hasPrefix:@"wins Pot ("]) {
                     a.action = ActionEventWins;
-                    NSString* betPart = [actionS substringFromIndex:10];
-                    a.bet = (NSDecimalNumber*)[self.moneyFormatter numberFromString:[betPart substringToIndex:betPart.length - 1]];
+                    NSRange betRange = NSMakeRange(10, actionS.length - 11);
+                    NSString* betPart = [actionS substringWithRange:betRange];
+                    a.bet = [NSDecimalNumber decimalNumberWithString:betPart];
+                    //(NSDecimalNumber*)[self.moneyFormatter numberFromString:];
+                } else if ([actionS hasPrefix:@"splits Pot ("]) {
+                    a.action = ActionEventWins;
+                    NSRange betRange = NSMakeRange(12, actionS.length - 13);
+                    NSString* betPart = [actionS substringWithRange:betRange];
+                    a.bet = [NSDecimalNumber decimalNumberWithString:betPart];
+                    //(NSDecimalNumber*)[self.moneyFormatter numberFromString:];
+                } else if ([actionS hasPrefix:@"wins Side Pot"] || [actionS hasPrefix:@"wins Main Pot"]) {
+                    a.action = ActionEventWins;
+                    NSRange betRange1 = [actionS rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"("]
+                                                                 options:NSCaseInsensitiveSearch];
+                    NSRange betRange2 = [actionS rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@")"]
+                                                                 options:NSCaseInsensitiveSearch];
+                    NSRange betRange = NSMakeRange(betRange1.location + 1, betRange2.location - betRange1.location - 1);
+                    
+                    NSString* betString = [actionS substringWithRange:betRange];
+                    a.bet = [NSDecimalNumber decimalNumberWithString:betString];
                 } else {
                     assert(NO);
                 }
@@ -478,6 +497,45 @@
         a.hand = hand;
         
     }
+}
+
+- (NSArray*)rangesForShowdownInHand:(NSString*)fullHand {
+    NSRange showdownStart = [fullHand rangeOfString:@"Show Down **"
+                                            options:NSCaseInsensitiveSearch];
+    
+    NSMutableArray* showdowns = [NSMutableArray array];
+    
+    NSInteger handLength = fullHand.length;
+    
+    while (showdownStart.location != NSNotFound) {
+        NSRange remainder = NSMakeRange(showdownStart.location, handLength - showdownStart.location);
+        NSRange eol = [fullHand rangeOfString:@"\n" options:NSCaseInsensitiveSearch range:remainder];
+        NSRange sol = [fullHand rangeOfString:@"\n" options:NSBackwardsSearch range:NSMakeRange(0, remainder.location)];
+        NSString* sdToEnd = [fullHand substringWithRange:NSMakeRange(eol.location + 1, handLength - eol.location - 1)];
+        
+        
+        // Showdowns always end with a rake
+        NSRange rakeRange = [sdToEnd rangeOfString:@"Rake ("];
+//        NSString* sdText = [sdToEnd substringToIndex:rakeRange.location];
+        
+        NSRange sdRange = NSMakeRange(sol.location + 1, rakeRange.location + (eol.location - sol.location));
+        
+        [showdowns addObject:[NSValue valueWithRange:sdRange]];
+        
+        showdownStart = [fullHand rangeOfString:@"Show Down **"
+                                        options:NSCaseInsensitiveSearch
+                                          range:NSMakeRange(eol.location, handLength - eol.location)];
+    }
+//    if (splitByShowdowns.count == 1) {
+//        // Just return an empty array, there are no showdowns
+//        return [NSArray array];
+//    } else {
+//        NSString* compOne = [splitByShowdowns objectAtIndex:0];
+//        NSRange sdEnd = [compOne rangeOfString:@"**" options:NSBackwardsSearch];
+//        stop = sdEnd.location;
+//    }
+
+    return showdowns;
 }
 
 - (NSRange)rangeForStage:(ActionStageType)s inHand:(NSString*)fullHand {
@@ -502,10 +560,22 @@
             stop = [fullHand rangeOfString:@"** River **"].location;
             break;
         case ActionStageRiver:
+        {
             start = [fullHand rangeOfString:@"** River **"].location;
-            stop = [fullHand rangeOfString:@"** Pot Show Down **"].location;
+            NSArray* splitByShowdowns = [fullHand componentsSeparatedByString:@"Show Down **"];
+            if (splitByShowdowns.count == 1) {
+                stop = NSNotFound;
+            } else {
+                NSString* compOne = [splitByShowdowns objectAtIndex:0];
+                NSRange sdEnd = [compOne rangeOfString:@"**" options:NSBackwardsSearch];
+                stop = sdEnd.location;
+            }
             break;
+        }
         case ActionStageShowdown:
+            // This shouldn't be called anymore
+            // There's a separate function that handles multiple showdowns
+//            assert(NO);
             start = [fullHand rangeOfString:@"** Pot Show Down **"].location;
             stop = rakeLoc;
             break;
@@ -693,32 +763,26 @@
     }
 }
 
-- (void)parseHands:(NSArray*)handDatas
-           forSiteID:(NSManagedObjectID*)siteID
-         inContext:(NSManagedObjectContext*)importContext {
-    
-//    NSError *prerror = nil;
-//    [importContext save:&prerror];
-//
-    
-//    NSManagedObjectContext *importContext = [[NSManagedObjectContext alloc] init];
-//    SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
-//    NSPersistentStoreCoordinator *coordinator = d.persistentStoreCoordinator;
-//    [importContext setPersistentStoreCoordinator:coordinator];
-//    [importContext setUndoManager:nil];
-    
+- (void)initialize {
     self.cardCache = [NSMutableDictionary dictionary];
     self.playerCache = [NSMutableDictionary dictionary];
     self.parsedHandCache = [NSMutableDictionary dictionary];
-    [self loadHandCache:importContext];
     self.moneyFormatter = [[NSNumberFormatter alloc] init];
     [self.moneyFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     
     // Only generate the regex once
     self.actionPattern = [NSRegularExpression
-                          regularExpressionWithPattern:@"(.*) (folds|calls (\\d+(\\.\\d\\d)?)|raises to (\\d+(\\.\\d\\d)?)|checks|bets (\\d+(\\.\\d\\d)?)|refunded (\\d+(\\.\\d\\d)?)|wins Pot \\((\\d+(\\.\\d\\d)?)\\)|shows \\[[\\dTJQKA][cdhs] [\\dTJQKA][cdhs]\\] \\(.*\\))"
+                          regularExpressionWithPattern:@"(.*) (folds|calls (\\d+(\\.\\d\\d)?)|raises to (\\d+(\\.\\d\\d)?)|checks|bets (\\d+(\\.\\d\\d)?)|refunded (\\d+(\\.\\d\\d)?)|splits .*\\((\\d+(\\.\\d\\d)?)\\)|wins .*\\((\\d+(\\.\\d\\d)?)\\)|shows \\[[\\dTJQKA][cdhs] [\\dTJQKA][cdhs]\\] \\(.*\\))"
                           options:NSRegularExpressionCaseInsensitive
                           error:nil];
+}
+
+- (void)parseHands:(NSArray*)handDatas
+           forSiteID:(NSManagedObjectID*)siteID
+         inContext:(NSManagedObjectContext*)importContext {
+    
+    [self initialize];
+    [self loadHandCache:importContext];
     
     // Can't cross pollinate data from different contexts
     Site* fastSite = (Site*)[importContext objectWithID:siteID];
@@ -836,11 +900,20 @@
         [self parseHandData:handData forRiverWithRange:riverRange withHand:rv inContext:fastContext];
     }
     
-    NSRange showdownRange = [self rangeForStage:ActionStageShowdown inHand:handData];
-    if (showdownRange.location != NSNotFound) {
-        [self parseHandData:handData forShowdownWithRange:showdownRange withHand:rv inContext:fastContext];
-    }
+    NSArray* showdownRanges = [self rangesForShowdownInHand:handData];
     
+    for (NSValue* sdrv in showdownRanges) {
+        NSRange sdr = [sdrv rangeValue];
+        NSLog(@"Showdown: %@", [handData substringWithRange:sdr]);
+        [self parseHandData:handData forShowdownWithRange:sdr withHand:rv
+                  inContext:fastContext];
+    }
+//    
+//    NSRange showdownRange = [self rangeForStage:ActionStageShowdown inHand:handData];
+//    if (showdownRange.location != NSNotFound) {
+//        [self parseHandData:handData forShowdownWithRange:showdownRange withHand:rv inContext:fastContext];
+//    }
+//    
     for (NSString* rakeOpt in [hdLines reverseObjectEnumerator]) {
         if ([rakeOpt hasPrefix:@"Rake ("]) {
             NSString* rakePart = [rakeOpt substringFromIndex:6];
