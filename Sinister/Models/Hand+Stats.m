@@ -9,6 +9,7 @@
 #import "Hand+Stats.h"
 #import "Action+Constants.h"
 #import "SRSAppDelegate.h"
+#import "Seat+Stats.h"
 
 @implementation Hand (Stats)
 
@@ -21,7 +22,16 @@
         
     }
     
-    return sum;
+//    return sum;
+    
+    for (Seat* s in self.seats) {
+        if (s.player == player) {
+            double ret = [s.chipDelta doubleValue];
+            return ret;
+        }
+    }
+    
+    return 0;
 }
 
 @end

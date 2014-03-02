@@ -12,6 +12,7 @@
 #import "Hand+Stats.h"
 #import "Action+Constants.h"
 #import "Site.h"
+#import "NSDecimalNumber+Abs.h"
 
 @implementation Player (Stats)
 
@@ -180,10 +181,6 @@
     
     NSInteger numerator = 0;
     NSInteger denominator = 0;
-    
-    if ([self.name isEqualToString:@"TBaged"]) {
-        NSLog(@"halt");
-    }
     
     for (Action* a in actions) {
         
@@ -452,41 +449,108 @@
     // TODO: this doesn't account for split pots
     NSUserDefaults* def = [NSUserDefaults standardUserDefaults];
     NSString* activePlayerName = [def objectForKey:@"activePlayer"];
-    Player* activePlayer = [self findPlayerWithName:activePlayerName forSite:self.site];
+    Player* hero = [self findPlayerWithName:activePlayerName forSite:self.site];
     
+    // Shortcut, as this will be the most common
+    if (self == hero) {
+        return 0;
+    }
     
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
     // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Seat"
                                               inManagedObjectContext:aMOC];
     
     [fetchRequest setEntity:entity];
     
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and action == %d)", activePlayer, ActionEventWins]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and chipDelta != 0)", self]];
     NSError *error;
     
-    NSArray* activePlayerWins = [aMOC executeFetchRequest:fetchRequest error:&error];
+    NSArray* villainPlays = [aMOC executeFetchRequest:fetchRequest error:&error];
     
     double sum = 0;
     
-    for (Action* w in activePlayerWins) {
-        Hand* wHand = w.hand;
+    for (Seat* s in villainPlays) {
         
-        sum += MIN([wHand amountSpentByPlayer:self], [w.bet doubleValue]);
+        NSDecimalNumber* villainDelta = s.chipDelta;
+        
+        if ([villainDelta compare:[NSDecimalNumber zero]] != NSOrderedSame) {
+            Seat* heroSeat = nil;
+            for (Seat* os in s.hand.seats) {
+                if (os.player == hero) {
+                    heroSeat = os;
+                }
+            }
+            
+            NSDecimalNumber* heroDelta = heroSeat.chipDelta;
+            Hand* h = s.hand;
+            NSString* handID = h.handID;
+
+            if ([heroDelta compare:[NSDecimalNumber zero]] == NSOrderedSame) {
+                // skip this round
+                // Hero didn't participate
+            } else if ([heroDelta compare:[NSDecimalNumber zero]] == NSOrderedAscending
+                && [villainDelta compare:[NSDecimalNumber zero]] == NSOrderedAscending) {
+                // In the event of a split pot this gets complex
+                // TODO: scrub the actions to see if either actually won anything
+                // Otherwise don't adjust sum
+                for (Action* a in s.actions) {
+                    if (a.action == ActionEventWins) {
+                        // This appears to be due to the rake
+                        NSLog(@"Both players lost, but villain won");
+                    }
+                }
+                for (Action* a in heroSeat.actions) {
+                    if (a.action == ActionEventWins) {
+                        NSLog(@"Both players lost, but hero won");
+                    }
+                }
+            } else if ([heroDelta compare:[NSDecimalNumber zero]] == NSOrderedDescending
+                       && [villainDelta compare:[NSDecimalNumber zero]] == NSOrderedDescending) {
+                // Both won, this could be a split pot as well
+                // TODO: figure this out
+                NSLog(@"Split pot, both players win");
+            } else {
+                NSDecimalNumber* realDelta = [villainDelta absoluteMinimum:heroDelta];
+                
+                if ([realDelta compare:[NSDecimalNumber zero]] == NSOrderedDescending) {
+                   //NSLog(@"When does this happen? %@", handID);
+                }
+                
+                if (realDelta == heroDelta) {
+                    sum += [heroDelta doubleValue];
+                } else {
+                    // This is most likely a negative value
+                    sum -= [villainDelta doubleValue];
+                }
+            }
+            
+//            if (s.player == hero) {
+//                sum += MIN([wHand amountSpentByPlayer:self], s.chipDelta);
+//            }
+        }
     }
     
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and action == %d)", self, ActionEventWins]];
-    
-    NSArray* thisPlayerWins = [aMOC executeFetchRequest:fetchRequest error:&error];
-    
-    for (Action* w in thisPlayerWins) {
-        Hand* wHand = w.hand;
-        
-        sum -= MIN([wHand amountSpentByPlayer:activePlayer], [w.bet doubleValue]);
-    }
+//    for (Action* w in activePlayerWins) {
+//        Hand* wHand = w.hand;
+//        
+//    
+//        
+//        sum += MIN([wHand amountSpentByPlayer:self], [w.bet doubleValue]);
+//    }
+//    
+//    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and action == %d)", self, ActionEventWins]];
+//    
+//    NSArray* thisPlayerWins = [aMOC executeFetchRequest:fetchRequest error:&error];
+//    
+//    for (Action* w in thisPlayerWins) {
+//        Hand* wHand = w.hand;
+//        
+//        sum -= MIN([wHand amountSpentByPlayer:hero], [w.bet doubleValue]);
+//    }
     
     return sum;
 }

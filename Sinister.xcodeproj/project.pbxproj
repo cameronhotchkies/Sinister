@@ -35,6 +35,17 @@
 		7E448F86188B0B6F00D88D5A /* SRSMavenHandFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448F85188B0B6F00D88D5A /* SRSMavenHandFileParser.m */; };
 		7E448F88188B0C1D00D88D5A /* SRSMavenLogParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448F87188B0C1D00D88D5A /* SRSMavenLogParserTest.m */; };
 		7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FB4188F5EC800D88D5A /* Action+Constants.m */; };
+		7E75B23418C28A510062C7AD /* Seat+Stats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B23318C28A510062C7AD /* Seat+Stats.m */; };
+		7E75B23718C294030062C7AD /* NSDecimalNumber+Abs.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B23618C294030062C7AD /* NSDecimalNumber+Abs.m */; };
+		7E75B26418C2C49A0062C7AD /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B26318C2C49A0062C7AD /* Player.m */; };
+		7E75B26718C2C49B0062C7AD /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B26618C2C49B0062C7AD /* Card.m */; };
+		7E75B26A18C2C49B0062C7AD /* ParsedFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B26918C2C49B0062C7AD /* ParsedFile.m */; };
+		7E75B26D18C2C49B0062C7AD /* Seat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B26C18C2C49B0062C7AD /* Seat.m */; };
+		7E75B27018C2C49B0062C7AD /* Site.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B26F18C2C49B0062C7AD /* Site.m */; };
+		7E75B27318C2C49B0062C7AD /* Hand.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27218C2C49B0062C7AD /* Hand.m */; };
+		7E75B27618C2C49B0062C7AD /* GameFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27518C2C49B0062C7AD /* GameFormat.m */; };
+		7E75B27918C2C49B0062C7AD /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27818C2C49B0062C7AD /* Action.m */; };
+		7E75B27C18C2C4AE0062C7AD /* GameFormat+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27B18C2C4AE0062C7AD /* GameFormat+Constants.m */; };
 		7E8E530D18A5825100E8425A /* defaultPrefs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E8E530C18A5825100E8425A /* defaultPrefs.plist */; };
 		7E8E531018A5831500E8425A /* SRSParseEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E530F18A5831500E8425A /* SRSParseEngine.m */; };
 		7E8E531818A58A4500E8425A /* SRSInitialSetupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E531618A58A4500E8425A /* SRSInitialSetupWindowController.m */; };
@@ -42,13 +53,6 @@
 		7E8E531C18A58CD100E8425A /* swc-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E8E531B18A58CD100E8425A /* swc-logo.png */; };
 		7E8E531F18A59A3400E8425A /* AnimationFlipWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E531E18A59A3400E8425A /* AnimationFlipWindow.m */; };
 		7E8E532118A59A9A00E8425A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E8E532018A59A9A00E8425A /* QuartzCore.framework */; };
-		7E9390A018A9695A005E9E56 /* Hand.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E93909F18A9695A005E9E56 /* Hand.m */; };
-		7E9390A318A9695B005E9E56 /* ParsedFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390A218A9695B005E9E56 /* ParsedFile.m */; };
-		7E9390A618A9695B005E9E56 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390A518A9695B005E9E56 /* Player.m */; };
-		7E9390A918A9695B005E9E56 /* Site.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390A818A9695B005E9E56 /* Site.m */; };
-		7E9390AC18A9695B005E9E56 /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390AB18A9695B005E9E56 /* Action.m */; };
-		7E9390AF18A9695B005E9E56 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390AE18A9695B005E9E56 /* Card.m */; };
-		7E9390B218A9695B005E9E56 /* Seat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9390B118A9695B005E9E56 /* Seat.m */; };
 		7E9390B418A96AC8005E9E56 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E9390B318A96AC8005E9E56 /* CoreServices.framework */; };
 		7E9C357D189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C357B189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m */; };
 		7E9C357E189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C357C189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib */; };
@@ -114,6 +118,28 @@
 		7E448F87188B0C1D00D88D5A /* SRSMavenLogParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSMavenLogParserTest.m; sourceTree = "<group>"; };
 		7E448FB3188F5EC800D88D5A /* Action+Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Action+Constants.h"; path = "Models/Action+Constants.h"; sourceTree = "<group>"; };
 		7E448FB4188F5EC800D88D5A /* Action+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Action+Constants.m"; path = "Models/Action+Constants.m"; sourceTree = "<group>"; };
+		7E75B23218C28A510062C7AD /* Seat+Stats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Seat+Stats.h"; path = "Models/Seat+Stats.h"; sourceTree = "<group>"; };
+		7E75B23318C28A510062C7AD /* Seat+Stats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Seat+Stats.m"; path = "Models/Seat+Stats.m"; sourceTree = "<group>"; };
+		7E75B23518C294030062C7AD /* NSDecimalNumber+Abs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDecimalNumber+Abs.h"; sourceTree = "<group>"; };
+		7E75B23618C294030062C7AD /* NSDecimalNumber+Abs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDecimalNumber+Abs.m"; sourceTree = "<group>"; };
+		7E75B26218C2C49A0062C7AD /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Models/Player.h; sourceTree = "<group>"; };
+		7E75B26318C2C49A0062C7AD /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Models/Player.m; sourceTree = "<group>"; };
+		7E75B26518C2C49B0062C7AD /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Card.h; path = Models/Card.h; sourceTree = "<group>"; };
+		7E75B26618C2C49B0062C7AD /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Card.m; path = Models/Card.m; sourceTree = "<group>"; };
+		7E75B26818C2C49B0062C7AD /* ParsedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParsedFile.h; path = Models/ParsedFile.h; sourceTree = "<group>"; };
+		7E75B26918C2C49B0062C7AD /* ParsedFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParsedFile.m; path = Models/ParsedFile.m; sourceTree = "<group>"; };
+		7E75B26B18C2C49B0062C7AD /* Seat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Seat.h; path = Models/Seat.h; sourceTree = "<group>"; };
+		7E75B26C18C2C49B0062C7AD /* Seat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Seat.m; path = Models/Seat.m; sourceTree = "<group>"; };
+		7E75B26E18C2C49B0062C7AD /* Site.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Site.h; path = Models/Site.h; sourceTree = "<group>"; };
+		7E75B26F18C2C49B0062C7AD /* Site.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Site.m; path = Models/Site.m; sourceTree = "<group>"; };
+		7E75B27118C2C49B0062C7AD /* Hand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hand.h; path = Models/Hand.h; sourceTree = "<group>"; };
+		7E75B27218C2C49B0062C7AD /* Hand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Hand.m; path = Models/Hand.m; sourceTree = "<group>"; };
+		7E75B27418C2C49B0062C7AD /* GameFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameFormat.h; path = Models/GameFormat.h; sourceTree = "<group>"; };
+		7E75B27518C2C49B0062C7AD /* GameFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameFormat.m; path = Models/GameFormat.m; sourceTree = "<group>"; };
+		7E75B27718C2C49B0062C7AD /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Action.h; path = Models/Action.h; sourceTree = "<group>"; };
+		7E75B27818C2C49B0062C7AD /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Action.m; path = Models/Action.m; sourceTree = "<group>"; };
+		7E75B27A18C2C4AD0062C7AD /* GameFormat+Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GameFormat+Constants.h"; path = "Models/GameFormat+Constants.h"; sourceTree = "<group>"; };
+		7E75B27B18C2C4AE0062C7AD /* GameFormat+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GameFormat+Constants.m"; path = "Models/GameFormat+Constants.m"; sourceTree = "<group>"; };
 		7E8E530C18A5825100E8425A /* defaultPrefs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = defaultPrefs.plist; sourceTree = "<group>"; };
 		7E8E530E18A5831500E8425A /* SRSParseEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSParseEngine.h; sourceTree = "<group>"; };
 		7E8E530F18A5831500E8425A /* SRSParseEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSParseEngine.m; sourceTree = "<group>"; };
@@ -124,20 +150,6 @@
 		7E8E531D18A59A3400E8425A /* AnimationFlipWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationFlipWindow.h; path = UI/AnimationFlipWindow.h; sourceTree = "<group>"; };
 		7E8E531E18A59A3400E8425A /* AnimationFlipWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationFlipWindow.m; path = UI/AnimationFlipWindow.m; sourceTree = "<group>"; };
 		7E8E532018A59A9A00E8425A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		7E93909E18A9695A005E9E56 /* Hand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hand.h; path = Models/Hand.h; sourceTree = "<group>"; };
-		7E93909F18A9695A005E9E56 /* Hand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Hand.m; path = Models/Hand.m; sourceTree = "<group>"; };
-		7E9390A118A9695B005E9E56 /* ParsedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParsedFile.h; path = Models/ParsedFile.h; sourceTree = "<group>"; };
-		7E9390A218A9695B005E9E56 /* ParsedFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ParsedFile.m; path = Models/ParsedFile.m; sourceTree = "<group>"; };
-		7E9390A418A9695B005E9E56 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = Models/Player.h; sourceTree = "<group>"; };
-		7E9390A518A9695B005E9E56 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = Models/Player.m; sourceTree = "<group>"; };
-		7E9390A718A9695B005E9E56 /* Site.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Site.h; path = Models/Site.h; sourceTree = "<group>"; };
-		7E9390A818A9695B005E9E56 /* Site.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Site.m; path = Models/Site.m; sourceTree = "<group>"; };
-		7E9390AA18A9695B005E9E56 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Action.h; path = Models/Action.h; sourceTree = "<group>"; };
-		7E9390AB18A9695B005E9E56 /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Action.m; path = Models/Action.m; sourceTree = "<group>"; };
-		7E9390AD18A9695B005E9E56 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Card.h; path = Models/Card.h; sourceTree = "<group>"; };
-		7E9390AE18A9695B005E9E56 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Card.m; path = Models/Card.m; sourceTree = "<group>"; };
-		7E9390B018A9695B005E9E56 /* Seat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Seat.h; path = Models/Seat.h; sourceTree = "<group>"; };
-		7E9390B118A9695B005E9E56 /* Seat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Seat.m; path = Models/Seat.m; sourceTree = "<group>"; };
 		7E9390B318A96AC8005E9E56 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		7E9C357A189C56BC002C47A2 /* SRSHandExpectedValueWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSHandExpectedValueWindowController.h; sourceTree = "<group>"; };
 		7E9C357B189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSHandExpectedValueWindowController.m; sourceTree = "<group>"; };
@@ -224,25 +236,29 @@
 				7E02EA05188AF05A001A41C7 /* MainMenu.xib */,
 				7E02EA0B188AF05A001A41C7 /* Images.xcassets */,
 				7E02EA08188AF05A001A41C7 /* Sinister.xcdatamodeld */,
-				7E9390B018A9695B005E9E56 /* Seat.h */,
-				7E9390B118A9695B005E9E56 /* Seat.m */,
-				7E9390AD18A9695B005E9E56 /* Card.h */,
-				7E9390AE18A9695B005E9E56 /* Card.m */,
-				7E9390AA18A9695B005E9E56 /* Action.h */,
-				7E9390AB18A9695B005E9E56 /* Action.m */,
-				7E9390A718A9695B005E9E56 /* Site.h */,
-				7E9390A818A9695B005E9E56 /* Site.m */,
-				7E9390A418A9695B005E9E56 /* Player.h */,
-				7E9390A518A9695B005E9E56 /* Player.m */,
-				7E9390A118A9695B005E9E56 /* ParsedFile.h */,
-				7E9390A218A9695B005E9E56 /* ParsedFile.m */,
-				7E93909E18A9695A005E9E56 /* Hand.h */,
-				7E93909F18A9695A005E9E56 /* Hand.m */,
+				7E75B27718C2C49B0062C7AD /* Action.h */,
+				7E75B27818C2C49B0062C7AD /* Action.m */,
+				7E75B27418C2C49B0062C7AD /* GameFormat.h */,
+				7E75B27518C2C49B0062C7AD /* GameFormat.m */,
+				7E75B27118C2C49B0062C7AD /* Hand.h */,
+				7E75B27218C2C49B0062C7AD /* Hand.m */,
+				7E75B26E18C2C49B0062C7AD /* Site.h */,
+				7E75B26F18C2C49B0062C7AD /* Site.m */,
+				7E75B26B18C2C49B0062C7AD /* Seat.h */,
+				7E75B26C18C2C49B0062C7AD /* Seat.m */,
+				7E75B26818C2C49B0062C7AD /* ParsedFile.h */,
+				7E75B26918C2C49B0062C7AD /* ParsedFile.m */,
+				7E75B26518C2C49B0062C7AD /* Card.h */,
+				7E75B26618C2C49B0062C7AD /* Card.m */,
+				7E75B26218C2C49A0062C7AD /* Player.h */,
+				7E75B26318C2C49A0062C7AD /* Player.m */,
 				7E02E9F7188AF05A001A41C7 /* Supporting Files */,
 				7E448F84188B0B6F00D88D5A /* SRSMavenHandFileParser.h */,
 				7E448F85188B0B6F00D88D5A /* SRSMavenHandFileParser.m */,
 				7E8E530E18A5831500E8425A /* SRSParseEngine.h */,
 				7E8E530F18A5831500E8425A /* SRSParseEngine.m */,
+				7E75B23518C294030062C7AD /* NSDecimalNumber+Abs.h */,
+				7E75B23618C294030062C7AD /* NSDecimalNumber+Abs.m */,
 			);
 			path = Sinister;
 			sourceTree = "<group>";
@@ -292,6 +308,10 @@
 				7E3E786C189855F80073A08A /* Hand+Stats.m */,
 				7E9C3580189C87D9002C47A2 /* SRSHandExpectedValue.h */,
 				7E9C3581189C87D9002C47A2 /* SRSHandExpectedValue.m */,
+				7E75B23218C28A510062C7AD /* Seat+Stats.h */,
+				7E75B23318C28A510062C7AD /* Seat+Stats.m */,
+				7E75B27A18C2C4AD0062C7AD /* GameFormat+Constants.h */,
+				7E75B27B18C2C4AE0062C7AD /* GameFormat+Constants.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -452,26 +472,30 @@
 				7EDA52D118AEC96C001D5371 /* SRSLogImportProgressWindowController.m in Sources */,
 				7E8E531F18A59A3400E8425A /* AnimationFlipWindow.m in Sources */,
 				7E02EA0A188AF05A001A41C7 /* Sinister.xcdatamodeld in Sources */,
+				7E75B26D18C2C49B0062C7AD /* Seat.m in Sources */,
 				7E8E531818A58A4500E8425A /* SRSInitialSetupWindowController.m in Sources */,
+				7E75B27318C2C49B0062C7AD /* Hand.m in Sources */,
 				7E3E783D1896FE0C0073A08A /* SRSParseEngineWindowController.m in Sources */,
 				7E3E78381896F3B20073A08A /* SRSPreferencesWindowController.m in Sources */,
+				7E75B27618C2C49B0062C7AD /* GameFormat.m in Sources */,
+				7E75B26418C2C49A0062C7AD /* Player.m in Sources */,
 				7E3E78331895EDA40073A08A /* Card+Constants.m in Sources */,
-				7E9390A918A9695B005E9E56 /* Site.m in Sources */,
-				7E9390AF18A9695B005E9E56 /* Card.m in Sources */,
 				7E3E78571897589F0073A08A /* SRSPlayerStatsWindowController.m in Sources */,
-				7E9390A018A9695A005E9E56 /* Hand.m in Sources */,
+				7E75B23718C294030062C7AD /* NSDecimalNumber+Abs.m in Sources */,
 				7E02EA2C188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m in Sources */,
+				7E75B26A18C2C49B0062C7AD /* ParsedFile.m in Sources */,
+				7E75B27918C2C49B0062C7AD /* Action.m in Sources */,
+				7E75B27018C2C49B0062C7AD /* Site.m in Sources */,
+				7E75B26718C2C49B0062C7AD /* Card.m in Sources */,
 				7E9C3582189C87D9002C47A2 /* SRSHandExpectedValue.m in Sources */,
-				7E9390A318A9695B005E9E56 /* ParsedFile.m in Sources */,
+				7E75B23418C28A510062C7AD /* Seat+Stats.m in Sources */,
 				7E02E9FD188AF05A001A41C7 /* main.m in Sources */,
 				7E3E786D189855F80073A08A /* Hand+Stats.m in Sources */,
 				7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */,
+				7E75B27C18C2C4AE0062C7AD /* GameFormat+Constants.m in Sources */,
 				7E9C357D189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m in Sources */,
-				7E9390B218A9695B005E9E56 /* Seat.m in Sources */,
 				7E02EA04188AF05A001A41C7 /* SRSAppDelegate.m in Sources */,
-				7E9390AC18A9695B005E9E56 /* Action.m in Sources */,
 				7E448F86188B0B6F00D88D5A /* SRSMavenHandFileParser.m in Sources */,
-				7E9390A618A9695B005E9E56 /* Player.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

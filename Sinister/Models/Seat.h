@@ -2,7 +2,7 @@
 //  Seat.h
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 2/10/14.
+//  Created by Cameron Hotchkies on 3/1/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
@@ -19,7 +19,7 @@
 @property (nonatomic) BOOL isSmallBlind;
 @property (nonatomic) int16_t position;
 @property (nonatomic, retain) NSDecimalNumber * startingChips;
-@property (nonatomic, retain) NSSet *actions;
+@property (nonatomic, retain) NSOrderedSet *actions;
 @property (nonatomic, retain) Hand *hand;
 @property (nonatomic, retain) NSSet *holeCards;
 @property (nonatomic, retain) Player *player;
@@ -27,11 +27,16 @@
 
 @interface Seat (CoreDataGeneratedAccessors)
 
+- (void)insertObject:(Action *)value inActionsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromActionsAtIndex:(NSUInteger)idx;
+- (void)insertActions:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeActionsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInActionsAtIndex:(NSUInteger)idx withObject:(Action *)value;
+- (void)replaceActionsAtIndexes:(NSIndexSet *)indexes withActions:(NSArray *)values;
 - (void)addActionsObject:(Action *)value;
 - (void)removeActionsObject:(Action *)value;
-- (void)addActions:(NSSet *)values;
-- (void)removeActions:(NSSet *)values;
-
+- (void)addActions:(NSOrderedSet *)values;
+- (void)removeActions:(NSOrderedSet *)values;
 - (void)addHoleCardsObject:(Card *)value;
 - (void)removeHoleCardsObject:(Card *)value;
 - (void)addHoleCards:(NSSet *)values;

@@ -297,7 +297,7 @@
                                    insertIntoManagedObjectContext:fastContext];
                 
                 sbAction.action = ActionEventPost;
-                NSDecimalNumber* dn = (NSDecimalNumber*)[self.moneyFormatter numberFromString:ante];
+                NSDecimalNumber* dn = [NSDecimalNumber decimalNumberWithString:ante];
                 sbAction.bet = dn;
                 
                 sbAction.hand = hand;
@@ -340,7 +340,7 @@
                                    insertIntoManagedObjectContext:fastContext];
                 
                 bbAction.action = ActionEventPost;
-                bbAction.bet =  (NSDecimalNumber*)[self.moneyFormatter numberFromString:ante];
+                bbAction.bet = [NSDecimalNumber decimalNumberWithString:ante];
                 
                 bbAction.hand = hand;
                 bbAction.seat = s;
@@ -904,7 +904,6 @@
     
     for (NSValue* sdrv in showdownRanges) {
         NSRange sdr = [sdrv rangeValue];
-        NSLog(@"Showdown: %@", [handData substringWithRange:sdr]);
         [self parseHandData:handData forShowdownWithRange:sdr withHand:rv
                   inContext:fastContext];
     }
@@ -930,17 +929,36 @@
 }
 
 - (void)calculatePerSeatIncome:(Hand*)hand {
-    
     for (Seat* s in hand.seats) {
         NSDecimalNumber *sum = [NSDecimalNumber zero];
+        
+        NSDecimalNumber* bets[10];
+        
+        Player* p = s.player;
+        NSString* pname = p.name;
+        
+        bets[ActionStagePreflop] = [NSDecimalNumber zero];
+        bets[ActionStageFlop] = [NSDecimalNumber zero];
+        bets[ActionStageTurn] = [NSDecimalNumber zero];
+        bets[ActionStageRiver] = [NSDecimalNumber zero];
         
         for (Action* a in s.actions) {
             if (a.action == ActionEventRefunded || a.action == ActionEventWins) {
                 sum = [sum decimalNumberByAdding:a.bet];
-            } else {
-                sum = [sum decimalNumberBySubtracting:a.bet];
+            } else if (a.action == ActionEventRaise) {
+                bets[a.stage] = a.bet;
+            } else if (a.action != ActionEventFold && a.action != ActionEventCheck) {
+                // Folds have a zero, which overwrites the last bet
+                //bets[a.stage] = a.bet;
+                // calls are additive
+                bets[a.stage] = [bets[a.stage] decimalNumberByAdding:a.bet];
             }
         }
+        
+        sum = [sum decimalNumberBySubtracting:bets[ActionStagePreflop]];
+        sum = [sum decimalNumberBySubtracting:bets[ActionStageFlop]];
+        sum = [sum decimalNumberBySubtracting:bets[ActionStageTurn]];
+        sum = [sum decimalNumberBySubtracting:bets[ActionStageRiver]];
         
         s.chipDelta = sum;
     }

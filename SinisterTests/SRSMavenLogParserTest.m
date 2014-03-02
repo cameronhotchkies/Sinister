@@ -231,6 +231,53 @@ Rake (0.03)";
     return rv;
 }
 
+- (void)testBlindStealing {
+    NSString* handData = @"Hand #12345697-021 - 2014-01-18 18:58:08\n\
+Game: NL Hold'em (2 - 10) - Blinds 0.05/0.10\n\
+Site: Seals With Clubs\n\
+Table: NLHE 6max .05/.10 #4\n\
+Seat 1: VillainA (23.55)\n\
+Seat 2: VillainB (10)\n\
+Seat 3: VillainC (21.99)\n\
+Seat 4: VillainD (12.82)\n\
+Seat 5: Hero (4.67)\n\
+Seat 6: VillainE (2) - waiting for big blind\n\
+VillainC has the dealer button\n\
+VillainD posts small blind 0.05\n\
+Hero posts big blind 0.10\n\
+** Hole Cards **\n\
+Dealt to Hero [9d Qh]\n\
+VillainA folds\n\
+VillainB folds\n\
+VillainC folds\n\
+VillainD raises to 0.30\n\
+Hero folds\n\
+VillainD refunded 0.20\n\
+VillainD wins Pot (0.20)\n\
+Rake (0)";
+    SRSMavenHandFileParser *p = [[SRSMavenHandFileParser alloc] init];
+    
+    [p initialize];
+    NSManagedObjectContext* moc = [SRSMavenLogParserTest managedObjectContextForTests];
+    
+    Site* site = [self findOrCreateSealsSite:moc];
+    
+    Hand *h = [p parseHandData:handData forSite:site inContext:moc];
+    NSOrderedSet *ss = h.seats;
+    
+    for (Seat* s in ss) {
+        if ([s.player.name isEqualToString:@"Hero"]) {
+            NSDecimalNumber* expected = [NSDecimalNumber decimalNumberWithString:@"-0.10"];
+            NSDecimalNumber* actual = s.chipDelta;
+            XCTAssert([expected compare:actual] == NSOrderedSame, @"Hero lost 0.10");
+        } else if ([s.player.name isEqualToString:@"VillainD"]) {
+            NSDecimalNumber* expected = [NSDecimalNumber decimalNumberWithString:@"0.10"];
+            NSDecimalNumber* actual = s.chipDelta;
+            XCTAssert([expected compare:actual] == NSOrderedSame, @"Villain won 0.10");
+        }
+    }
+}
+
 - (void)testSplitPots {
     SRSMavenHandFileParser *p = [[SRSMavenHandFileParser alloc] init];
     
@@ -284,8 +331,6 @@ Rake (0.10)";
     Site* site = [self findOrCreateSealsSite:moc];
     
     Hand *h = [p parseHandData:handData forSite:site inContext:moc];
-    NSOrderedSet *ss = h.seats;
-    
     NSString *handID = h.handID;
     
     XCTAssert([handID isEqualToString:@"12345697-020"], @"Match hand ID");
@@ -373,8 +418,6 @@ VillainF adds 9.74 chips";
     Site* site = [self findOrCreateSealsSite:moc];
     
     Hand *h = [p parseHandData:handData forSite:site inContext:moc];
-    NSOrderedSet *ss = h.seats;
-    
     NSString *handID = h.handID;
     
     XCTAssert([handID isEqualToString:@"12345678-001"], @"Match hand ID");

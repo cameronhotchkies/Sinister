@@ -2,7 +2,7 @@
 //  Site.h
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 2/10/14.
+//  Created by Cameron Hotchkies on 3/1/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
@@ -17,8 +17,8 @@
 @property (nonatomic, retain) NSString * handHistoryLocation;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSSet *hands;
-@property (nonatomic, retain) NSSet *players;
 @property (nonatomic, retain) NSSet *parsedHandFiles;
+@property (nonatomic, retain) NSSet *players;
 @end
 
 @interface Site (CoreDataGeneratedAccessors)
@@ -28,14 +28,14 @@
 - (void)addHands:(NSSet *)values;
 - (void)removeHands:(NSSet *)values;
 
-- (void)addPlayersObject:(Player *)value;
-- (void)removePlayersObject:(Player *)value;
-- (void)addPlayers:(NSSet *)values;
-- (void)removePlayers:(NSSet *)values;
-
 - (void)addParsedHandFilesObject:(ParsedFile *)value;
 - (void)removeParsedHandFilesObject:(ParsedFile *)value;
 - (void)addParsedHandFiles:(NSSet *)values;
 - (void)removeParsedHandFiles:(NSSet *)values;
+
+- (void)addPlayersObject:(Player *)value;
+- (void)removePlayersObject:(Player *)value;
+- (void)addPlayers:(NSSet *)values;
+- (void)removePlayers:(NSSet *)values;
 
 @end
