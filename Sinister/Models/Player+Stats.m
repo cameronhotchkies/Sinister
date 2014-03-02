@@ -41,16 +41,38 @@
                                                        ascending:NO];
     
     [fetchRequest setSortDescriptors: [NSArray arrayWithObject:sd]];
+//
+    
+    fetchRequest.resultType = NSDictionaryResultType;
+    
+    NSExpressionDescription* lastSeenDescription = [[NSExpressionDescription alloc] init];
+    [lastSeenDescription setName:@"lastSeen"];
+    
+    NSExpression* dateExpression = [NSExpression expressionForKeyPath:@"hand.date"];
+    NSExpression* maxDate = [NSExpression expressionForFunction:@"max:"
+                                                      arguments:@[dateExpression]];
+    //[lastSeenDescription setExpression:maxDate];
+    [lastSeenDescription setExpression:dateExpression];
+    
+    [lastSeenDescription setExpressionResultType:NSDateAttributeType];
+    
+    fetchRequest.fetchLimit = 1;
+    fetchRequest.propertiesToFetch = @[lastSeenDescription];
+//    NSArray* results = [aMOC executeFetchRequest:fetchRequest error:nil];
+    
     // Execute the fetch
     NSError *error;
     NSArray *seats = [aMOC executeFetchRequest:fetchRequest error:&error];
     
     if ([seats count] > 0) {
-        Seat* s = [seats objectAtIndex:0];
-        Hand* h = s.hand;
-        NSTimeInterval dt = h.date;
+        NSDictionary* d = [seats objectAtIndex:0];
+//        Seat* s = [seats objectAtIndex:0];
+//        Hand* h = s.hand;
+//        NSTimeInterval dt = h.date;
+
+//        NSTimeInterval dt = ();
         
-        return [NSDate dateWithTimeIntervalSince1970:dt];;
+        return [d objectForKey:@"lastSeen"];//[NSDate dateWithTimeIntervalSince1970:dt];;
     } else {
         return nil;
     }
@@ -67,8 +89,9 @@
                                               inManagedObjectContext:aMOC];
     
     [fetchRequest setEntity:entity];
-    //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetPreflop]];
+    
+    // Show (6) or above could give false positives as it doesn't reflect real bet action
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d and action < 6)", self, ActionStreetPreflop]];
     
     // make sure the results are sorted as well
     
@@ -83,15 +106,12 @@
     NSMutableDictionary* compressed = [[NSMutableDictionary alloc] init];
     
     for (Action* a in actions) {
-        // Show could give false positives as it doesn't reflect real bet action
-        if (a.action < ActionEventShow) {
-            if ([compressed objectForKey:a.hand.handID] != nil) {
-                ActionEvent old = [[compressed objectForKey:a.hand.handID] integerValue];
-                ActionEvent max = MAX(old, a.action);
-                [compressed setObject:[NSNumber numberWithInt:max] forKey:a.hand.handID];
-            } else {
-                [compressed setObject:[NSNumber numberWithInt:a.action] forKey:a.hand.handID];
-            }
+        if ([compressed objectForKey:a.hand.handID] != nil) {
+            ActionEvent old = [[compressed objectForKey:a.hand.handID] integerValue];
+            ActionEvent max = MAX(old, a.action);
+            [compressed setObject:[NSNumber numberWithInt:max] forKey:a.hand.handID];
+        } else {
+            [compressed setObject:[NSNumber numberWithInt:a.action] forKey:a.hand.handID];
         }
     }
     
@@ -470,7 +490,7 @@
     fetchRequest.propertiesToFetch = [NSArray arrayWithObjects:deltaSumDescription, nil];
     NSArray* results = [aMOC executeFetchRequest:fetchRequest error:nil];
     
-    NSInteger denominator = results.count;
+    NSInteger denominator = results.count / 100;
     //[[fetchResultsDictionary objectForKey:@"deltaCount"] integerValue];
     
     NSDecimalNumber* sum = [NSDecimalNumber zero];
@@ -495,9 +515,7 @@
 
 - (double)chipsLostToActivePlayer {
     // TODO: this doesn't account for split pots
-    NSUserDefaults* def = [NSUserDefaults standardUserDefaults];
-    NSString* activePlayerName = [def objectForKey:@"activePlayer"];
-    Player* hero = [self findPlayerWithName:activePlayerName forSite:self.site];
+    Player* hero = [self findPlayerWithName:self.site.account forSite:self.site];
     
     // Shortcut, as this will be the most common
     if (self == hero) {
@@ -507,13 +525,11 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Seat"
                                               inManagedObjectContext:aMOC];
     
     [fetchRequest setEntity:entity];
-    
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and chipDelta != 0)", self]];
     NSError *error;
     
