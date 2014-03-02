@@ -26,14 +26,9 @@
 @implementation SRSMavenHandFileParser
 
 - (SRSTitleData*)parseTitleLine:(NSString *)titleLine {
-    NSRegularExpression *titleExp = [NSRegularExpression
-                                     regularExpressionWithPattern:@"Hand #(\\d+-\\d+) - (\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d)"
-                                     options:NSRegularExpressionCaseInsensitive
-                                     error:nil];
-    
-    NSTextCheckingResult *match = [titleExp firstMatchInString:titleLine
-                                                       options:0
-                                                         range:NSMakeRange(0, [titleLine length])];
+    NSTextCheckingResult *match = [self.titlePattern firstMatchInString:titleLine
+                                                                options:0
+                                                                  range:NSMakeRange(0, [titleLine length])];
     
     if (match != nil) {
         SRSTitleData* title = [[SRSTitleData alloc] init];
@@ -41,9 +36,7 @@
         title.handID = [titleLine substringWithRange:[match rangeAtIndex:1]];
         NSString* dateChunk = [titleLine substringWithRange:[match rangeAtIndex:2]];
         
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-        NSDate* d = [dateFormat dateFromString:dateChunk];
+        NSDate* d = [self.dateFormat dateFromString:dateChunk];
         title.date = [d timeIntervalSince1970];
         
         return title;
@@ -88,14 +81,9 @@
               inContext:(NSManagedObjectContext*)fastContext {
     
     for (NSString* sl in seatLines) {
-        NSRegularExpression *seatExp = [NSRegularExpression
-                                         regularExpressionWithPattern:@"Seat (\\d): (.*) \\((\\d+(\\.\\d\\d)?)\\).*"
-                                         options:NSRegularExpressionCaseInsensitive
-                                         error:nil];
-
-        NSTextCheckingResult *match = [seatExp firstMatchInString:sl
-                                                          options:0
-                                                            range:NSMakeRange(0, [sl length])];
+        NSTextCheckingResult *match = [self.seatPattern firstMatchInString:sl
+                                                                   options:0
+                                                                     range:NSMakeRange(0, [sl length])];
         
         
         if (match != nil) {
@@ -110,10 +98,9 @@
             
             seat.position = [seatNum integerValue];
             
-            seat.startingChips = (NSDecimalNumber*) [self.moneyFormatter numberFromString:startingAmount];
+            seat.startingChips = [NSDecimalNumber decimalNumberWithString:startingAmount];
             seat.player = [self findOrCreatePlayerWithName:playerName forSite:hand.site inContext:fastContext];
             seat.hand = hand;
-            //[hand addSeatsObject:seat];
         }
         
     }
@@ -273,14 +260,10 @@
 - (void) parseSmallBlindLine:(NSString*)smallBlindLine
                      forHand:(Hand*)hand
                    inContext:(NSManagedObjectContext*)fastContext {
-    NSRegularExpression *sbExp = [NSRegularExpression
-                                      regularExpressionWithPattern:@"(.*) posts small blind (\\d+(\\.\\d\\d)?)"
-                                      options:NSRegularExpressionCaseInsensitive
-                                      error:nil];
     
-    NSTextCheckingResult *match = [sbExp firstMatchInString:smallBlindLine
-                                                        options:0
-                                                          range:NSMakeRange(0, [smallBlindLine length])];
+    NSTextCheckingResult *match = [self.smallBlindPattern firstMatchInString:smallBlindLine
+                                                                     options:0
+                                                                       range:NSMakeRange(0, [smallBlindLine length])];
     
     if (match != nil) {
         
@@ -314,14 +297,10 @@
 - (void) parseBigBlindLine:(NSString*)bigBlindLine
                    forHand:(Hand*)hand
                  inContext:(NSManagedObjectContext*)fastContext {
-    NSRegularExpression *bbExp = [NSRegularExpression
-                                  regularExpressionWithPattern:@"(.*) posts big blind (\\d+(\\.\\d\\d)?)"
-                                  options:NSRegularExpressionCaseInsensitive
-                                  error:nil];
     
-    NSTextCheckingResult *match = [bbExp firstMatchInString:bigBlindLine
-                                                    options:0
-                                                      range:NSMakeRange(0, [bigBlindLine length])];
+    NSTextCheckingResult *match = [self.bigBlindPattern firstMatchInString:bigBlindLine
+                                                                   options:0
+                                                                     range:NSMakeRange(0, [bigBlindLine length])];
     
     if (match != nil) {
        
@@ -433,16 +412,16 @@
                     
                 } else if ([actionS hasPrefix:@"calls "]) {
                     a.action = ActionEventCall;                    
-                    a.bet = (NSDecimalNumber*)[self.moneyFormatter numberFromString:[actionS substringFromIndex:6]];
+                    a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:6]];
                 } else if ([actionS hasPrefix:@"raises to "]) {
                     a.action = ActionEventRaise;
-                    a.bet = (NSDecimalNumber*)[self.moneyFormatter numberFromString:[actionS substringFromIndex:10]];
+                    a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:10]];
                 } else if ([actionS hasPrefix:@"checks"]) {
                     a.action = ActionEventCheck;
                     a.bet = [NSDecimalNumber zero];
                 } else if ([actionS hasPrefix:@"bets"]) {
                     a.action = ActionEventBet;
-                    a.bet = (NSDecimalNumber*)[self.moneyFormatter numberFromString:[actionS substringFromIndex:5]];
+                    a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:5]];
                 } else if ([actionS hasPrefix:@"shows"]) {
                     a.action = ActionEventShow;
                     a.bet = [NSDecimalNumber zero];
@@ -462,19 +441,17 @@
                     }
                 } else if ([actionS hasPrefix:@"refunded"]) {
                     a.action = ActionEventRefunded;
-                    a.bet = (NSDecimalNumber*)[self.moneyFormatter numberFromString:[actionS substringFromIndex:9]];
+                    a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:9]];
                 } else if ([actionS hasPrefix:@"wins Pot ("]) {
                     a.action = ActionEventWins;
                     NSRange betRange = NSMakeRange(10, actionS.length - 11);
                     NSString* betPart = [actionS substringWithRange:betRange];
                     a.bet = [NSDecimalNumber decimalNumberWithString:betPart];
-                    //(NSDecimalNumber*)[self.moneyFormatter numberFromString:];
                 } else if ([actionS hasPrefix:@"splits Pot ("]) {
                     a.action = ActionEventWins;
                     NSRange betRange = NSMakeRange(12, actionS.length - 13);
                     NSString* betPart = [actionS substringWithRange:betRange];
                     a.bet = [NSDecimalNumber decimalNumberWithString:betPart];
-                    //(NSDecimalNumber*)[self.moneyFormatter numberFromString:];
                 } else if ([actionS hasPrefix:@"wins Side Pot"] || [actionS hasPrefix:@"wins Main Pot"]) {
                     a.action = ActionEventWins;
                     NSRange betRange1 = [actionS rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"("]
@@ -639,54 +616,21 @@
 
 }
 
-- (void)parseHandData:(NSString*)handData forFlopWithRange:(NSRange)flopRange withHand:(Hand*)hand inContext:(NSManagedObjectContext*)fastContext {
-    NSString* flopData = [handData substringWithRange:flopRange];
-    NSArray* flopAction = [flopData componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+- (void)parseStreet:(ActionStreet)street
+           fromText:(NSString*)handText
+          withRange:(NSRange)streetRange
+            forHand:(Hand*)hand
+          inContext:(NSManagedObjectContext*)context {
+    NSString* streetText = [handText substringWithRange:streetRange];
+    NSArray* actionText = [streetText componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
-    // parse flop cards
-    flopAction = [flopAction subarrayWithRange:NSMakeRange(1, flopAction.count - 1)];
+    actionText = [actionText subarrayWithRange:NSMakeRange(1, actionText.count - 1)];
     
-    for (NSString* actionLine in flopAction) {
-        [self parseActionLine:actionLine forStreet:ActionStreetFlop inHand:hand inContext:fastContext];
-    }
-}
-
-- (void)parseHandData:(NSString*)handData forTurnWithRange:(NSRange)turnRange withHand:(Hand*)hand inContext:(NSManagedObjectContext*)fastContext {
-    NSString* turnData = [handData substringWithRange:turnRange];
-    NSArray* turnAction = [turnData componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    
-    // parse turn cards
-    turnAction = [turnAction subarrayWithRange:NSMakeRange(1, turnAction.count - 1)];
-    
-    for (NSString* actionLine in turnAction) {
-        [self parseActionLine:actionLine forStreet:ActionStreetTurn inHand:hand inContext:fastContext];
-    }
-}
-
-- (void)parseHandData:(NSString*)handData forRiverWithRange:(NSRange)riverRange withHand:(Hand*)hand inContext:(NSManagedObjectContext*)fastContext {
-    NSString* riverData = [handData substringWithRange:riverRange];
-    NSArray* riverAction = [riverData componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    
-    // parse river cards
-    riverAction = [riverAction subarrayWithRange:NSMakeRange(1, riverAction.count - 1)];
-    
-    for (NSString* actionLine in riverAction) {
-        [self parseActionLine:actionLine forStreet:ActionStreetRiver inHand:hand inContext:fastContext];
-    }
-}
-
-- (void)parseHandData:(NSString*)handData
- forShowdownWithRange:(NSRange)showdownRange
-             withHand:(Hand*)hand
-            inContext:(NSManagedObjectContext*)fastContext {
-    NSString* sdData = [handData substringWithRange:showdownRange];
-    NSArray* sdAction = [sdData componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    
-    // parse showdown cards
-    sdAction = [sdAction subarrayWithRange:NSMakeRange(1, sdAction.count - 1)];
-    
-    for (NSString* actionLine in sdAction) {
-        [self parseActionLine:actionLine forStreet:ActionStreetShowdown inHand:hand inContext:fastContext];
+    for (NSString* actionLine in actionText) {
+        [self parseActionLine:actionLine
+                    forStreet:street
+                       inHand:hand
+                    inContext:context];
     }
 }
 
@@ -767,14 +711,34 @@
     self.cardCache = [NSMutableDictionary dictionary];
     self.playerCache = [NSMutableDictionary dictionary];
     self.parsedHandCache = [NSMutableDictionary dictionary];
-    self.moneyFormatter = [[NSNumberFormatter alloc] init];
-    [self.moneyFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     
-    // Only generate the regex once
+    self.dateFormat = [[NSDateFormatter alloc] init];
+    [self.dateFormat setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    
+    // Only generate the regexes once
+    self.seatPattern =  [NSRegularExpression regularExpressionWithPattern:@"Seat (\\d): (.*) \\((\\d+(\\.\\d\\d)?)\\).*"
+                                                                  options:NSRegularExpressionCaseInsensitive
+                                                                    error:nil];
+    
+
     self.actionPattern = [NSRegularExpression
                           regularExpressionWithPattern:@"(.*) (folds|calls (\\d+(\\.\\d\\d)?)|raises to (\\d+(\\.\\d\\d)?)|checks|bets (\\d+(\\.\\d\\d)?)|refunded (\\d+(\\.\\d\\d)?)|splits .*\\((\\d+(\\.\\d\\d)?)\\)|wins .*\\((\\d+(\\.\\d\\d)?)\\)|shows \\[[\\dTJQKA][cdhs] [\\dTJQKA][cdhs]\\] \\(.*\\))"
                           options:NSRegularExpressionCaseInsensitive
                           error:nil];
+    
+    self.smallBlindPattern = [NSRegularExpression
+                              regularExpressionWithPattern:@"(.*) posts small blind (\\d+(\\.\\d\\d)?)"
+                              options:NSRegularExpressionCaseInsensitive
+                              error:nil];
+    
+    self.bigBlindPattern = [NSRegularExpression
+                            regularExpressionWithPattern:@"(.*) posts big blind (\\d+(\\.\\d\\d)?)"
+                            options:NSRegularExpressionCaseInsensitive
+                            error:nil];
+    
+    self.titlePattern = [NSRegularExpression regularExpressionWithPattern:@"Hand #(\\d+-\\d+) - (\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d)"
+                                                                  options:NSRegularExpressionCaseInsensitive
+                                                                    error:nil];
 }
 
 - (void)parseHands:(NSArray*)handDatas
@@ -791,9 +755,6 @@
     for (NSString* handData in handDatas) {
         [self parseHandData:handData forSite:fastSite inContext:importContext];
     }
-//    
-//    NSError *error = nil;
-//    [importContext save:&error];
     
     self.cardCache = nil;
 }
@@ -887,33 +848,49 @@
     NSRange flopRange = [self rangeForStreet:ActionStreetFlop inHand:handData];
     
     if (flopRange.location != NSNotFound) {
-        [self parseHandData:handData forFlopWithRange:flopRange withHand:rv inContext:fastContext];
+        [self parseStreet:ActionStreetFlop
+                 fromText:handData
+                withRange:flopRange
+                  forHand:rv
+                inContext:fastContext];
     }
     
     NSRange turnRange = [self rangeForStreet:ActionStreetTurn inHand:handData];
     if (turnRange.location != NSNotFound) {
-        [self parseHandData:handData forTurnWithRange:turnRange withHand:rv inContext:fastContext];
+        [self parseStreet:ActionStreetTurn
+                 fromText:handData
+                withRange:turnRange
+                  forHand:rv
+                inContext:fastContext];
     }
     
     NSRange riverRange = [self rangeForStreet:ActionStreetRiver inHand:handData];
     if (riverRange.location != NSNotFound) {
-        [self parseHandData:handData forRiverWithRange:riverRange withHand:rv inContext:fastContext];
+        [self parseStreet:ActionStreetRiver
+                 fromText:handData
+                withRange:riverRange
+                  forHand:rv
+                inContext:fastContext];
     }
     
     NSArray* showdownRanges = [self rangesForShowdownInHand:handData];
     
     for (NSValue* sdrv in showdownRanges) {
         NSRange sdr = [sdrv rangeValue];
-        [self parseHandData:handData forShowdownWithRange:sdr withHand:rv
-                  inContext:fastContext];
+        [self parseStreet:ActionStreetShowdown
+                 fromText:handData
+                withRange:sdr
+                  forHand:rv
+                inContext:fastContext];
     }
 
     for (NSString* rakeOpt in [hdLines reverseObjectEnumerator]) {
         if ([rakeOpt hasPrefix:@"Rake ("]) {
-            NSString* rakePart = [rakeOpt substringFromIndex:6];
-            NSString* rakeValue = [rakePart substringToIndex:rakePart.length - 1];
+            NSInteger rakeLen = rakeOpt.length;
+            NSRange rakeRange = NSMakeRange(6, rakeLen - 7);
+            NSString* rakeValue = [rakeOpt substringWithRange:rakeRange];
             
-            rv.rake = (NSDecimalNumber*)[self.moneyFormatter numberFromString:rakeValue];
+            rv.rake = [NSDecimalNumber decimalNumberWithString:rakeValue];
             break;
         }
     }

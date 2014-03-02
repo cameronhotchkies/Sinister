@@ -183,16 +183,15 @@
             
             Site* aSite = (Site*)[importContext objectWithID:siteID];
             
-//            site = [self findSiteWithName:site.name inContext:self.aMOC];
-            
             pf = [self fileByName:filename forSite:aSite inContext:importContext];
             
             pf.lastModification = [actualMod timeIntervalSince1970];
             pf.parseTime = [NSDate timeIntervalSinceReferenceDate];
+
+            // ****************************************************
+            // Saving the context is on the burden of the caller
+            // ****************************************************
             
-            NSError *error = nil;
-            [importContext save:&error];
-            NSLog(@"Saved");
         } else {
            // NSLog(@"File (%@) wasn't actually modified?", filename);
         }
@@ -289,10 +288,7 @@ void myCallbackFunction(ConstFSEventStreamRef streamRef,
             NSPersistentStoreCoordinator *coordinator = d.persistentStoreCoordinator;
             [importContext setPersistentStoreCoordinator:coordinator];
             [importContext setUndoManager:nil];
-            
-            //Site* importSite = (Site*)[importContext objectWithID:siteID];
-            //[self findSiteWithName:siteName inContext:importContext];
-            
+
             for (NSURL* fileName in dirContents) {
                 [self parseLogFile:[fileName path] forSite:siteID inContext:importContext];
                 
@@ -300,6 +296,10 @@ void myCallbackFunction(ConstFSEventStreamRef streamRef,
                     [self.progressWindow incrementProgressIndicator];
                 });
             }
+            
+            // Save as one large batch
+            NSError *error = nil;
+            [importContext save:&error];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"SRSEngineInitialized"
                                                                 object:nil];

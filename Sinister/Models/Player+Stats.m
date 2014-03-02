@@ -525,30 +525,9 @@
                 }
             }
             
-//            if (s.player == hero) {
-//                sum += MIN([wHand amountSpentByPlayer:self], s.chipDelta);
-//            }
         }
     }
-    
-//    for (Action* w in activePlayerWins) {
-//        Hand* wHand = w.hand;
-//        
-//    
-//        
-//        sum += MIN([wHand amountSpentByPlayer:self], [w.bet doubleValue]);
-//    }
-//    
-//    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and action == %d)", self, ActionEventWins]];
-//    
-//    NSArray* thisPlayerWins = [aMOC executeFetchRequest:fetchRequest error:&error];
-//    
-//    for (Action* w in thisPlayerWins) {
-//        Hand* wHand = w.hand;
-//        
-//        sum -= MIN([wHand amountSpentByPlayer:hero], [w.bet doubleValue]);
-//    }
-    
+ 
     return sum;
 }
 
