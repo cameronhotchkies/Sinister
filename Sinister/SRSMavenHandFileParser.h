@@ -15,6 +15,7 @@
 @property (strong) NSMutableDictionary* cardCache;
 @property (strong) NSMutableDictionary* playerCache;
 @property (strong) NSMutableDictionary* parsedHandCache;
+@property (strong) NSMutableArray* gameFormats;
 
 @property (strong) NSRegularExpression* actionPattern;
 @property (strong) NSRegularExpression* seatPattern;
@@ -28,6 +29,6 @@
 - (Hand*)parseHandData:(NSString*)handData forSite:(Site*)site inContext:(NSManagedObjectContext*)fastContext;
 - (void)parseHands:(NSArray*)handDatas forSiteID:(NSManagedObjectID*)siteID inContext:(NSManagedObjectContext*)importContext;
 
-- (void)initialize;
+- (void)initialize:(NSManagedObjectContext*)context;
 
 @end

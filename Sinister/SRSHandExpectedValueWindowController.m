@@ -37,42 +37,6 @@
     [self generateEVforHands];
 }
 
-
-- (char)cardToRankChar:(CardRankType)rank {
-    switch (rank) {
-        case CardRankAce:
-            return 'A';
-        case CardRankKing:
-            return 'K';
-        case CardRankQueen:
-            return 'Q';
-        case CardRankJack:
-            return 'J';
-        case CardRankTen:
-            return 'T';
-        default:
-            return '1' - 1 + rank;
-            
-    }
-}
-
-- (CardRankType)charToCardRank:(char)c {
-    switch (c) {
-        case 'A':
-            return CardRankAce;
-        case 'K':
-            return CardRankKing;
-        case 'Q':
-            return CardRankQueen;
-        case 'J':
-            return CardRankJack;
-        case 'T':
-            return CardRankTen;
-        default:
-            return [[NSString stringWithFormat:@"%c", c] intValue];
-    }
-}
-
 - (void)generateEVforHands {
     
     // create the fetch request to get all Employees matching the IDs
@@ -110,13 +74,12 @@
             
             NSString* holeString;
             if (c1.rank != c2.rank && ((c1.rank > c2.rank && c2.rank != CardRankAce) || c1.rank == CardRankAce)) {
-                holeString = [NSString stringWithFormat:@"%c%c%c", [self cardToRankChar:c1.rank],  [self cardToRankChar:c2.rank], suit];
+                holeString = [NSString stringWithFormat:@"%c%c%c", [Card rankToChar:c1.rank],  [Card rankToChar:c2.rank], suit];
             } else if (c1.rank != c2.rank && ((c2.rank > c1.rank && c1.rank != CardRankAce) || c2.rank == CardRankAce)) {
-                 holeString = [NSString stringWithFormat:@"%c%c%c", [self cardToRankChar:c2.rank],  [self cardToRankChar:c1.rank], suit];
+                holeString = [NSString stringWithFormat:@"%c%c%c", [Card rankToChar:c2.rank],  [Card rankToChar:c1.rank], suit];
             } else {
-                 holeString = [NSString stringWithFormat:@"%c%c", [self cardToRankChar:c1.rank],  [self cardToRankChar:c2.rank]];
+                holeString = [NSString stringWithFormat:@"%c%c", [Card rankToChar:c1.rank],  [Card rankToChar:c2.rank]];
             }
-            
             
             SRSHandExpectedValue* payouts = [cardPayouts objectForKey:holeString];
             
@@ -140,8 +103,8 @@
         char c11 = [h1 characterAtIndex:0];
         char c21 = [h2 characterAtIndex:0];
         
-        CardRankType r11 = [self charToCardRank:c11];
-        CardRankType r21 = [self charToCardRank:c21];
+        CardRankType r11 = [Card rankFromChar:c11];
+        CardRankType r21 = [Card rankFromChar:c21];
     
         
         
@@ -159,8 +122,8 @@
             char c12 = [h1 characterAtIndex:1];
             char c22 = [h2 characterAtIndex:1];
             
-            CardRankType r12 = [self charToCardRank:c12];
-            CardRankType r22 = [self charToCardRank:c22];
+            CardRankType r12 = [Card rankFromChar:c12];
+            CardRankType r22 = [Card rankFromChar:c22];
             if (r12 != r22) {
                 if (r12 == CardRankAce) {
                     return NSOrderedDescending;

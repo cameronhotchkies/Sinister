@@ -33,4 +33,12 @@ typedef NS_ENUM(NSInteger, CardSuitType) {
 
 @interface Card (Constants)
 
++ (CardSuitType)suitFromChar:(char)c;
++ (CardRankType)rankFromChar:(char)c;
+
++ (char)rankToChar:(CardRankType)r;
++ (char)suitToChar:(CardSuitType)s;
+
+- (NSString*)printable;
+
 @end

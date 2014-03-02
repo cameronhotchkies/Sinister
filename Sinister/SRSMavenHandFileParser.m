@@ -13,6 +13,7 @@
 #import "Action+Constants.h"
 #import "Site.h"
 #import "Card+Constants.h"
+#import "GameFormat+Constants.h"
 
 @interface SRSTitleData : NSObject
 
@@ -45,35 +46,72 @@
     return nil;
 }
 
-- (void) parseGameDescriptionLine:(NSString *)descLine forHand:(Hand *)hand  {
-    NSRegularExpression *descExp = [NSRegularExpression
-                                     regularExpressionWithPattern:@"Game: (.*)"
-                                     options:NSRegularExpressionCaseInsensitive
-                                     error:nil];
+- (SRSGameFormat*) parseGameDescriptionLine:(NSString *)gameLine withTable:(NSString*)tableLine  {
+    SRSGameFormat* gameFormat = [[SRSGameFormat alloc] init];
     
-    NSTextCheckingResult *match = [descExp firstMatchInString:descLine
-                                                       options:0
-                                                         range:NSMakeRange(0, [descLine length])];
+    NSString* description = [gameLine substringFromIndex:6];
+
+    gameFormat.description = description;
     
-    if (match != nil) {
-        hand.game = [descLine substringWithRange:[match rangeAtIndex:1]];
+    NSString* postFlavor;
+    
+    if ([description hasPrefix:@"NL Hold'em"]) {
+        gameFormat.flavor = NLHE;
+        postFlavor = [description substringFromIndex:12];
+    } else if ([description hasPrefix:@"PL Omaha"]) {
+        gameFormat.flavor = PLO;
+        postFlavor = [description substringFromIndex:10];
+    } else {
+        return nil;
     }
+    
+    NSRange buyinRange = [postFlavor rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@")"]];
+    NSString* buyinFormat = [postFlavor substringToIndex:buyinRange.location];
+    
+    NSArray* cashBlinds = [buyinFormat componentsSeparatedByString:@" - "];
+    
+    if (cashBlinds.count == 2) {
+        // It's a cash game
+        gameFormat.minBuyin = [NSDecimalNumber decimalNumberWithString:[cashBlinds objectAtIndex:0]];
+        gameFormat.maxBuyin = [NSDecimalNumber decimalNumberWithString:[cashBlinds objectAtIndex:1]];
+        
+        NSRange blindRange = [postFlavor rangeOfString:@") - Blinds "];
+        NSString* blindString = [postFlavor substringFromIndex:blindRange.location + blindRange.length];
+        
+        NSArray* blinds = [blindString componentsSeparatedByString:@"/"];
+        gameFormat.bigBlind = [NSDecimalNumber decimalNumberWithString:[blinds objectAtIndex:1]];
+        
+        if ([tableLine rangeOfString:@"6max"].location != NSNotFound) {
+            gameFormat.maxPlayers = 6;
+        } else if ([tableLine rangeOfString:@"9max"].location != NSNotFound) {
+            gameFormat.maxPlayers = 9;
+        } else {
+            NSLog(@"Unknown seat count.. skipping");
+            return nil;
+        }
+    } else {
+        // SNG, but not supported yet
+        // TODO: finish out
+        return nil;
+    }
+    
+    return gameFormat;
 }
 
 - (void) parseTableDescriptionLine:(NSString *)tableLine forHand:(Hand *)hand  {
     NSRegularExpression *tableExp = [NSRegularExpression
-                                    regularExpressionWithPattern:@"Table: (.*)"
-                                    options:NSRegularExpressionCaseInsensitive
-                                    error:nil];
+                                     regularExpressionWithPattern:@"Table: (.*)"
+                                     options:NSRegularExpressionCaseInsensitive
+                                     error:nil];
     
     NSTextCheckingResult *match = [tableExp firstMatchInString:tableLine
-                                                      options:0
-                                                        range:NSMakeRange(0, [tableLine length])];
+                                                       options:0
+                                                         range:NSMakeRange(0, [tableLine length])];
     
     if (match != nil) {
         hand.table = [tableLine substringWithRange:[match rangeAtIndex:1]];
     }
-
+    
 }
 
 - (void) parseSeatLines:(NSArray*)seatLines
@@ -104,89 +142,6 @@
         }
         
     }
-}
-
-// Don't create
-- (Site*)findSiteWithName:(NSString*)name
-                inContext:(NSManagedObjectContext*)fastContext {
-    
-    // create the fetch request
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Site"
-                                              inManagedObjectContext:fastContext];
-    
-    [fetchRequest setEntity:entity];
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(name == %@)", name]];
-    
-    // make sure the results are sorted as well
-    
-    NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey: @"name"
-                                                       ascending:YES];
-    
-    [fetchRequest setSortDescriptors: [NSArray arrayWithObject:sd]];
-    // Execute the fetch
-    NSError *error;
-    NSArray *sites = [fastContext executeFetchRequest:fetchRequest error:&error];
-    
-    // TODO: check error
-    
-    Site *rv = nil;
-    
-    if ([sites count] != 0) {
-        rv = [sites objectAtIndex:0];
-    }
-    
-    return rv;
-}
-
-
-
-- (Card*)findOrCreateCardWithSuit:(CardSuitType)s
-                          andRank:(CardRankType)r
-                        inContext:(NSManagedObjectContext*)fastContext {
-    
-    NSInteger cardKey = s << 4 | r;
-    
-    Card* cached = [self.cardCache objectForKey:[NSNumber numberWithInteger:cardKey]];
-    if (cached != nil) {
-        return cached;
-    }
-    
-    // create the fetch request
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Card"
-                                              inManagedObjectContext:fastContext];
-    
-    [fetchRequest setEntity:entity];
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(rank == %d and suit == %d)", r, s]];
-    
-    // make sure the results are sorted as well
-    
-    NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey: @"rank"
-                                                       ascending:YES];
-    
-    [fetchRequest setSortDescriptors: [NSArray arrayWithObject:sd]];
-    // Execute the fetch
-    NSError *error;
-    NSArray *cards = [fastContext executeFetchRequest:fetchRequest error:&error];
-    
-    // TODO: check error
-    
-    Card *rv;
-    
-    if ([cards count] == 0) {
-        rv = [[Card alloc] initWithEntity:entity
-             insertIntoManagedObjectContext:fastContext];
-        rv.rank = r;
-        rv.suit = s;
-        
-    } else {
-        rv = [cards objectAtIndex:0];
-    }
-    
-    [self.cardCache setObject:rv forKey:[NSNumber numberWithInteger:cardKey]];
-    
-    return rv;
 }
 
 - (Player*)findOrCreatePlayerWithName:(NSString*)name
@@ -225,7 +180,7 @@
              insertIntoManagedObjectContext:fastContext];
         rv.name = name;
         rv.site = site;
-    
+        
     } else {
         rv = [players objectAtIndex:0];
     }
@@ -236,17 +191,8 @@
 }
 
 - (void) parseDealerLine:(NSString*)dealerLine forHand:(Hand*)hand {
-    NSRegularExpression *dealerExp = [NSRegularExpression
-                                     regularExpressionWithPattern:@"(.*) has the dealer button"
-                                     options:NSRegularExpressionCaseInsensitive
-                                     error:nil];
-    
-    NSTextCheckingResult *match = [dealerExp firstMatchInString:dealerLine
-                                                       options:0
-                                                         range:NSMakeRange(0, [dealerLine length])];
-    
-    if (match != nil) {
-        NSString* dealerName = [dealerLine substringWithRange:[match rangeAtIndex:1]];
+    if ([dealerLine hasSuffix:@" has the dealer button"]) {
+        NSString* dealerName = [dealerLine substringToIndex:dealerLine.length - 22];
         
         for (Seat* s in hand.seats) {
             if ([s.player.name isEqualToString:dealerName]) {
@@ -303,14 +249,14 @@
                                                                      range:NSMakeRange(0, [bigBlindLine length])];
     
     if (match != nil) {
-       
+        
         NSString* bbName = [bigBlindLine substringWithRange:[match rangeAtIndex:1]];
         
         NSString* ante = [bigBlindLine substringWithRange:[match rangeAtIndex:2]];
         
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                                   inManagedObjectContext:fastContext];
-
+        
         
         for (Seat* s in hand.seats) {
             if ([s.player.name isEqualToString:bbName]) {
@@ -330,143 +276,92 @@
     }
 }
 
-- (CardSuitType)charToSuit:(char) c {
-    CardSuitType s;
-    switch (c) {
-        case 'd':
-            s = CardSuitDiamonds;
-            break;
-        case 'c':
-            s = CardSuitClubs;
-            break;
-        case 'h':
-            s = CardSuitHearts;
-            break;
-        case 's':
-            s = CardSuitSpades;
-            break;
-    }
-    return s;
-}
-
-- (CardRankType)charToRank:(char) c {
-    CardRankType r;
-    
-    switch (c) {
-        case 'T':
-            r = CardRankTen;
-            break;
-        case 'J':
-            r = CardRankJack;
-            break;
-        case 'Q':
-            r = CardRankQueen;
-            break;
-        case 'K':
-            r = CardRankKing;
-            break;
-        case 'A':
-            r = CardRankAce;
-            break;
-        default:
-            r = [[NSString stringWithFormat:@"%c", c] intValue];;
-            break;
-    }
-    
-    return r;
-}
-
 - (void)parseActionLine:(NSString*)actionLine
-               forStreet:(NSInteger)street
+              forStreet:(NSInteger)street
                  inHand:(Hand*)hand
               inContext:(NSManagedObjectContext*)fastContext {
-   
+    
     NSRegularExpression *axnExp = self.actionPattern;
     
     NSTextCheckingResult *match = [axnExp firstMatchInString:actionLine
-                                                    options:0
-                                                      range:NSMakeRange(0, [actionLine length])];
+                                                     options:0
+                                                       range:NSMakeRange(0, [actionLine length])];
     
     if (match != nil) {
         NSString* playerName = [actionLine substringWithRange:[match rangeAtIndex:1]];
-
+        
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                                   inManagedObjectContext:fastContext];
         
         Action* a = [[Action alloc] initWithEntity:entity
                     insertIntoManagedObjectContext:fastContext];
-
+        
         for (Seat* s in hand.seats) {
-            if ([s.player.name isEqualToString:playerName]) {
-                
-                
-                Player* p = s.player;
-                a.player = p;
-                a.seat = s;
-                
-                NSString* actionS = [actionLine substringWithRange:[match rangeAtIndex:2]];
-                
-                if ([actionS isEqualToString:@"folds"]) {
-                    a.action = ActionEventFold;
-                    a.bet = [NSDecimalNumber zero];
+            @autoreleasepool {
+                if ([s.player.name isEqualToString:playerName]) {
                     
-                } else if ([actionS hasPrefix:@"calls "]) {
-                    a.action = ActionEventCall;                    
-                    a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:6]];
-                } else if ([actionS hasPrefix:@"raises to "]) {
-                    a.action = ActionEventRaise;
-                    a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:10]];
-                } else if ([actionS hasPrefix:@"checks"]) {
-                    a.action = ActionEventCheck;
-                    a.bet = [NSDecimalNumber zero];
-                } else if ([actionS hasPrefix:@"bets"]) {
-                    a.action = ActionEventBet;
-                    a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:5]];
-                } else if ([actionS hasPrefix:@"shows"]) {
-                    a.action = ActionEventShow;
-                    a.bet = [NSDecimalNumber zero];
-                    // Set hole cards
-                    NSRange holeRange = NSMakeRange(7, 5);
-                    NSString* cardPart = [actionS substringWithRange:holeRange];
-                    NSArray* holeCardsStr = [cardPart componentsSeparatedByString:@" "];
-                    for (NSString* c in holeCardsStr) {
-                        CardRankType r;
-                        CardSuitType suit;
+                    Player* p = s.player;
+                    a.player = p;
+                    a.seat = s;
+                    
+                    NSString* actionS = [actionLine substringWithRange:[match rangeAtIndex:2]];
+                    
+                    if ([actionS isEqualToString:@"folds"]) {
+                        a.action = ActionEventFold;
+                        a.bet = [NSDecimalNumber zero];
                         
-                        r = [self charToRank:[c characterAtIndex:0]];
-                        suit = [self charToSuit:[c characterAtIndex:1]];
+                    } else if ([actionS hasPrefix:@"calls "]) {
+                        a.action = ActionEventCall;
+                        a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:6]];
+                    } else if ([actionS hasPrefix:@"raises to "]) {
+                        a.action = ActionEventRaise;
+                        a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:10]];
+                    } else if ([actionS hasPrefix:@"checks"]) {
+                        a.action = ActionEventCheck;
+                        a.bet = [NSDecimalNumber zero];
+                    } else if ([actionS hasPrefix:@"bets"]) {
+                        a.action = ActionEventBet;
+                        a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:5]];
+                    } else if ([actionS hasPrefix:@"shows"]) {
+                        a.action = ActionEventShow;
+                        a.bet = [NSDecimalNumber zero];
+                        // Set hole cards
+                        NSRange holeRange = NSMakeRange(7, 5);
+                        NSString* cardPart = [actionS substringWithRange:holeRange];
+                        NSArray* holeCardsStr = [cardPart componentsSeparatedByString:@" "];
+                        for (NSString* c in holeCardsStr) {
+                            Card *card = [self.cardCache objectForKey:c];
+                            [s addHoleCardsObject:card];
+                        }
+                    } else if ([actionS hasPrefix:@"refunded"]) {
+                        a.action = ActionEventRefunded;
+                        a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:9]];
+                    } else if ([actionS hasPrefix:@"wins Pot ("]) {
+                        a.action = ActionEventWins;
+                        NSRange betRange = NSMakeRange(10, actionS.length - 11);
+                        NSString* betPart = [actionS substringWithRange:betRange];
+                        a.bet = [NSDecimalNumber decimalNumberWithString:betPart];
+                    } else if ([actionS hasPrefix:@"splits Pot ("]) {
+                        a.action = ActionEventWins;
+                        NSRange betRange = NSMakeRange(12, actionS.length - 13);
+                        NSString* betPart = [actionS substringWithRange:betRange];
+                        a.bet = [NSDecimalNumber decimalNumberWithString:betPart];
+                    } else if ([actionS hasPrefix:@"wins Side Pot"] || [actionS hasPrefix:@"wins Main Pot"]) {
+                        a.action = ActionEventWins;
+                        NSRange betRange1 = [actionS rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"("]
+                                                                     options:NSCaseInsensitiveSearch];
+                        NSRange betRange2 = [actionS rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@")"]
+                                                                     options:NSCaseInsensitiveSearch];
+                        NSRange betRange = NSMakeRange(betRange1.location + 1, betRange2.location - betRange1.location - 1);
                         
-                        Card *c = [self findOrCreateCardWithSuit:suit andRank:r inContext:fastContext];
-                        [s addHoleCardsObject:c];
+                        NSString* betString = [actionS substringWithRange:betRange];
+                        a.bet = [NSDecimalNumber decimalNumberWithString:betString];
+                    } else {
+                        assert(NO);
                     }
-                } else if ([actionS hasPrefix:@"refunded"]) {
-                    a.action = ActionEventRefunded;
-                    a.bet = [NSDecimalNumber decimalNumberWithString:[actionS substringFromIndex:9]];
-                } else if ([actionS hasPrefix:@"wins Pot ("]) {
-                    a.action = ActionEventWins;
-                    NSRange betRange = NSMakeRange(10, actionS.length - 11);
-                    NSString* betPart = [actionS substringWithRange:betRange];
-                    a.bet = [NSDecimalNumber decimalNumberWithString:betPart];
-                } else if ([actionS hasPrefix:@"splits Pot ("]) {
-                    a.action = ActionEventWins;
-                    NSRange betRange = NSMakeRange(12, actionS.length - 13);
-                    NSString* betPart = [actionS substringWithRange:betRange];
-                    a.bet = [NSDecimalNumber decimalNumberWithString:betPart];
-                } else if ([actionS hasPrefix:@"wins Side Pot"] || [actionS hasPrefix:@"wins Main Pot"]) {
-                    a.action = ActionEventWins;
-                    NSRange betRange1 = [actionS rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"("]
-                                                                 options:NSCaseInsensitiveSearch];
-                    NSRange betRange2 = [actionS rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@")"]
-                                                                 options:NSCaseInsensitiveSearch];
-                    NSRange betRange = NSMakeRange(betRange1.location + 1, betRange2.location - betRange1.location - 1);
                     
-                    NSString* betString = [actionS substringWithRange:betRange];
-                    a.bet = [NSDecimalNumber decimalNumberWithString:betString];
-                } else {
-                    assert(NO);
+                    break;
                 }
-                
-                break;
             }
         }
         
@@ -493,7 +388,7 @@
         
         // Showdowns always end with a rake
         NSRange rakeRange = [sdToEnd rangeOfString:@"Rake ("];
-//        NSString* sdText = [sdToEnd substringToIndex:rakeRange.location];
+        //        NSString* sdText = [sdToEnd substringToIndex:rakeRange.location];
         
         NSRange sdRange = NSMakeRange(sol.location + 1, rakeRange.location + (eol.location - sol.location));
         
@@ -503,15 +398,7 @@
                                         options:NSCaseInsensitiveSearch
                                           range:NSMakeRange(eol.location, handLength - eol.location)];
     }
-//    if (splitByShowdowns.count == 1) {
-//        // Just return an empty array, there are no showdowns
-//        return [NSArray array];
-//    } else {
-//        NSString* compOne = [splitByShowdowns objectAtIndex:0];
-//        NSRange sdEnd = [compOne rangeOfString:@"**" options:NSBackwardsSearch];
-//        stop = sdEnd.location;
-//    }
-
+    
     return showdowns;
 }
 
@@ -552,7 +439,7 @@
         case ActionStreetShowdown:
             // This shouldn't be called anymore
             // There's a separate function that handles multiple showdowns
-//            assert(NO);
+            //            assert(NO);
             start = [fullHand rangeOfString:@"** Pot Show Down **"].location;
             stop = rakeLoc;
             break;
@@ -582,20 +469,12 @@
         NSString* holeString = [dealtPart substringFromIndex:dealtPart.length - 7];
         NSRange hole1R = NSMakeRange(1, 2);
         NSRange hole2R = NSMakeRange(4, 2);
-
+        
         NSString* h1 = [holeString substringWithRange:hole1R];
         NSString* h2 = [holeString substringWithRange:hole2R];
         
-        CardRankType r;
-        CardSuitType suit;
-        
-        r = [self charToRank:[h1 characterAtIndex:0]];
-        suit = [self charToSuit:[h1 characterAtIndex:1]];
-        
-        Card *c1 = [self findOrCreateCardWithSuit:suit andRank:r inContext:fastContext];
-        r = [self charToRank:[h2 characterAtIndex:0]];
-        suit = [self charToSuit:[h2 characterAtIndex:1]];
-        Card *c2 = [self findOrCreateCardWithSuit:suit andRank:r inContext:fastContext];
+        Card *c1 = [self.cardCache objectForKey:h1];    
+        Card *c2 = [self.cardCache objectForKey:h2];
         
         for (Seat* s in hand.seats) {
             if ([s.player.name isEqualToString:activeName]) {
@@ -613,7 +492,7 @@
     for (NSString* actionLine in preflopAction) {
         [self parseActionLine:actionLine forStreet:ActionStreetPreflop inHand:hand inContext:fastContext];
     }
-
+    
 }
 
 - (void)parseStreet:(ActionStreet)street
@@ -635,17 +514,8 @@
 }
 
 - (NSString*)parseSiteLine:(NSString*)siteLine {
-    NSRegularExpression *siteExp = [NSRegularExpression
-                                    regularExpressionWithPattern:@"Site: (.*)"
-                                    options:NSRegularExpressionCaseInsensitive
-                                    error:nil];
-    
-    NSTextCheckingResult *match = [siteExp firstMatchInString:siteLine
-                                                      options:0
-                                                        range:NSMakeRange(0, [siteLine length])];
-    
-    if (match != nil) {
-        NSString* siteName = [siteLine substringWithRange:[match rangeAtIndex:1]];
+    if ([siteLine hasPrefix:@"Site: "]) {
+        NSString* siteName = [siteLine substringFromIndex:6];
         return siteName;
     }
     
@@ -662,7 +532,6 @@
                                               inManagedObjectContext:fastContext];
     
     [fetchRequest setEntity:entity];
-    //and site.name == %@
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(handID == %@ and site == %@)", handID, site]];
     
     // make sure the results are sorted as well
@@ -689,7 +558,6 @@
                                               inManagedObjectContext:fastContext];
     
     [fetchRequest setEntity:entity];
-    //and site.name == %@
     [fetchRequest setPredicate:nil];
     
     // make sure the results are sorted as well
@@ -707,8 +575,68 @@
     }
 }
 
-- (void)initialize {
+- (void)initializeCardCache:(NSManagedObjectContext*)context {
     self.cardCache = [NSMutableDictionary dictionary];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Card"
+                                              inManagedObjectContext:context];
+    
+    [fetchRequest setEntity:entity];
+    [fetchRequest setPredicate:nil];
+   
+    // Execute the fetch
+    NSError *error;
+    NSArray *cards = [context executeFetchRequest:fetchRequest error:&error];
+    
+    if (cards.count == 52) {
+        // save them to the cache
+        for (Card* c in cards) {
+            [self.cardCache setObject:c forKey:[c printable]];
+        }
+        
+    } else if (cards.count == 0) {
+        // generate cards, then cache
+        for (NSInteger s = 1; s <= 4; s++) {
+            for (NSInteger r = 1; r <= 13; r++) {
+                Card* newCard = [[Card alloc] initWithEntity:entity
+                              insertIntoManagedObjectContext:context];
+                newCard.rank = r;
+                newCard.suit = s;
+                
+                NSString* key = [newCard printable];
+                
+                [self.cardCache setObject:newCard forKey:key];
+            }
+        }
+        
+    } else {
+        // This shouldn't happen
+        assert(NO);
+    }
+}
+
+- (void)initializeGameFormats:(NSManagedObjectContext*)context {
+    self.gameFormats = [NSMutableArray array];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"GameFormat"
+                                              inManagedObjectContext:context];
+    
+    [fetchRequest setEntity:entity];
+    [fetchRequest setPredicate:nil];
+
+    // Execute the fetch
+    NSError *error;
+    NSArray *formats = [context executeFetchRequest:fetchRequest error:&error];
+    
+    for (GameFormat* fmt in formats) {
+        [self.gameFormats addObject:fmt];
+    }
+}
+
+- (void)initialize:(NSManagedObjectContext*)context {
+    [self initializeCardCache:context];
     self.playerCache = [NSMutableDictionary dictionary];
     self.parsedHandCache = [NSMutableDictionary dictionary];
     
@@ -720,7 +648,7 @@
                                                                   options:NSRegularExpressionCaseInsensitive
                                                                     error:nil];
     
-
+    
     self.actionPattern = [NSRegularExpression
                           regularExpressionWithPattern:@"(.*) (folds|calls (\\d+(\\.\\d\\d)?)|raises to (\\d+(\\.\\d\\d)?)|checks|bets (\\d+(\\.\\d\\d)?)|refunded (\\d+(\\.\\d\\d)?)|splits .*\\((\\d+(\\.\\d\\d)?)\\)|wins .*\\((\\d+(\\.\\d\\d)?)\\)|shows \\[[\\dTJQKA][cdhs] [\\dTJQKA][cdhs]\\] \\(.*\\))"
                           options:NSRegularExpressionCaseInsensitive
@@ -742,21 +670,35 @@
 }
 
 - (void)parseHands:(NSArray*)handDatas
-           forSiteID:(NSManagedObjectID*)siteID
+         forSiteID:(NSManagedObjectID*)siteID
          inContext:(NSManagedObjectContext*)importContext {
     
-    [self initialize];
+    [self initialize:importContext];
     [self loadHandCache:importContext];
     
     // Can't cross pollinate data from different contexts
     Site* fastSite = (Site*)[importContext objectWithID:siteID];
-    //[self findSiteWithName:site.name inContext:importContext];
     
     for (NSString* handData in handDatas) {
         [self parseHandData:handData forSite:fastSite inContext:importContext];
     }
     
     self.cardCache = nil;
+}
+
+- (GameFormat*)findGameFormat:(SRSGameFormat*)f
+                    inContext:(NSManagedObjectContext*)context {
+    
+    for (GameFormat* gf in self.gameFormats) {
+        if ([f equals:gf]) {
+            return gf;
+        }
+    }
+    
+    // Didn't find one, create one
+    GameFormat* newFormat = [f toManagedObject:context];
+    [self.gameFormats addObject:newFormat];
+    return newFormat;
 }
 
 - (Hand*)parseHandData:(NSString*)handData forSite:(Site*)site inContext:(NSManagedObjectContext*)fastContext {
@@ -770,6 +712,12 @@
     NSString *titleLine = [hdLines objectAtIndex:0];
     
     SRSTitleData* title = [self parseTitleLine:titleLine];
+    SRSGameFormat* gameFormat = [self parseGameDescriptionLine:[hdLines objectAtIndex:1]
+                                                     withTable:[hdLines objectAtIndex:3]];
+    
+    if (gameFormat == nil) {
+        return nil;
+    }
     
     // Line 2 is the Site name
     NSString* siteName = [self parseSiteLine:[hdLines objectAtIndex:2]];
@@ -792,13 +740,19 @@
         return [self handWithId:title.handID forSite:site inContext:fastContext];
     } else {
         rv = [[Hand alloc] initWithEntity:entity
-                 insertIntoManagedObjectContext:fastContext];
+           insertIntoManagedObjectContext:fastContext];
         rv.handID = title.handID;
         rv.date = title.date;
         rv.site = site;
     }
     
-    [self parseGameDescriptionLine:[hdLines objectAtIndex:1] forHand:rv];
+    GameFormat* format = [self findGameFormat:gameFormat
+                                    inContext:fastContext];
+    
+    rv.gameFormat = format;
+    
+    NSString* gameDescription = [[hdLines objectAtIndex:1] substringFromIndex:6];
+    rv.game = gameDescription;
 
     
     [self parseTableDescriptionLine:[hdLines objectAtIndex:3] forHand:rv];
@@ -838,7 +792,7 @@
         
         NSString* hs = [hdLines objectAtIndex:seatsEndRange + bbIndex];
         if (![hs isEqualToString:@"** Hole Cards **"]) {
-           
+            
         }
     }
     
@@ -883,7 +837,7 @@
                   forHand:rv
                 inContext:fastContext];
     }
-
+    
     for (NSString* rakeOpt in [hdLines reverseObjectEnumerator]) {
         if ([rakeOpt hasPrefix:@"Rake ("]) {
             NSInteger rakeLen = rakeOpt.length;
@@ -906,8 +860,8 @@
         
         NSDecimalNumber* bets[10];
         
-//        Player* p = s.player;
-//        NSString* pname = p.name;
+        //        Player* p = s.player;
+        //        NSString* pname = p.name;
         
         bets[ActionStreetPreflop] = [NSDecimalNumber zero];
         bets[ActionStreetFlop] = [NSDecimalNumber zero];

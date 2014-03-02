@@ -45,7 +45,6 @@
 - (void)testUpToFlop
 {
     SRSMavenHandFileParser *p = [[SRSMavenHandFileParser alloc] init];
-    [p initialize];
     
     NSString *sampleHandData = @"Hand #12345679-010 - 2014-01-16 23:59:34\n\
 Game: NL Hold'em (2 - 10) - Blinds 0.05/0.10\n\
@@ -75,6 +74,7 @@ Villain6 wins Pot (1.17)\n\
 Rake (0.03)";
     
     NSManagedObjectContext* moc = [SRSMavenLogParserTest managedObjectContextForTests];
+    [p initialize:moc];
     
     Site* site = [self findOrCreateSealsSite:moc];
     Hand *h = [p parseHandData:sampleHandData forSite:site inContext:moc];
@@ -257,8 +257,8 @@ VillainD wins Pot (0.20)\n\
 Rake (0)";
     SRSMavenHandFileParser *p = [[SRSMavenHandFileParser alloc] init];
     
-    [p initialize];
     NSManagedObjectContext* moc = [SRSMavenLogParserTest managedObjectContextForTests];
+    [p initialize:moc];
     
     Site* site = [self findOrCreateSealsSite:moc];
     
@@ -325,8 +325,9 @@ VillainC shows [Kh Jh] (a Full House, Jacks full of Fours)\n\
 VillainB splits Pot (2.03) with a Full House\n\
 VillainC splits Pot (2.02) with a Full House\n\
 Rake (0.10)";
-    [p initialize];
+    
     NSManagedObjectContext* moc = [SRSMavenLogParserTest managedObjectContextForTests];
+    [p initialize:moc];
     
     Site* site = [self findOrCreateSealsSite:moc];
     
@@ -412,8 +413,8 @@ Hero wins Main Pot (26.03) with a Full House\n\
 Rake (0.50)\n\
 VillainF adds 9.74 chips";
     
-    [p initialize];
     NSManagedObjectContext* moc = [SRSMavenLogParserTest managedObjectContextForTests];
+    [p initialize:moc];
     
     Site* site = [self findOrCreateSealsSite:moc];
     
@@ -483,10 +484,8 @@ Rake (0.08)";
     
     SRSMavenHandFileParser *p = [[SRSMavenHandFileParser alloc] init];
     
-    [p initialize];
-    
-//    Hand *h = //[p parseHandData:handData];
     NSManagedObjectContext* moc = [SRSMavenLogParserTest managedObjectContextForTests];
+    [p initialize:moc];
     
     Site* site = [self findOrCreateSealsSite:moc];
     

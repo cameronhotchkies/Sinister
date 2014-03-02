@@ -21,3 +21,18 @@ typedef NS_ENUM(NSInteger, GameFormatFlavor) {
 @interface GameFormat (Constants)
 
 @end
+
+@interface SRSGameFormat : NSObject
+
+@property (assign) GameFormatFlavor flavor;
+@property (strong) NSDecimalNumber* bigBlind;
+@property (strong) NSDecimalNumber* minBuyin;
+@property (strong) NSDecimalNumber* maxBuyin;
+@property (assign) NSInteger maxPlayers;
+@property (strong) NSString* description;
+
+- (GameFormat*)toManagedObject:(NSManagedObjectContext*)context;
+
+- (BOOL)equals:(GameFormat*)format;
+
+@end
