@@ -346,7 +346,9 @@
                         NSRange betRange = NSMakeRange(12, actionS.length - 13);
                         NSString* betPart = [actionS substringWithRange:betRange];
                         a.bet = [NSDecimalNumber decimalNumberWithString:betPart];
-                    } else if ([actionS hasPrefix:@"wins Side Pot"] || [actionS hasPrefix:@"wins Main Pot"]) {
+                    } else if ([actionS hasPrefix:@"wins Side Pot"]
+                               || [actionS hasPrefix:@"wins Main Pot"]
+                               || [actionS hasPrefix:@"splits Side Pot"]) {
                         a.action = ActionEventWins;
                         NSRange betRange1 = [actionS rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"("]
                                                                      options:NSCaseInsensitiveSearch];

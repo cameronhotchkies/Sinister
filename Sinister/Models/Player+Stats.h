@@ -27,4 +27,6 @@
 
 - (double)chipsLostToActivePlayer;
 
+- (NSDecimalNumber*)bigBlindsPerHundredOverall;
+
 @end

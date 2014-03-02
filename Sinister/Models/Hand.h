@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Action, Card, Player, Seat, Site;
+@class Action, Card, Player, Seat, Site, GameFormat;
 
 @interface Hand : NSManagedObject
 
@@ -25,7 +25,7 @@
 @property (nonatomic, retain) NSOrderedSet *seats;
 @property (nonatomic, retain) Site *site;
 @property (nonatomic, retain) Card *turn;
-@property (nonatomic, retain) NSManagedObject *gameFormat;
+@property (nonatomic, retain) GameFormat *gameFormat;
 @end
 
 @interface Hand (CoreDataGeneratedAccessors)

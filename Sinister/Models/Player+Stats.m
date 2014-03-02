@@ -13,6 +13,7 @@
 #import "Action+Constants.h"
 #import "Site.h"
 #import "NSDecimalNumber+Abs.h"
+#import "GameFormat+Constants.h"
 
 @implementation Player (Stats)
 
@@ -53,7 +54,7 @@
     } else {
         return nil;
     }
-
+    
 }
 
 - (NSInteger)pfr {
@@ -128,7 +129,7 @@
     // Execute the fetch
     NSError *error;
     NSArray *actions = [aMOC executeFetchRequest:fetchRequest error:&error];
-
+    
     NSMutableDictionary* compressed = [[NSMutableDictionary alloc] init];
     
     for (Action* a in actions) {
@@ -190,12 +191,12 @@
             denominator += 1;
         }
     }
-  
+    
     // This is an unlikely situation, but div by zero is bad
     if (denominator == 0) {
         denominator = 1;
     }
-
+    
     double rv = (double)numerator / (double)denominator;
     
     return rv;
@@ -382,7 +383,7 @@
     
     [fetchRequest setEntity:entity];
     //and site.name == %@
-       [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetShowdown]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetShowdown]];
     [fetchRequest setResultType:NSDictionaryResultType];
     [fetchRequest setReturnsDistinctResults:YES];
     [fetchRequest setPropertiesToFetch:@[@"hand.handID"]];
@@ -441,6 +442,56 @@
     return rv;
 }
 
+- (NSDecimalNumber*)bigBlindsPerHundredOverall {
+    
+    SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
+    NSManagedObjectContext *aMOC = d.managedObjectContext;
+    
+    // create the fetch request to get all Employees matching the IDs
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Seat"
+                                              inManagedObjectContext:aMOC];
+    
+    [fetchRequest setEntity:entity];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and actions.@count > 0)", self]];
+    
+    fetchRequest.resultType = NSDictionaryResultType;
+    
+    NSExpressionDescription* deltaSumDescription = [[NSExpressionDescription alloc] init];
+    [deltaSumDescription setName:@"deltaSum"];
+    
+    [deltaSumDescription setExpression:[NSExpression expressionForFunction:@"divide:by:"
+                                                                                                      arguments:[NSArray arrayWithObjects:[NSExpression expressionForKeyPath:@"chipDelta"],
+                                                                                                                 [NSExpression expressionForKeyPath:@"hand.gameFormat.bigBlind"], nil]]
+                                                                            ];
+    
+    [deltaSumDescription setExpressionResultType:NSDecimalAttributeType];
+    
+    fetchRequest.propertiesToFetch = [NSArray arrayWithObjects:deltaSumDescription, nil];
+    NSArray* results = [aMOC executeFetchRequest:fetchRequest error:nil];
+    
+    NSInteger denominator = results.count;
+    //[[fetchResultsDictionary objectForKey:@"deltaCount"] integerValue];
+    
+    NSDecimalNumber* sum = [NSDecimalNumber zero];
+    
+    for (NSDictionary* d in results) {
+        sum = [sum decimalNumberByAdding:[d objectForKey:@"deltaSum"]];
+    }
+    
+    NSDecimalNumber* numerator = sum;
+    
+    if (denominator == 0) {
+        return [NSDecimalNumber zero];
+    } else {
+        NSDecimalNumber* denom = [NSDecimalNumber decimalNumberWithMantissa:denominator
+                                                                   exponent:0
+                                                                 isNegative:NO];
+        NSDecimalNumber* result = [numerator decimalNumberByDividingBy:denom];
+        return result;
+    }
+}
+
 
 - (double)chipsLostToActivePlayer {
     // TODO: this doesn't account for split pots
@@ -483,14 +534,14 @@
             }
             
             NSDecimalNumber* heroDelta = heroSeat.chipDelta;
-//            Hand* h = s.hand;
-//            NSString* handID = h.handID;
-
+            //            Hand* h = s.hand;
+            //            NSString* handID = h.handID;
+            
             if ([heroDelta compare:[NSDecimalNumber zero]] == NSOrderedSame) {
                 // skip this round
                 // Hero didn't participate
             } else if ([heroDelta compare:[NSDecimalNumber zero]] == NSOrderedAscending
-                && [villainDelta compare:[NSDecimalNumber zero]] == NSOrderedAscending) {
+                       && [villainDelta compare:[NSDecimalNumber zero]] == NSOrderedAscending) {
                 // In the event of a split pot this gets complex
                 // TODO: scrub the actions to see if either actually won anything
                 // Otherwise don't adjust sum
@@ -514,7 +565,7 @@
                 NSDecimalNumber* realDelta = [villainDelta absoluteMinimum:heroDelta];
                 
                 if ([realDelta compare:[NSDecimalNumber zero]] == NSOrderedDescending) {
-                   //NSLog(@"When does this happen? %@", handID);
+                    //NSLog(@"When does this happen? %@", handID);
                 }
                 
                 if (realDelta == heroDelta) {
@@ -527,7 +578,7 @@
             
         }
     }
- 
+    
     return sum;
 }
 
