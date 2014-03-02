@@ -8,12 +8,12 @@
 
 #import "Action.h"
 
-typedef NS_ENUM(NSInteger, ActionStageType) {
-    ActionStagePreflop = 0,
-    ActionStageFlop = 1,
-    ActionStageTurn = 2,
-    ActionStageRiver = 3,
-    ActionStageShowdown = 4
+typedef NS_ENUM(NSInteger, ActionStreet) {
+    ActionStreetPreflop = 0,
+    ActionStreetFlop = 1,
+    ActionStreetTurn = 2,
+    ActionStreetRiver = 3,
+    ActionStreetShowdown = 4
 };
 
 typedef NS_ENUM(NSInteger, ActionEvent) {

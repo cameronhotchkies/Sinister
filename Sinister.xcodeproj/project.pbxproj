@@ -44,8 +44,8 @@
 		7E75B27018C2C49B0062C7AD /* Site.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B26F18C2C49B0062C7AD /* Site.m */; };
 		7E75B27318C2C49B0062C7AD /* Hand.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27218C2C49B0062C7AD /* Hand.m */; };
 		7E75B27618C2C49B0062C7AD /* GameFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27518C2C49B0062C7AD /* GameFormat.m */; };
-		7E75B27918C2C49B0062C7AD /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27818C2C49B0062C7AD /* Action.m */; };
 		7E75B27C18C2C4AE0062C7AD /* GameFormat+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27B18C2C4AE0062C7AD /* GameFormat+Constants.m */; };
+		7E75B27F18C2C73D0062C7AD /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27E18C2C73D0062C7AD /* Action.m */; };
 		7E8E530D18A5825100E8425A /* defaultPrefs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E8E530C18A5825100E8425A /* defaultPrefs.plist */; };
 		7E8E531018A5831500E8425A /* SRSParseEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E530F18A5831500E8425A /* SRSParseEngine.m */; };
 		7E8E531818A58A4500E8425A /* SRSInitialSetupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E531618A58A4500E8425A /* SRSInitialSetupWindowController.m */; };
@@ -136,10 +136,10 @@
 		7E75B27218C2C49B0062C7AD /* Hand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Hand.m; path = Models/Hand.m; sourceTree = "<group>"; };
 		7E75B27418C2C49B0062C7AD /* GameFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameFormat.h; path = Models/GameFormat.h; sourceTree = "<group>"; };
 		7E75B27518C2C49B0062C7AD /* GameFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameFormat.m; path = Models/GameFormat.m; sourceTree = "<group>"; };
-		7E75B27718C2C49B0062C7AD /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Action.h; path = Models/Action.h; sourceTree = "<group>"; };
-		7E75B27818C2C49B0062C7AD /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Action.m; path = Models/Action.m; sourceTree = "<group>"; };
 		7E75B27A18C2C4AD0062C7AD /* GameFormat+Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GameFormat+Constants.h"; path = "Models/GameFormat+Constants.h"; sourceTree = "<group>"; };
 		7E75B27B18C2C4AE0062C7AD /* GameFormat+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GameFormat+Constants.m"; path = "Models/GameFormat+Constants.m"; sourceTree = "<group>"; };
+		7E75B27D18C2C73D0062C7AD /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Action.h; path = Models/Action.h; sourceTree = "<group>"; };
+		7E75B27E18C2C73D0062C7AD /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Action.m; path = Models/Action.m; sourceTree = "<group>"; };
 		7E8E530C18A5825100E8425A /* defaultPrefs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = defaultPrefs.plist; sourceTree = "<group>"; };
 		7E8E530E18A5831500E8425A /* SRSParseEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSParseEngine.h; sourceTree = "<group>"; };
 		7E8E530F18A5831500E8425A /* SRSParseEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSParseEngine.m; sourceTree = "<group>"; };
@@ -235,9 +235,9 @@
 				7E02EA03188AF05A001A41C7 /* SRSAppDelegate.m */,
 				7E02EA05188AF05A001A41C7 /* MainMenu.xib */,
 				7E02EA0B188AF05A001A41C7 /* Images.xcassets */,
+				7E75B27D18C2C73D0062C7AD /* Action.h */,
+				7E75B27E18C2C73D0062C7AD /* Action.m */,
 				7E02EA08188AF05A001A41C7 /* Sinister.xcdatamodeld */,
-				7E75B27718C2C49B0062C7AD /* Action.h */,
-				7E75B27818C2C49B0062C7AD /* Action.m */,
 				7E75B27418C2C49B0062C7AD /* GameFormat.h */,
 				7E75B27518C2C49B0062C7AD /* GameFormat.m */,
 				7E75B27118C2C49B0062C7AD /* Hand.h */,
@@ -484,7 +484,6 @@
 				7E75B23718C294030062C7AD /* NSDecimalNumber+Abs.m in Sources */,
 				7E02EA2C188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m in Sources */,
 				7E75B26A18C2C49B0062C7AD /* ParsedFile.m in Sources */,
-				7E75B27918C2C49B0062C7AD /* Action.m in Sources */,
 				7E75B27018C2C49B0062C7AD /* Site.m in Sources */,
 				7E75B26718C2C49B0062C7AD /* Card.m in Sources */,
 				7E9C3582189C87D9002C47A2 /* SRSHandExpectedValue.m in Sources */,
@@ -494,6 +493,7 @@
 				7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */,
 				7E75B27C18C2C4AE0062C7AD /* GameFormat+Constants.m in Sources */,
 				7E9C357D189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m in Sources */,
+				7E75B27F18C2C73D0062C7AD /* Action.m in Sources */,
 				7E02EA04188AF05A001A41C7 /* SRSAppDelegate.m in Sources */,
 				7E448F86188B0B6F00D88D5A /* SRSMavenHandFileParser.m in Sources */,
 			);

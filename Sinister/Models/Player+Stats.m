@@ -67,7 +67,7 @@
     
     [fetchRequest setEntity:entity];
     //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage == %d)", self, ActionStagePreflop]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetPreflop]];
     
     // make sure the results are sorted as well
     
@@ -117,7 +117,7 @@
     
     [fetchRequest setEntity:entity];
     //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage == %d)", self, ActionStagePreflop]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetPreflop]];
     
     // make sure the results are sorted as well
     
@@ -167,7 +167,7 @@
     
     [fetchRequest setEntity:entity];
     //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage != %d)", self, ActionStagePreflop]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street != %d)", self, ActionStreetPreflop]];
     
     // make sure the results are sorted as well
     
@@ -183,9 +183,6 @@
     NSInteger denominator = 0;
     
     for (Action* a in actions) {
-        
-        ActionEvent ae = a.action;
-        
         // Show could give false positives as it doesn't reflect real bet action
         if (a.action == ActionEventRaise || a.action == ActionEventBet) {
             numerator += 1;
@@ -215,7 +212,7 @@
     
     [fetchRequest setEntity:entity];
     //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage == %d)", self, ActionStageFlop]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetFlop]];
     
     // make sure the results are sorted as well
     
@@ -260,7 +257,7 @@
     
     [fetchRequest setEntity:entity];
     //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage == %d)", self, ActionStageTurn]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetTurn]];
     
     // make sure the results are sorted as well
     
@@ -305,7 +302,7 @@
     
     [fetchRequest setEntity:entity];
     //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage == %d)", self, ActionStageRiver]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetRiver]];
     
     // make sure the results are sorted as well
     
@@ -350,7 +347,7 @@
     
     [fetchRequest setEntity:entity];
     //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage == %d)", self, ActionStageFlop]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetFlop]];
     [fetchRequest setResultType:NSDictionaryResultType];
     [fetchRequest setReturnsDistinctResults:YES];
     [fetchRequest setPropertiesToFetch:@[@"hand.handID"]];
@@ -358,7 +355,7 @@
     // Execute the fetch
     NSError *error;
     NSArray *flopHands = [aMOC executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage == %d)", self, ActionStageShowdown]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetShowdown]];
     NSArray *sdHands = [aMOC executeFetchRequest:fetchRequest error:&error];
     
     NSInteger numerator = sdHands.count;
@@ -385,7 +382,7 @@
     
     [fetchRequest setEntity:entity];
     //and site.name == %@
-       [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage == %d)", self, ActionStageShowdown]];
+       [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetShowdown]];
     [fetchRequest setResultType:NSDictionaryResultType];
     [fetchRequest setReturnsDistinctResults:YES];
     [fetchRequest setPropertiesToFetch:@[@"hand.handID"]];
@@ -393,7 +390,7 @@
     // Execute the fetch
     NSError *error;
     NSArray *sdHands = [aMOC executeFetchRequest:fetchRequest error:&error];
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and stage == %d and action == %d)", self, ActionStageShowdown, ActionEventWins]];
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d and action == %d)", self, ActionStreetShowdown, ActionEventWins]];
     NSArray *winHands = [aMOC executeFetchRequest:fetchRequest error:&error];
     
     NSInteger numerator = winHands.count;
@@ -486,8 +483,8 @@
             }
             
             NSDecimalNumber* heroDelta = heroSeat.chipDelta;
-            Hand* h = s.hand;
-            NSString* handID = h.handID;
+//            Hand* h = s.hand;
+//            NSString* handID = h.handID;
 
             if ([heroDelta compare:[NSDecimalNumber zero]] == NSOrderedSame) {
                 // skip this round

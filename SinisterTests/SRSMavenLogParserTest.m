@@ -128,7 +128,7 @@ Rake (0.03)";
     
     XCTAssertTrue(bbSeat.isBigBlind, @"Verify is Big Blind");
     
-    NSOrderedSet* preflopActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"stage == %d", ActionStagePreflop]];
+    NSOrderedSet* preflopActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"street == %d", ActionStreetPreflop]];
     
     XCTAssert(preflopActions.count == 8, @"Verify preflop actions");
     
@@ -154,7 +154,7 @@ Rake (0.03)";
     Action* a5 = [preflopActions objectAtIndex:7];
     XCTAssert(a5.action == ActionEventFold, @"Expecting a fold");
     
-    NSOrderedSet* flopActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"stage == %d", ActionStageFlop]];
+    NSOrderedSet* flopActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"street == %d", ActionStreetFlop]];
         XCTAssert(flopActions.count == 5, @"Verify flop actions");
     
     Action* f0 = [flopActions objectAtIndex:0];
@@ -547,15 +547,15 @@ Rake (0.08)";
     
     XCTAssertTrue(sixSeat.isBigBlind, @"Verify is Big Blind");
     
-    NSOrderedSet* preflopActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"stage == %d", ActionStagePreflop]];
+    NSOrderedSet* preflopActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"street == %d", ActionStreetPreflop]];
     
-    NSOrderedSet* flopActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"stage == %d", ActionStageFlop]];
+    NSOrderedSet* flopActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"street == %d", ActionStreetFlop]];
     
-    NSOrderedSet* turnActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"stage == %d", ActionStageTurn]];
+    NSOrderedSet* turnActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"street == %d", ActionStreetTurn]];
     
-    NSOrderedSet* riverActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"stage == %d", ActionStageRiver]];
+    NSOrderedSet* riverActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"street == %d", ActionStreetRiver]];
     
-    NSOrderedSet* showdownActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"stage == %d", ActionStageShowdown]];
+    NSOrderedSet* showdownActions = [h.actions filteredOrderedSetUsingPredicate:[NSPredicate predicateWithFormat:@"street == %d", ActionStreetShowdown]];
     
     XCTAssertEqual(preflopActions.count, (NSUInteger)8, @"Preflop count");
     XCTAssertEqual(flopActions.count, (NSUInteger)7, @"Flop count");

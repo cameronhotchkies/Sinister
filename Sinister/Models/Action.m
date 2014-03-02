@@ -16,7 +16,7 @@
 
 @dynamic action;
 @dynamic bet;
-@dynamic stage;
+@dynamic street;
 @dynamic hand;
 @dynamic player;
 @dynamic seat;

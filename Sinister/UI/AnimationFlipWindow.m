@@ -39,7 +39,7 @@ NSRect RectFromViewToView(NSRect aRect, NSView *fromView, NSView *toView);
     NSView *activeView = [activeWindow.contentView superview];
     NSView *targetView = [targetWindow.contentView superview];
     
-    NSRect activeFrame = activeWindow.frame;
+//    NSRect activeFrame = activeWindow.frame;
     
     // Create an animation window
     CGFloat maxWidth  = MAX(NSWidth(activeWindow.frame), NSWidth(targetWindow.frame)) + 500;

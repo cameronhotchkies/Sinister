@@ -398,7 +398,7 @@
 }
 
 - (void)parseActionLine:(NSString*)actionLine
-               forStage:(NSInteger)stage
+               forStreet:(NSInteger)street
                  inHand:(Hand*)hand
               inContext:(NSManagedObjectContext*)fastContext {
    
@@ -493,7 +493,7 @@
             }
         }
         
-        a.stage = stage;
+        a.street = street;
         a.hand = hand;
         
     }
@@ -538,7 +538,7 @@
     return showdowns;
 }
 
-- (NSRange)rangeForStage:(ActionStageType)s inHand:(NSString*)fullHand {
+- (NSRange)rangeForStreet:(ActionStreet)s inHand:(NSString*)fullHand {
     NSUInteger start = NSNotFound;
     NSUInteger stop = NSNotFound;
     
@@ -546,20 +546,20 @@
     assert(rakeLoc != NSNotFound);
     
     switch (s) {
-        case ActionStagePreflop:
+        case ActionStreetPreflop:
             start = [fullHand rangeOfString:@"** Hole Cards **"].location;
             stop = [fullHand rangeOfString:@"** Flop **"].location;
             stop = MIN(rakeLoc, stop);
             break;
-        case ActionStageFlop:
+        case ActionStreetFlop:
             start = [fullHand rangeOfString:@"** Flop **"].location;
             stop = [fullHand rangeOfString:@"** Turn **"].location;
             break;
-        case ActionStageTurn:
+        case ActionStreetTurn:
             start = [fullHand rangeOfString:@"** Turn **"].location;
             stop = [fullHand rangeOfString:@"** River **"].location;
             break;
-        case ActionStageRiver:
+        case ActionStreetRiver:
         {
             start = [fullHand rangeOfString:@"** River **"].location;
             NSArray* splitByShowdowns = [fullHand componentsSeparatedByString:@"Show Down **"];
@@ -572,7 +572,7 @@
             }
             break;
         }
-        case ActionStageShowdown:
+        case ActionStreetShowdown:
             // This shouldn't be called anymore
             // There's a separate function that handles multiple showdowns
 //            assert(NO);
@@ -634,7 +634,7 @@
     }
     
     for (NSString* actionLine in preflopAction) {
-        [self parseActionLine:actionLine forStage:ActionStagePreflop inHand:hand inContext:fastContext];
+        [self parseActionLine:actionLine forStreet:ActionStreetPreflop inHand:hand inContext:fastContext];
     }
 
 }
@@ -647,7 +647,7 @@
     flopAction = [flopAction subarrayWithRange:NSMakeRange(1, flopAction.count - 1)];
     
     for (NSString* actionLine in flopAction) {
-        [self parseActionLine:actionLine forStage:ActionStageFlop inHand:hand inContext:fastContext];
+        [self parseActionLine:actionLine forStreet:ActionStreetFlop inHand:hand inContext:fastContext];
     }
 }
 
@@ -659,7 +659,7 @@
     turnAction = [turnAction subarrayWithRange:NSMakeRange(1, turnAction.count - 1)];
     
     for (NSString* actionLine in turnAction) {
-        [self parseActionLine:actionLine forStage:ActionStageTurn inHand:hand inContext:fastContext];
+        [self parseActionLine:actionLine forStreet:ActionStreetTurn inHand:hand inContext:fastContext];
     }
 }
 
@@ -671,7 +671,7 @@
     riverAction = [riverAction subarrayWithRange:NSMakeRange(1, riverAction.count - 1)];
     
     for (NSString* actionLine in riverAction) {
-        [self parseActionLine:actionLine forStage:ActionStageRiver inHand:hand inContext:fastContext];
+        [self parseActionLine:actionLine forStreet:ActionStreetRiver inHand:hand inContext:fastContext];
     }
 }
 
@@ -686,7 +686,7 @@
     sdAction = [sdAction subarrayWithRange:NSMakeRange(1, sdAction.count - 1)];
     
     for (NSString* actionLine in sdAction) {
-        [self parseActionLine:actionLine forStage:ActionStageShowdown inHand:hand inContext:fastContext];
+        [self parseActionLine:actionLine forStreet:ActionStreetShowdown inHand:hand inContext:fastContext];
     }
 }
 
@@ -881,21 +881,21 @@
         }
     }
     
-    NSRange preflopRange = [self rangeForStage:ActionStagePreflop inHand:handData];
+    NSRange preflopRange = [self rangeForStreet:ActionStreetPreflop inHand:handData];
     [self parseHandData:handData forPreflopWithRange:preflopRange withHand:rv inContext:fastContext];
     
-    NSRange flopRange = [self rangeForStage:ActionStageFlop inHand:handData];
+    NSRange flopRange = [self rangeForStreet:ActionStreetFlop inHand:handData];
     
     if (flopRange.location != NSNotFound) {
         [self parseHandData:handData forFlopWithRange:flopRange withHand:rv inContext:fastContext];
     }
     
-    NSRange turnRange = [self rangeForStage:ActionStageTurn inHand:handData];
+    NSRange turnRange = [self rangeForStreet:ActionStreetTurn inHand:handData];
     if (turnRange.location != NSNotFound) {
         [self parseHandData:handData forTurnWithRange:turnRange withHand:rv inContext:fastContext];
     }
     
-    NSRange riverRange = [self rangeForStage:ActionStageRiver inHand:handData];
+    NSRange riverRange = [self rangeForStreet:ActionStreetRiver inHand:handData];
     if (riverRange.location != NSNotFound) {
         [self parseHandData:handData forRiverWithRange:riverRange withHand:rv inContext:fastContext];
     }
@@ -907,12 +907,7 @@
         [self parseHandData:handData forShowdownWithRange:sdr withHand:rv
                   inContext:fastContext];
     }
-//    
-//    NSRange showdownRange = [self rangeForStage:ActionStageShowdown inHand:handData];
-//    if (showdownRange.location != NSNotFound) {
-//        [self parseHandData:handData forShowdownWithRange:showdownRange withHand:rv inContext:fastContext];
-//    }
-//    
+
     for (NSString* rakeOpt in [hdLines reverseObjectEnumerator]) {
         if ([rakeOpt hasPrefix:@"Rake ("]) {
             NSString* rakePart = [rakeOpt substringFromIndex:6];
@@ -934,31 +929,30 @@
         
         NSDecimalNumber* bets[10];
         
-        Player* p = s.player;
-        NSString* pname = p.name;
+//        Player* p = s.player;
+//        NSString* pname = p.name;
         
-        bets[ActionStagePreflop] = [NSDecimalNumber zero];
-        bets[ActionStageFlop] = [NSDecimalNumber zero];
-        bets[ActionStageTurn] = [NSDecimalNumber zero];
-        bets[ActionStageRiver] = [NSDecimalNumber zero];
+        bets[ActionStreetPreflop] = [NSDecimalNumber zero];
+        bets[ActionStreetFlop] = [NSDecimalNumber zero];
+        bets[ActionStreetTurn] = [NSDecimalNumber zero];
+        bets[ActionStreetRiver] = [NSDecimalNumber zero];
         
         for (Action* a in s.actions) {
             if (a.action == ActionEventRefunded || a.action == ActionEventWins) {
                 sum = [sum decimalNumberByAdding:a.bet];
             } else if (a.action == ActionEventRaise) {
-                bets[a.stage] = a.bet;
+                bets[a.street] = a.bet;
             } else if (a.action != ActionEventFold && a.action != ActionEventCheck) {
                 // Folds have a zero, which overwrites the last bet
-                //bets[a.stage] = a.bet;
                 // calls are additive
-                bets[a.stage] = [bets[a.stage] decimalNumberByAdding:a.bet];
+                bets[a.street] = [bets[a.street] decimalNumberByAdding:a.bet];
             }
         }
         
-        sum = [sum decimalNumberBySubtracting:bets[ActionStagePreflop]];
-        sum = [sum decimalNumberBySubtracting:bets[ActionStageFlop]];
-        sum = [sum decimalNumberBySubtracting:bets[ActionStageTurn]];
-        sum = [sum decimalNumberBySubtracting:bets[ActionStageRiver]];
+        sum = [sum decimalNumberBySubtracting:bets[ActionStreetPreflop]];
+        sum = [sum decimalNumberBySubtracting:bets[ActionStreetFlop]];
+        sum = [sum decimalNumberBySubtracting:bets[ActionStreetTurn]];
+        sum = [sum decimalNumberBySubtracting:bets[ActionStreetRiver]];
         
         s.chipDelta = sum;
     }
