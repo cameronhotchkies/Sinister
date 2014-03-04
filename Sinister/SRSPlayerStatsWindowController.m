@@ -8,6 +8,7 @@
 
 #import "SRSPlayerStatsWindowController.h"
 #import "SRSAppDelegate.h"
+#import "Seat+Stats.h"
 
 @interface SRSPlayerStatsWindowController ()
 
@@ -45,13 +46,15 @@
 
 
 - (IBAction)moreDetails:(id)sender {
+
     NSButton* btn = sender;
-    
+
     NSInteger playerRow = [self.playerTable rowForView:btn];
-    
+
     NSArray* arr = self.playerArray.arrangedObjects;
     Player* p = [arr objectAtIndex:playerRow];
     
+    // Commented for dev
     self.playerHands = [[SRSPlayerHandsWindowController alloc] initWithWindowNibName:@"SRSPlayerHandsWindowController"];
     self.playerHands.player = p;
     

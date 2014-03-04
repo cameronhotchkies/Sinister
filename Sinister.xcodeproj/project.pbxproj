@@ -21,6 +21,8 @@
 		7E02EA1E188AF05A001A41C7 /* SinisterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E02EA1D188AF05A001A41C7 /* SinisterTests.m */; };
 		7E02EA2C188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E02EA2A188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m */; };
 		7E02EA2D188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E02EA2B188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib */; };
+		7E22D63E18C5468000071FB0 /* SRSDealerButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E22D63D18C5468000071FB0 /* SRSDealerButtonView.m */; };
+		7E22D64118C5739400071FB0 /* SRSSeatBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E22D64018C5739400071FB0 /* SRSSeatBackgroundView.m */; };
 		7E27A01C18A44C9400240919 /* SRSPlayerHandsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E27A01A18A44C9400240919 /* SRSPlayerHandsWindowController.m */; };
 		7E27A01D18A44C9400240919 /* SRSPlayerHandsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E27A01B18A44C9400240919 /* SRSPlayerHandsWindowController.xib */; };
 		7E3E78331895EDA40073A08A /* Card+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E78321895EDA40073A08A /* Card+Constants.m */; };
@@ -46,6 +48,10 @@
 		7E75B27618C2C49B0062C7AD /* GameFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27518C2C49B0062C7AD /* GameFormat.m */; };
 		7E75B27C18C2C4AE0062C7AD /* GameFormat+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27B18C2C4AE0062C7AD /* GameFormat+Constants.m */; };
 		7E75B27F18C2C73D0062C7AD /* Action.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B27E18C2C73D0062C7AD /* Action.m */; };
+		7E75B28318C3F6520062C7AD /* SRSHandReplayWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B28118C3F6520062C7AD /* SRSHandReplayWindowController.m */; };
+		7E75B28418C3F6520062C7AD /* SRSHandReplayWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E75B28218C3F6520062C7AD /* SRSHandReplayWindowController.xib */; };
+		7E75B28818C3FCD10062C7AD /* SRSSeatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B28618C3FCD10062C7AD /* SRSSeatViewController.m */; };
+		7E75B28918C3FCD10062C7AD /* SRSSeatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E75B28718C3FCD10062C7AD /* SRSSeatViewController.xib */; };
 		7E8E530D18A5825100E8425A /* defaultPrefs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E8E530C18A5825100E8425A /* defaultPrefs.plist */; };
 		7E8E531018A5831500E8425A /* SRSParseEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E530F18A5831500E8425A /* SRSParseEngine.m */; };
 		7E8E531818A58A4500E8425A /* SRSInitialSetupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E8E531618A58A4500E8425A /* SRSInitialSetupWindowController.m */; };
@@ -95,6 +101,10 @@
 		7E02EA29188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSHandHistoriesLocationWindowController.h; path = UI/SRSHandHistoriesLocationWindowController.h; sourceTree = "<group>"; };
 		7E02EA2A188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSHandHistoriesLocationWindowController.m; path = UI/SRSHandHistoriesLocationWindowController.m; sourceTree = "<group>"; };
 		7E02EA2B188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SRSHandHistoriesLocationWindowController.xib; path = UI/SRSHandHistoriesLocationWindowController.xib; sourceTree = "<group>"; };
+		7E22D63C18C5468000071FB0 /* SRSDealerButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSDealerButtonView.h; path = UI/SRSDealerButtonView.h; sourceTree = "<group>"; };
+		7E22D63D18C5468000071FB0 /* SRSDealerButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSDealerButtonView.m; path = UI/SRSDealerButtonView.m; sourceTree = "<group>"; };
+		7E22D63F18C5739400071FB0 /* SRSSeatBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSSeatBackgroundView.h; path = UI/SRSSeatBackgroundView.h; sourceTree = "<group>"; };
+		7E22D64018C5739400071FB0 /* SRSSeatBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSSeatBackgroundView.m; path = UI/SRSSeatBackgroundView.m; sourceTree = "<group>"; };
 		7E27A01918A44C9400240919 /* SRSPlayerHandsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSPlayerHandsWindowController.h; sourceTree = "<group>"; };
 		7E27A01A18A44C9400240919 /* SRSPlayerHandsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSPlayerHandsWindowController.m; sourceTree = "<group>"; };
 		7E27A01B18A44C9400240919 /* SRSPlayerHandsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SRSPlayerHandsWindowController.xib; sourceTree = "<group>"; };
@@ -140,6 +150,12 @@
 		7E75B27B18C2C4AE0062C7AD /* GameFormat+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GameFormat+Constants.m"; path = "Models/GameFormat+Constants.m"; sourceTree = "<group>"; };
 		7E75B27D18C2C73D0062C7AD /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Action.h; path = Models/Action.h; sourceTree = "<group>"; };
 		7E75B27E18C2C73D0062C7AD /* Action.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Action.m; path = Models/Action.m; sourceTree = "<group>"; };
+		7E75B28018C3F6520062C7AD /* SRSHandReplayWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSHandReplayWindowController.h; path = UI/SRSHandReplayWindowController.h; sourceTree = "<group>"; };
+		7E75B28118C3F6520062C7AD /* SRSHandReplayWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSHandReplayWindowController.m; path = UI/SRSHandReplayWindowController.m; sourceTree = "<group>"; };
+		7E75B28218C3F6520062C7AD /* SRSHandReplayWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SRSHandReplayWindowController.xib; path = UI/SRSHandReplayWindowController.xib; sourceTree = "<group>"; };
+		7E75B28518C3FCD10062C7AD /* SRSSeatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSSeatViewController.h; path = UI/SRSSeatViewController.h; sourceTree = "<group>"; };
+		7E75B28618C3FCD10062C7AD /* SRSSeatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSSeatViewController.m; path = UI/SRSSeatViewController.m; sourceTree = "<group>"; };
+		7E75B28718C3FCD10062C7AD /* SRSSeatViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SRSSeatViewController.xib; path = UI/SRSSeatViewController.xib; sourceTree = "<group>"; };
 		7E8E530C18A5825100E8425A /* defaultPrefs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = defaultPrefs.plist; sourceTree = "<group>"; };
 		7E8E530E18A5831500E8425A /* SRSParseEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSParseEngine.h; sourceTree = "<group>"; };
 		7E8E530F18A5831500E8425A /* SRSParseEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSParseEngine.m; sourceTree = "<group>"; };
@@ -345,6 +361,16 @@
 				7EDA52CE18AEC96C001D5371 /* SRSLogImportProgressWindowController.h */,
 				7EDA52CF18AEC96C001D5371 /* SRSLogImportProgressWindowController.m */,
 				7EDA52D018AEC96C001D5371 /* SRSLogImportProgressWindowController.xib */,
+				7E75B28018C3F6520062C7AD /* SRSHandReplayWindowController.h */,
+				7E75B28118C3F6520062C7AD /* SRSHandReplayWindowController.m */,
+				7E75B28218C3F6520062C7AD /* SRSHandReplayWindowController.xib */,
+				7E75B28518C3FCD10062C7AD /* SRSSeatViewController.h */,
+				7E75B28618C3FCD10062C7AD /* SRSSeatViewController.m */,
+				7E75B28718C3FCD10062C7AD /* SRSSeatViewController.xib */,
+				7E22D63C18C5468000071FB0 /* SRSDealerButtonView.h */,
+				7E22D63D18C5468000071FB0 /* SRSDealerButtonView.m */,
+				7E22D63F18C5739400071FB0 /* SRSSeatBackgroundView.h */,
+				7E22D64018C5739400071FB0 /* SRSSeatBackgroundView.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -439,6 +465,7 @@
 				7E8E530D18A5825100E8425A /* defaultPrefs.plist in Resources */,
 				7E02EA2D188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib in Resources */,
 				7E27A01D18A44C9400240919 /* SRSPlayerHandsWindowController.xib in Resources */,
+				7E75B28418C3F6520062C7AD /* SRSHandReplayWindowController.xib in Resources */,
 				7E02E9FB188AF05A001A41C7 /* InfoPlist.strings in Resources */,
 				7E02EA0C188AF05A001A41C7 /* Images.xcassets in Resources */,
 				7E02EA01188AF05A001A41C7 /* Credits.rtf in Resources */,
@@ -447,6 +474,7 @@
 				7E3E78391896F3B20073A08A /* SRSPreferencesWindowController.xib in Resources */,
 				7E3E78581897589F0073A08A /* SRSPlayerStatsWindowController.xib in Resources */,
 				7E8E531918A58A4500E8425A /* SRSInitialSetupWindowController.xib in Resources */,
+				7E75B28918C3FCD10062C7AD /* SRSSeatViewController.xib in Resources */,
 				7E8E531C18A58CD100E8425A /* swc-logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -469,8 +497,10 @@
 				7E27A01C18A44C9400240919 /* SRSPlayerHandsWindowController.m in Sources */,
 				7E8E531018A5831500E8425A /* SRSParseEngine.m in Sources */,
 				7E3E7853189757270073A08A /* Player+Stats.m in Sources */,
+				7E75B28318C3F6520062C7AD /* SRSHandReplayWindowController.m in Sources */,
 				7EDA52D118AEC96C001D5371 /* SRSLogImportProgressWindowController.m in Sources */,
 				7E8E531F18A59A3400E8425A /* AnimationFlipWindow.m in Sources */,
+				7E22D64118C5739400071FB0 /* SRSSeatBackgroundView.m in Sources */,
 				7E02EA0A188AF05A001A41C7 /* Sinister.xcdatamodeld in Sources */,
 				7E75B26D18C2C49B0062C7AD /* Seat.m in Sources */,
 				7E8E531818A58A4500E8425A /* SRSInitialSetupWindowController.m in Sources */,
@@ -487,11 +517,13 @@
 				7E75B27018C2C49B0062C7AD /* Site.m in Sources */,
 				7E75B26718C2C49B0062C7AD /* Card.m in Sources */,
 				7E9C3582189C87D9002C47A2 /* SRSHandExpectedValue.m in Sources */,
+				7E75B28818C3FCD10062C7AD /* SRSSeatViewController.m in Sources */,
 				7E75B23418C28A510062C7AD /* Seat+Stats.m in Sources */,
 				7E02E9FD188AF05A001A41C7 /* main.m in Sources */,
 				7E3E786D189855F80073A08A /* Hand+Stats.m in Sources */,
 				7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */,
 				7E75B27C18C2C4AE0062C7AD /* GameFormat+Constants.m in Sources */,
+				7E22D63E18C5468000071FB0 /* SRSDealerButtonView.m in Sources */,
 				7E9C357D189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m in Sources */,
 				7E75B27F18C2C73D0062C7AD /* Action.m in Sources */,
 				7E02EA04188AF05A001A41C7 /* SRSAppDelegate.m in Sources */,

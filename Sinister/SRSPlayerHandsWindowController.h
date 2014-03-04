@@ -9,10 +9,18 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Player+Stats.h"
+#import "SRSHandReplayWindowController.h"
 
 @interface SRSPlayerHandsWindowController : NSWindowController
 
 @property (strong) Player* player;
 @property (strong) NSArray* hands;
+
+@property (weak) IBOutlet NSTableView* handsTable;
+@property (weak) IBOutlet NSArrayController* handsArray;
+
+@property (strong) SRSHandReplayWindowController* handReplay;
+
+- (IBAction)showPlayerHand:(id)sender;
 
 @end

@@ -11,6 +11,8 @@
 
 #import "SRSPlayerHandsWindowController.h"
 
+#import "SRSHandReplayWindowController.h"
+
 @interface SRSPlayerStatsWindowController : NSWindowController
 
 @property (weak) IBOutlet NSManagedObjectContext* aMOC;

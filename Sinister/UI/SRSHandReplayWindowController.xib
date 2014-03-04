@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B3116" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="SRSHandReplayWindowController">
+            <connections>
+                <outlet property="seat1View" destination="Dft-vB-ziI" id="qBw-fK-oQb"/>
+                <outlet property="seat1ViewController" destination="WBM-ZB-iee" id="E8p-yz-OQr"/>
+                <outlet property="seat2View" destination="B6D-VL-BXF" id="Mav-xP-DsC"/>
+                <outlet property="seat2ViewController" destination="Qzu-6A-bSk" id="bd6-hn-A3m"/>
+                <outlet property="seat3View" destination="Sg8-CH-oHs" id="3Dy-Mj-OtC"/>
+                <outlet property="seat3ViewController" destination="WaA-6D-P70" id="hb9-Oa-a0i"/>
+                <outlet property="seat4View" destination="k7p-A9-MNK" id="MfT-BE-XhI"/>
+                <outlet property="seat4ViewController" destination="zYK-2W-smJ" id="xye-bx-f6D"/>
+                <outlet property="seat5View" destination="g4J-Re-Xhp" id="9T3-uD-ZX1"/>
+                <outlet property="seat5ViewController" destination="PlR-1b-hfH" id="S5t-7Z-9cN"/>
+                <outlet property="seat6View" destination="agg-9k-Aw3" id="ODx-vz-L0c"/>
+                <outlet property="seat6ViewController" destination="Dh7-Oe-aIw" id="iYW-FL-p9k"/>
+                <outlet property="seat7View" destination="YOS-DF-pha" id="z9V-5q-Gzd"/>
+                <outlet property="seat7ViewController" destination="Wft-B8-Fcx" id="sd4-FK-Xtx"/>
+                <outlet property="seat8View" destination="lX7-13-fCd" id="lnk-uy-RDJ"/>
+                <outlet property="seat8ViewController" destination="JS6-cR-U5Z" id="UeW-Nj-ufp"/>
+                <outlet property="seat9View" destination="sav-H4-dqe" id="5Oc-Am-Sbg"/>
+                <outlet property="seat9ViewController" destination="zFh-3y-1R4" id="xt5-Zz-qF0"/>
+                <outlet property="window" destination="1" id="3"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application"/>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" wantsToBeColor="NO" animationBehavior="default" id="1">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="705" height="447"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
+            <view key="contentView" id="2">
+                <rect key="frame" x="0.0" y="0.0" width="705" height="447"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sav-H4-dqe">
+                        <rect key="frame" x="247" y="336" width="91" height="91"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lX7-13-fCd">
+                        <rect key="frame" x="130" y="296" width="91" height="91"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dft-vB-ziI">
+                        <rect key="frame" x="367" y="336" width="91" height="91"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B6D-VL-BXF">
+                        <rect key="frame" x="482" y="296" width="91" height="91"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sg8-CH-oHs">
+                        <rect key="frame" x="572" y="178" width="91" height="91"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YOS-DF-pha">
+                        <rect key="frame" x="45" y="178" width="91" height="91"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="agg-9k-Aw3">
+                        <rect key="frame" x="170" y="63" width="91" height="91"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g4J-Re-Xhp">
+                        <rect key="frame" x="304" y="39" width="91" height="91"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k7p-A9-MNK">
+                        <rect key="frame" x="443" y="63" width="91" height="91"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
+                </subviews>
+            </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="4"/>
+            </connections>
+        </window>
+        <viewController title="Seat 1" nibName="SRSSeatViewController" id="WBM-ZB-iee" customClass="SRSSeatViewController"/>
+        <viewController title="Seat 2" nibName="SRSSeatViewController" id="Qzu-6A-bSk" customClass="SRSSeatViewController"/>
+        <viewController title="Seat 3" nibName="SRSSeatViewController" id="WaA-6D-P70" customClass="SRSSeatViewController"/>
+        <viewController title="Seat 4" nibName="SRSSeatViewController" id="zYK-2W-smJ" customClass="SRSSeatViewController"/>
+        <viewController title="Seat 5" nibName="SRSSeatViewController" id="PlR-1b-hfH" customClass="SRSSeatViewController"/>
+        <viewController title="Seat 6" nibName="SRSSeatViewController" id="Dh7-Oe-aIw" customClass="SRSSeatViewController"/>
+        <viewController title="Seat 7" nibName="SRSSeatViewController" id="Wft-B8-Fcx" customClass="SRSSeatViewController"/>
+        <viewController title="Seat 8" nibName="SRSSeatViewController" id="JS6-cR-U5Z" customClass="SRSSeatViewController"/>
+        <viewController title="Seat 5" nibName="SRSSeatViewController" id="zFh-3y-1R4" customClass="SRSSeatViewController"/>
+    </objects>
+</document>

@@ -44,4 +44,20 @@
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
+- (IBAction)showPlayerHand:(id)sender {
+    NSButton* btn = sender;
+    
+    NSInteger handRow = [self.handsTable rowForView:btn];
+    
+    NSArray* arr = self.handsArray.arrangedObjects;
+    Seat* s = [arr objectAtIndex:handRow];
+    Hand*h = s.hand;
+    
+    self.handReplay = [[SRSHandReplayWindowController alloc] initWithWindowNibName:@"SRSHandReplayWindowController"];
+
+    [self.handReplay showWindow:nil];
+    [self.handReplay setHand:h];
+
+}
+
 @end
