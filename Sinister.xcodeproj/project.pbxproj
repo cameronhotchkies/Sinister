@@ -37,6 +37,61 @@
 		7E448F86188B0B6F00D88D5A /* SRSMavenHandFileParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448F85188B0B6F00D88D5A /* SRSMavenHandFileParser.m */; };
 		7E448F88188B0C1D00D88D5A /* SRSMavenLogParserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448F87188B0C1D00D88D5A /* SRSMavenLogParserTest.m */; };
 		7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E448FB4188F5EC800D88D5A /* Action+Constants.m */; };
+		7E73539C18C67F4100FCAB31 /* SRSCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E73539B18C67F4100FCAB31 /* SRSCardView.m */; };
+		7E7353D718C6946400FCAB31 /* 2C.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A018C6946400FCAB31 /* 2C.eps */; };
+		7E7353D818C6946400FCAB31 /* 3C.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A118C6946400FCAB31 /* 3C.eps */; };
+		7E7353D918C6946400FCAB31 /* 4C.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A218C6946400FCAB31 /* 4C.eps */; };
+		7E7353DA18C6946400FCAB31 /* 5C.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A318C6946400FCAB31 /* 5C.eps */; };
+		7E7353DB18C6946400FCAB31 /* 6C.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A418C6946400FCAB31 /* 6C.eps */; };
+		7E7353DC18C6946400FCAB31 /* 7C.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A518C6946400FCAB31 /* 7C.eps */; };
+		7E7353DD18C6946400FCAB31 /* 8C.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A618C6946400FCAB31 /* 8C.eps */; };
+		7E7353DE18C6946400FCAB31 /* 9C.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A718C6946400FCAB31 /* 9C.eps */; };
+		7E7353DF18C6946400FCAB31 /* AC.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A818C6946400FCAB31 /* AC.eps */; };
+		7E7353E018C6946400FCAB31 /* JC.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353A918C6946400FCAB31 /* JC.eps */; };
+		7E7353E118C6946400FCAB31 /* KC.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353AA18C6946400FCAB31 /* KC.eps */; };
+		7E7353E218C6946400FCAB31 /* QC.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353AB18C6946400FCAB31 /* QC.eps */; };
+		7E7353E418C6946400FCAB31 /* 2D.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353AE18C6946400FCAB31 /* 2D.eps */; };
+		7E7353E518C6946400FCAB31 /* 3D.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353AF18C6946400FCAB31 /* 3D.eps */; };
+		7E7353E618C6946400FCAB31 /* 4D.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B018C6946400FCAB31 /* 4D.eps */; };
+		7E7353E718C6946400FCAB31 /* 5D.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B118C6946400FCAB31 /* 5D.eps */; };
+		7E7353E818C6946400FCAB31 /* 6D.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B218C6946400FCAB31 /* 6D.eps */; };
+		7E7353E918C6946400FCAB31 /* 7D.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B318C6946400FCAB31 /* 7D.eps */; };
+		7E7353EA18C6946400FCAB31 /* 8D.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B418C6946400FCAB31 /* 8D.eps */; };
+		7E7353EB18C6946400FCAB31 /* 9D.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B518C6946400FCAB31 /* 9D.eps */; };
+		7E7353EC18C6946400FCAB31 /* AD.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B618C6946400FCAB31 /* AD.eps */; };
+		7E7353ED18C6946400FCAB31 /* JD.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B718C6946400FCAB31 /* JD.eps */; };
+		7E7353EE18C6946400FCAB31 /* KD.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B818C6946400FCAB31 /* KD.eps */; };
+		7E7353EF18C6946400FCAB31 /* QD.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353B918C6946400FCAB31 /* QD.eps */; };
+		7E7353F118C6946400FCAB31 /* 2H.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353BC18C6946400FCAB31 /* 2H.eps */; };
+		7E7353F218C6946400FCAB31 /* 3H.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353BD18C6946400FCAB31 /* 3H.eps */; };
+		7E7353F318C6946400FCAB31 /* 4H.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353BE18C6946400FCAB31 /* 4H.eps */; };
+		7E7353F418C6946400FCAB31 /* 5H.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353BF18C6946400FCAB31 /* 5H.eps */; };
+		7E7353F518C6946400FCAB31 /* 6H.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353C018C6946400FCAB31 /* 6H.eps */; };
+		7E7353F618C6946400FCAB31 /* 7H.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353C118C6946400FCAB31 /* 7H.eps */; };
+		7E7353F718C6946400FCAB31 /* 8H.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353C218C6946400FCAB31 /* 8H.eps */; };
+		7E7353F818C6946400FCAB31 /* 9H.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353C318C6946400FCAB31 /* 9H.eps */; };
+		7E7353F918C6946400FCAB31 /* AH.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353C418C6946400FCAB31 /* AH.eps */; };
+		7E7353FA18C6946400FCAB31 /* JH.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353C518C6946400FCAB31 /* JH.eps */; };
+		7E7353FB18C6946400FCAB31 /* KH.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353C618C6946400FCAB31 /* KH.eps */; };
+		7E7353FC18C6946400FCAB31 /* QH.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353C718C6946400FCAB31 /* QH.eps */; };
+		7E7353FE18C6946400FCAB31 /* 2S.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353CA18C6946400FCAB31 /* 2S.eps */; };
+		7E7353FF18C6946400FCAB31 /* 3S.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353CB18C6946400FCAB31 /* 3S.eps */; };
+		7E73540018C6946400FCAB31 /* 4S.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353CC18C6946400FCAB31 /* 4S.eps */; };
+		7E73540118C6946400FCAB31 /* 5S.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353CD18C6946400FCAB31 /* 5S.eps */; };
+		7E73540218C6946400FCAB31 /* 6S.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353CE18C6946400FCAB31 /* 6S.eps */; };
+		7E73540318C6946400FCAB31 /* 7S.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353CF18C6946400FCAB31 /* 7S.eps */; };
+		7E73540418C6946400FCAB31 /* 8S.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353D018C6946400FCAB31 /* 8S.eps */; };
+		7E73540518C6946400FCAB31 /* 9S.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353D118C6946400FCAB31 /* 9S.eps */; };
+		7E73540618C6946400FCAB31 /* AS.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353D218C6946400FCAB31 /* AS.eps */; };
+		7E73540718C6946400FCAB31 /* JS.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353D318C6946400FCAB31 /* JS.eps */; };
+		7E73540818C6946400FCAB31 /* KS.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353D418C6946400FCAB31 /* KS.eps */; };
+		7E73540918C6946400FCAB31 /* QS.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E7353D518C6946400FCAB31 /* QS.eps */; };
+		7E73540B18C6986C00FCAB31 /* Blue_Back.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E73540A18C6986C00FCAB31 /* Blue_Back.eps */; };
+		7E73540D18C8146D00FCAB31 /* TC.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E73540C18C8146D00FCAB31 /* TC.eps */; };
+		7E73540F18C8148200FCAB31 /* TD.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E73540E18C8148200FCAB31 /* TD.eps */; };
+		7E73541118C8149000FCAB31 /* TH.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E73541018C8149000FCAB31 /* TH.eps */; };
+		7E73541318C814A700FCAB31 /* TS.eps in Resources */ = {isa = PBXBuildFile; fileRef = 7E73541218C814A700FCAB31 /* TS.eps */; };
+		7E73541618C816B500FCAB31 /* SRSFeltTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E73541518C816B500FCAB31 /* SRSFeltTableView.m */; };
 		7E75B23418C28A510062C7AD /* Seat+Stats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B23318C28A510062C7AD /* Seat+Stats.m */; };
 		7E75B23718C294030062C7AD /* NSDecimalNumber+Abs.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B23618C294030062C7AD /* NSDecimalNumber+Abs.m */; };
 		7E75B26418C2C49A0062C7AD /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E75B26318C2C49A0062C7AD /* Player.m */; };
@@ -128,6 +183,63 @@
 		7E448F87188B0C1D00D88D5A /* SRSMavenLogParserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSMavenLogParserTest.m; sourceTree = "<group>"; };
 		7E448FB3188F5EC800D88D5A /* Action+Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Action+Constants.h"; path = "Models/Action+Constants.h"; sourceTree = "<group>"; };
 		7E448FB4188F5EC800D88D5A /* Action+Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Action+Constants.m"; path = "Models/Action+Constants.m"; sourceTree = "<group>"; };
+		7E73539A18C67F4100FCAB31 /* SRSCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSCardView.h; path = UI/SRSCardView.h; sourceTree = "<group>"; };
+		7E73539B18C67F4100FCAB31 /* SRSCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSCardView.m; path = UI/SRSCardView.m; sourceTree = "<group>"; };
+		7E7353A018C6946400FCAB31 /* 2C.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2C.eps; sourceTree = "<group>"; };
+		7E7353A118C6946400FCAB31 /* 3C.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 3C.eps; sourceTree = "<group>"; };
+		7E7353A218C6946400FCAB31 /* 4C.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 4C.eps; sourceTree = "<group>"; };
+		7E7353A318C6946400FCAB31 /* 5C.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 5C.eps; sourceTree = "<group>"; };
+		7E7353A418C6946400FCAB31 /* 6C.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 6C.eps; sourceTree = "<group>"; };
+		7E7353A518C6946400FCAB31 /* 7C.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 7C.eps; sourceTree = "<group>"; };
+		7E7353A618C6946400FCAB31 /* 8C.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 8C.eps; sourceTree = "<group>"; };
+		7E7353A718C6946400FCAB31 /* 9C.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 9C.eps; sourceTree = "<group>"; };
+		7E7353A818C6946400FCAB31 /* AC.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AC.eps; sourceTree = "<group>"; };
+		7E7353A918C6946400FCAB31 /* JC.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JC.eps; sourceTree = "<group>"; };
+		7E7353AA18C6946400FCAB31 /* KC.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = KC.eps; sourceTree = "<group>"; };
+		7E7353AB18C6946400FCAB31 /* QC.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = QC.eps; sourceTree = "<group>"; };
+		7E7353AE18C6946400FCAB31 /* 2D.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2D.eps; sourceTree = "<group>"; };
+		7E7353AF18C6946400FCAB31 /* 3D.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 3D.eps; sourceTree = "<group>"; };
+		7E7353B018C6946400FCAB31 /* 4D.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 4D.eps; sourceTree = "<group>"; };
+		7E7353B118C6946400FCAB31 /* 5D.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 5D.eps; sourceTree = "<group>"; };
+		7E7353B218C6946400FCAB31 /* 6D.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 6D.eps; sourceTree = "<group>"; };
+		7E7353B318C6946400FCAB31 /* 7D.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 7D.eps; sourceTree = "<group>"; };
+		7E7353B418C6946400FCAB31 /* 8D.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 8D.eps; sourceTree = "<group>"; };
+		7E7353B518C6946400FCAB31 /* 9D.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 9D.eps; sourceTree = "<group>"; };
+		7E7353B618C6946400FCAB31 /* AD.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AD.eps; sourceTree = "<group>"; };
+		7E7353B718C6946400FCAB31 /* JD.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JD.eps; sourceTree = "<group>"; };
+		7E7353B818C6946400FCAB31 /* KD.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = KD.eps; sourceTree = "<group>"; };
+		7E7353B918C6946400FCAB31 /* QD.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = QD.eps; sourceTree = "<group>"; };
+		7E7353BC18C6946400FCAB31 /* 2H.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2H.eps; sourceTree = "<group>"; };
+		7E7353BD18C6946400FCAB31 /* 3H.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 3H.eps; sourceTree = "<group>"; };
+		7E7353BE18C6946400FCAB31 /* 4H.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 4H.eps; sourceTree = "<group>"; };
+		7E7353BF18C6946400FCAB31 /* 5H.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 5H.eps; sourceTree = "<group>"; };
+		7E7353C018C6946400FCAB31 /* 6H.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 6H.eps; sourceTree = "<group>"; };
+		7E7353C118C6946400FCAB31 /* 7H.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 7H.eps; sourceTree = "<group>"; };
+		7E7353C218C6946400FCAB31 /* 8H.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 8H.eps; sourceTree = "<group>"; };
+		7E7353C318C6946400FCAB31 /* 9H.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 9H.eps; sourceTree = "<group>"; };
+		7E7353C418C6946400FCAB31 /* AH.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AH.eps; sourceTree = "<group>"; };
+		7E7353C518C6946400FCAB31 /* JH.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JH.eps; sourceTree = "<group>"; };
+		7E7353C618C6946400FCAB31 /* KH.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = KH.eps; sourceTree = "<group>"; };
+		7E7353C718C6946400FCAB31 /* QH.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = QH.eps; sourceTree = "<group>"; };
+		7E7353CA18C6946400FCAB31 /* 2S.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2S.eps; sourceTree = "<group>"; };
+		7E7353CB18C6946400FCAB31 /* 3S.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 3S.eps; sourceTree = "<group>"; };
+		7E7353CC18C6946400FCAB31 /* 4S.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 4S.eps; sourceTree = "<group>"; };
+		7E7353CD18C6946400FCAB31 /* 5S.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 5S.eps; sourceTree = "<group>"; };
+		7E7353CE18C6946400FCAB31 /* 6S.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 6S.eps; sourceTree = "<group>"; };
+		7E7353CF18C6946400FCAB31 /* 7S.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 7S.eps; sourceTree = "<group>"; };
+		7E7353D018C6946400FCAB31 /* 8S.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 8S.eps; sourceTree = "<group>"; };
+		7E7353D118C6946400FCAB31 /* 9S.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 9S.eps; sourceTree = "<group>"; };
+		7E7353D218C6946400FCAB31 /* AS.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AS.eps; sourceTree = "<group>"; };
+		7E7353D318C6946400FCAB31 /* JS.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JS.eps; sourceTree = "<group>"; };
+		7E7353D418C6946400FCAB31 /* KS.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = KS.eps; sourceTree = "<group>"; };
+		7E7353D518C6946400FCAB31 /* QS.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = QS.eps; sourceTree = "<group>"; };
+		7E73540A18C6986C00FCAB31 /* Blue_Back.eps */ = {isa = PBXFileReference; lastKnownFileType = file; path = Blue_Back.eps; sourceTree = "<group>"; };
+		7E73540C18C8146D00FCAB31 /* TC.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TC.eps; sourceTree = "<group>"; };
+		7E73540E18C8148200FCAB31 /* TD.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TD.eps; sourceTree = "<group>"; };
+		7E73541018C8149000FCAB31 /* TH.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TH.eps; sourceTree = "<group>"; };
+		7E73541218C814A700FCAB31 /* TS.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TS.eps; sourceTree = "<group>"; };
+		7E73541418C816B500FCAB31 /* SRSFeltTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSFeltTableView.h; path = UI/SRSFeltTableView.h; sourceTree = "<group>"; };
+		7E73541518C816B500FCAB31 /* SRSFeltTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSFeltTableView.m; path = UI/SRSFeltTableView.m; sourceTree = "<group>"; };
 		7E75B23218C28A510062C7AD /* Seat+Stats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Seat+Stats.h"; path = "Models/Seat+Stats.h"; sourceTree = "<group>"; };
 		7E75B23318C28A510062C7AD /* Seat+Stats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Seat+Stats.m"; path = "Models/Seat+Stats.m"; sourceTree = "<group>"; };
 		7E75B23518C294030062C7AD /* NSDecimalNumber+Abs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDecimalNumber+Abs.h"; sourceTree = "<group>"; };
@@ -244,6 +356,7 @@
 		7E02E9F6188AF05A001A41C7 /* Sinister */ = {
 			isa = PBXGroup;
 			children = (
+				7E73539D18C6944600FCAB31 /* Cards */,
 				7E8E531A18A58CC600E8425A /* Images */,
 				7E8E531118A5845700E8425A /* UI */,
 				7E3E78341896F1B60073A08A /* Models */,
@@ -332,6 +445,98 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		7E73539D18C6944600FCAB31 /* Cards */ = {
+			isa = PBXGroup;
+			children = (
+				7E73540A18C6986C00FCAB31 /* Blue_Back.eps */,
+				7E73539E18C6946400FCAB31 /* Clubs */,
+				7E7353AC18C6946400FCAB31 /* Diamonds */,
+				7E7353BA18C6946400FCAB31 /* Hearts */,
+				7E7353C818C6946400FCAB31 /* Spades */,
+			);
+			name = Cards;
+			sourceTree = "<group>";
+		};
+		7E73539E18C6946400FCAB31 /* Clubs */ = {
+			isa = PBXGroup;
+			children = (
+				7E73540C18C8146D00FCAB31 /* TC.eps */,
+				7E7353A018C6946400FCAB31 /* 2C.eps */,
+				7E7353A118C6946400FCAB31 /* 3C.eps */,
+				7E7353A218C6946400FCAB31 /* 4C.eps */,
+				7E7353A318C6946400FCAB31 /* 5C.eps */,
+				7E7353A418C6946400FCAB31 /* 6C.eps */,
+				7E7353A518C6946400FCAB31 /* 7C.eps */,
+				7E7353A618C6946400FCAB31 /* 8C.eps */,
+				7E7353A718C6946400FCAB31 /* 9C.eps */,
+				7E7353A818C6946400FCAB31 /* AC.eps */,
+				7E7353A918C6946400FCAB31 /* JC.eps */,
+				7E7353AA18C6946400FCAB31 /* KC.eps */,
+				7E7353AB18C6946400FCAB31 /* QC.eps */,
+			);
+			path = Clubs;
+			sourceTree = "<group>";
+		};
+		7E7353AC18C6946400FCAB31 /* Diamonds */ = {
+			isa = PBXGroup;
+			children = (
+				7E73540E18C8148200FCAB31 /* TD.eps */,
+				7E7353AE18C6946400FCAB31 /* 2D.eps */,
+				7E7353AF18C6946400FCAB31 /* 3D.eps */,
+				7E7353B018C6946400FCAB31 /* 4D.eps */,
+				7E7353B118C6946400FCAB31 /* 5D.eps */,
+				7E7353B218C6946400FCAB31 /* 6D.eps */,
+				7E7353B318C6946400FCAB31 /* 7D.eps */,
+				7E7353B418C6946400FCAB31 /* 8D.eps */,
+				7E7353B518C6946400FCAB31 /* 9D.eps */,
+				7E7353B618C6946400FCAB31 /* AD.eps */,
+				7E7353B718C6946400FCAB31 /* JD.eps */,
+				7E7353B818C6946400FCAB31 /* KD.eps */,
+				7E7353B918C6946400FCAB31 /* QD.eps */,
+			);
+			path = Diamonds;
+			sourceTree = "<group>";
+		};
+		7E7353BA18C6946400FCAB31 /* Hearts */ = {
+			isa = PBXGroup;
+			children = (
+				7E73541018C8149000FCAB31 /* TH.eps */,
+				7E7353BC18C6946400FCAB31 /* 2H.eps */,
+				7E7353BD18C6946400FCAB31 /* 3H.eps */,
+				7E7353BE18C6946400FCAB31 /* 4H.eps */,
+				7E7353BF18C6946400FCAB31 /* 5H.eps */,
+				7E7353C018C6946400FCAB31 /* 6H.eps */,
+				7E7353C118C6946400FCAB31 /* 7H.eps */,
+				7E7353C218C6946400FCAB31 /* 8H.eps */,
+				7E7353C318C6946400FCAB31 /* 9H.eps */,
+				7E7353C418C6946400FCAB31 /* AH.eps */,
+				7E7353C518C6946400FCAB31 /* JH.eps */,
+				7E7353C618C6946400FCAB31 /* KH.eps */,
+				7E7353C718C6946400FCAB31 /* QH.eps */,
+			);
+			path = Hearts;
+			sourceTree = "<group>";
+		};
+		7E7353C818C6946400FCAB31 /* Spades */ = {
+			isa = PBXGroup;
+			children = (
+				7E73541218C814A700FCAB31 /* TS.eps */,
+				7E7353CA18C6946400FCAB31 /* 2S.eps */,
+				7E7353CB18C6946400FCAB31 /* 3S.eps */,
+				7E7353CC18C6946400FCAB31 /* 4S.eps */,
+				7E7353CD18C6946400FCAB31 /* 5S.eps */,
+				7E7353CE18C6946400FCAB31 /* 6S.eps */,
+				7E7353CF18C6946400FCAB31 /* 7S.eps */,
+				7E7353D018C6946400FCAB31 /* 8S.eps */,
+				7E7353D118C6946400FCAB31 /* 9S.eps */,
+				7E7353D218C6946400FCAB31 /* AS.eps */,
+				7E7353D318C6946400FCAB31 /* JS.eps */,
+				7E7353D418C6946400FCAB31 /* KS.eps */,
+				7E7353D518C6946400FCAB31 /* QS.eps */,
+			);
+			path = Spades;
+			sourceTree = "<group>";
+		};
 		7E8E531118A5845700E8425A /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -371,6 +576,10 @@
 				7E22D63D18C5468000071FB0 /* SRSDealerButtonView.m */,
 				7E22D63F18C5739400071FB0 /* SRSSeatBackgroundView.h */,
 				7E22D64018C5739400071FB0 /* SRSSeatBackgroundView.m */,
+				7E73539A18C67F4100FCAB31 /* SRSCardView.h */,
+				7E73539B18C67F4100FCAB31 /* SRSCardView.m */,
+				7E73541418C816B500FCAB31 /* SRSFeltTableView.h */,
+				7E73541518C816B500FCAB31 /* SRSFeltTableView.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -460,21 +669,74 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E73540618C6946400FCAB31 /* AS.eps in Resources */,
+				7E73540D18C8146D00FCAB31 /* TC.eps in Resources */,
+				7E7353FC18C6946400FCAB31 /* QH.eps in Resources */,
+				7E7353F718C6946400FCAB31 /* 8H.eps in Resources */,
+				7E73540818C6946400FCAB31 /* KS.eps in Resources */,
+				7E7353DF18C6946400FCAB31 /* AC.eps in Resources */,
 				7E9C357E189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib in Resources */,
 				7EDA52D218AEC96C001D5371 /* SRSLogImportProgressWindowController.xib in Resources */,
 				7E8E530D18A5825100E8425A /* defaultPrefs.plist in Resources */,
+				7E7353F218C6946400FCAB31 /* 3H.eps in Resources */,
+				7E73540518C6946400FCAB31 /* 9S.eps in Resources */,
+				7E73540F18C8148200FCAB31 /* TD.eps in Resources */,
 				7E02EA2D188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib in Resources */,
 				7E27A01D18A44C9400240919 /* SRSPlayerHandsWindowController.xib in Resources */,
+				7E7353DE18C6946400FCAB31 /* 9C.eps in Resources */,
+				7E7353E918C6946400FCAB31 /* 7D.eps in Resources */,
 				7E75B28418C3F6520062C7AD /* SRSHandReplayWindowController.xib in Resources */,
 				7E02E9FB188AF05A001A41C7 /* InfoPlist.strings in Resources */,
+				7E7353FF18C6946400FCAB31 /* 3S.eps in Resources */,
+				7E7353F918C6946400FCAB31 /* AH.eps in Resources */,
+				7E7353F618C6946400FCAB31 /* 7H.eps in Resources */,
+				7E7353ED18C6946400FCAB31 /* JD.eps in Resources */,
+				7E7353FE18C6946400FCAB31 /* 2S.eps in Resources */,
 				7E02EA0C188AF05A001A41C7 /* Images.xcassets in Resources */,
+				7E73540118C6946400FCAB31 /* 5S.eps in Resources */,
+				7E7353DB18C6946400FCAB31 /* 6C.eps in Resources */,
+				7E7353E018C6946400FCAB31 /* JC.eps in Resources */,
 				7E02EA01188AF05A001A41C7 /* Credits.rtf in Resources */,
+				7E73540918C6946400FCAB31 /* QS.eps in Resources */,
+				7E7353E118C6946400FCAB31 /* KC.eps in Resources */,
+				7E73540318C6946400FCAB31 /* 7S.eps in Resources */,
+				7E73540718C6946400FCAB31 /* JS.eps in Resources */,
 				7E02EA07188AF05A001A41C7 /* MainMenu.xib in Resources */,
+				7E7353EA18C6946400FCAB31 /* 8D.eps in Resources */,
 				7E3E783E1896FE0C0073A08A /* SRSParseEngineWindowController.xib in Resources */,
+				7E7353DC18C6946400FCAB31 /* 7C.eps in Resources */,
+				7E7353E218C6946400FCAB31 /* QC.eps in Resources */,
+				7E73540B18C6986C00FCAB31 /* Blue_Back.eps in Resources */,
+				7E7353F418C6946400FCAB31 /* 5H.eps in Resources */,
+				7E73541318C814A700FCAB31 /* TS.eps in Resources */,
+				7E7353E718C6946400FCAB31 /* 5D.eps in Resources */,
+				7E7353F518C6946400FCAB31 /* 6H.eps in Resources */,
+				7E7353E618C6946400FCAB31 /* 4D.eps in Resources */,
+				7E73540018C6946400FCAB31 /* 4S.eps in Resources */,
+				7E7353EE18C6946400FCAB31 /* KD.eps in Resources */,
+				7E7353E518C6946400FCAB31 /* 3D.eps in Resources */,
+				7E7353F318C6946400FCAB31 /* 4H.eps in Resources */,
+				7E73540418C6946400FCAB31 /* 8S.eps in Resources */,
 				7E3E78391896F3B20073A08A /* SRSPreferencesWindowController.xib in Resources */,
+				7E7353DD18C6946400FCAB31 /* 8C.eps in Resources */,
+				7E7353FA18C6946400FCAB31 /* JH.eps in Resources */,
+				7E7353EC18C6946400FCAB31 /* AD.eps in Resources */,
 				7E3E78581897589F0073A08A /* SRSPlayerStatsWindowController.xib in Resources */,
+				7E7353E818C6946400FCAB31 /* 6D.eps in Resources */,
+				7E7353F818C6946400FCAB31 /* 9H.eps in Resources */,
+				7E7353E418C6946400FCAB31 /* 2D.eps in Resources */,
+				7E73541118C8149000FCAB31 /* TH.eps in Resources */,
+				7E7353D818C6946400FCAB31 /* 3C.eps in Resources */,
+				7E7353EF18C6946400FCAB31 /* QD.eps in Resources */,
+				7E7353DA18C6946400FCAB31 /* 5C.eps in Resources */,
+				7E73540218C6946400FCAB31 /* 6S.eps in Resources */,
+				7E7353D918C6946400FCAB31 /* 4C.eps in Resources */,
+				7E7353FB18C6946400FCAB31 /* KH.eps in Resources */,
 				7E8E531918A58A4500E8425A /* SRSInitialSetupWindowController.xib in Resources */,
+				7E7353D718C6946400FCAB31 /* 2C.eps in Resources */,
+				7E7353EB18C6946400FCAB31 /* 9D.eps in Resources */,
 				7E75B28918C3FCD10062C7AD /* SRSSeatViewController.xib in Resources */,
+				7E7353F118C6946400FCAB31 /* 2H.eps in Resources */,
 				7E8E531C18A58CD100E8425A /* swc-logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,6 +771,7 @@
 				7E3E78381896F3B20073A08A /* SRSPreferencesWindowController.m in Sources */,
 				7E75B27618C2C49B0062C7AD /* GameFormat.m in Sources */,
 				7E75B26418C2C49A0062C7AD /* Player.m in Sources */,
+				7E73539C18C67F4100FCAB31 /* SRSCardView.m in Sources */,
 				7E3E78331895EDA40073A08A /* Card+Constants.m in Sources */,
 				7E3E78571897589F0073A08A /* SRSPlayerStatsWindowController.m in Sources */,
 				7E75B23718C294030062C7AD /* NSDecimalNumber+Abs.m in Sources */,
@@ -524,6 +787,7 @@
 				7E448FB5188F5EC800D88D5A /* Action+Constants.m in Sources */,
 				7E75B27C18C2C4AE0062C7AD /* GameFormat+Constants.m in Sources */,
 				7E22D63E18C5468000071FB0 /* SRSDealerButtonView.m in Sources */,
+				7E73541618C816B500FCAB31 /* SRSFeltTableView.m in Sources */,
 				7E9C357D189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m in Sources */,
 				7E75B27F18C2C73D0062C7AD /* Action.m in Sources */,
 				7E02EA04188AF05A001A41C7 /* SRSAppDelegate.m in Sources */,

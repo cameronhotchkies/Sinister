@@ -38,6 +38,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="705" height="447"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W2x-Oh-Mf9" customClass="SRSFeltTableView">
+                        <rect key="frame" x="130" y="131" width="443" height="206"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sav-H4-dqe">
                         <rect key="frame" x="247" y="336" width="91" height="91"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
