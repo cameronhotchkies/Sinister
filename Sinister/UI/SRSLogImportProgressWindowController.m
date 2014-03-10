@@ -16,25 +16,11 @@
 
 - (id)initWithWindow:(NSWindow *)window
 {
-    if ([NSThread isMainThread]) {
-        NSLog(@"Init from main");
-    } else {
-        NSLog(@"Init from non-main");
-    }
-    
     self = [super initWithWindow:window];
     if (self) {
         // Initialization code here.
     }
     return self;
-}
-
-- (void)windowDidResignKey:(NSNotification *)notification {
-    NSLog(@"Resigned key");
-}
-
-- (void)windowDidBecomeKey:(NSNotification *)notification {
-    NSLog(@"Got key");
 }
 
 - (void)windowDidLoad
@@ -47,26 +33,17 @@
     [self.progress becomeFirstResponder];
     
     
-    
+    // Something is stealing the key window
     if (self.window.isKeyWindow) {
-        NSLog(@"isKey onload");
     } else {
-        NSLog(@"notKey onload");
         [self.window becomeKeyWindow];
     }
 }
 
 
 - (void)incrementProgressIndicator {
-    if ([NSThread isMainThread]) {
-        NSLog(@"Increment from main");
-    } else {
-        NSLog(@"Increment from non-main");
-    }
-    if (self.window.isKeyWindow) {
-        NSLog(@"isKey onInc");
-    } else {
-        NSLog(@"notKey onInc");
+
+    if (!self.window.isKeyWindow) {
         [self.window becomeKeyWindow];
     }
     
@@ -74,17 +51,11 @@
 }
 
 - (void)setMax:(NSInteger)max {
-    if ([NSThread isMainThread]) {
-        NSLog(@"setMax from main");
-    } else {
-        NSLog(@"setMax from non-main");
-    }
-    if (self.window.isKeyWindow) {
-        NSLog(@"isKey onSetMax");
-    } else {
-        NSLog(@"notKey onSetMax");
+
+    if (!self.window.isKeyWindow){
         [self.window becomeKeyWindow];
     }
+    
     self.progress.maxValue = max;
     [self.progress startAnimation:nil];
 }

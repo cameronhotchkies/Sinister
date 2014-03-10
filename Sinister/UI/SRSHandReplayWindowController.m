@@ -42,11 +42,7 @@
 }
 
 - (void)setHand:(Hand*)hand {
-    // TODO:
-    
     self.window.title = hand.handID;
-    
-    NSLog((@"In set hand"));
     
     for (Seat* s in hand.seats) {
         NSInteger position = s.position;

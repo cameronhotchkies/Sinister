@@ -12,12 +12,14 @@
 
 @property (nonatomic, strong) NSString* hand;
 @property (nonatomic, strong) NSArray* payouts;
+@property (assign) NSInteger handCount;
 
 - (void)addPayout:(NSDecimalNumber*)payout;
 
 - (double)averageExpectedValue;
 - (double)highestPayout;
 - (double)lowestPayout;
-
+- (double)seen;
+- (double)expectedFrequency;
 
 @end

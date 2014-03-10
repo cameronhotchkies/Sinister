@@ -70,4 +70,29 @@
 
 }
 
+- (double)seen {
+    double result = (((double)self.payouts.count) / ((double)self.handCount)) * 100.0;
+    return result;
+}
+
+
+- (double)expectedFrequency {
+    if ([self.hand hasSuffix:@"o"]) {
+        // eg. AhKc, AhKs, AhKd
+        //     AcKh, AcKs, AcKd
+        //     AsKh, AsKc, AsKd
+        //     AdKc, AdKh, AdKc
+        // hand freq / all hands * 2 for order * 100 for readability
+        return (12.0 / 2652.0) * 200.0;
+    } else if ([self.hand hasSuffix:@"s"]) {
+        // eg. AhKh, AcKc, AsKs, AdKd
+        return (4.0 / 2652.0) * 200.0;
+    } else {
+        // PP: AhAd, AhAc, AhAs
+        //     AdAc, AdAs,
+        //     AcAs
+        return (6.0 / 2652.0) * 200.0;
+    }
+}
+
 @end

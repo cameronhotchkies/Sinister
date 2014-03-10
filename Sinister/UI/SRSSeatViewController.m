@@ -38,7 +38,6 @@ Seat* __strong _seat;
         self.playerName.textColor = [NSColor grayColor];
     } else {
         NSString* pn = _seat.player.name;
-        NSLog(@"pn: %@", pn);
     }
 }
 
@@ -91,13 +90,6 @@ Seat* __strong _seat;
         
         [self.dealerButton addSubview:dbtn];
         
-        if ([self.dealerButton.subviews containsObject:dbtn]) {
-            NSLog(@"should be there");
-        }
-        
-//        NSTextField* dTxt = [[NSTextField alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-//        dTxt.stringValue = @"D";
-//        [self.dealerButton addSubview:dTxt];
     } else {
         [self.dealerButton setHidden:YES];
     }

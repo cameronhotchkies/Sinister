@@ -46,17 +46,12 @@
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
     NSArray* dirContents = [self logfiles];
     
-    NSLog(@"Files to parse: %ld", dirContents.count);
+//    NSLog(@"Files to parse: %ld", dirContents.count);
     
     [self.fileCount setStringValue:[NSString stringWithFormat:@"%ld", dirContents.count]];
 }
 
 - (NSInteger)handsParsed {
-//    return self.junk;
-//    SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
-//    NSManagedObjectContext *aMOC = d.managedObjectContext;
-    
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Hand"
                                               inManagedObjectContext:self.aMOC];
@@ -83,13 +78,7 @@
     for (id l in logs) {
         NSString* f = [NSString stringWithContentsOfURL:l encoding:NSUTF8StringEncoding error:nil];
         NSArray* hands = [f componentsSeparatedByString:@"\n\n\n"];
-        NSLog(@"Hand count: %ld", hands.count);
-
-        // This code is dead anyways
-//        for (NSString* h in hands) {
-//            SRSMavenHandFileParser *parser = [[SRSMavenHandFileParser alloc] init];
-//            [parser parseHandData:h];
-//        }
+//        NSLog(@"Hand count: %ld", hands.count);
     }
     [self.aMOC save:nil];
 }

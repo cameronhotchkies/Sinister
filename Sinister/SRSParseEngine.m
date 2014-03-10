@@ -176,7 +176,7 @@
                                                    encoding:NSUTF8StringEncoding
                                                       error:nil];
             NSArray* hands = [f componentsSeparatedByString:@"\n\n\n"];
-            NSLog(@"Hand count: %ld", hands.count);
+//            NSLog(@"Hand count: %ld", hands.count);
             
             SRSMavenHandFileParser *parser = [[SRSMavenHandFileParser alloc] init];
             [parser parseHands:hands forSiteID:siteID inContext:importContext];

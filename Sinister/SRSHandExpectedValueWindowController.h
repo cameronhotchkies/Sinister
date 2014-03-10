@@ -14,5 +14,6 @@
 @property (weak) IBOutlet NSManagedObjectContext* aMOC;
 
 - (void)generateEVforHands;
+- (double)getFrequency:(id)sender;
 
 @end

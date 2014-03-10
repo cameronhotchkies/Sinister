@@ -36,9 +36,9 @@
 	[[NSColor colorWithCalibratedRed:0.2 green:0.5 blue:0.35 alpha:1] set];
 	NSBezierPath *ellipseCenter = [NSBezierPath bezierPathWithOvalInRect:border];
 	[ellipseCenter fill];
-    
-    CIFilter *noiseFilter = [CIFilter filterWithName:@"CIRandomGenerator"];
-    CIImage *noise = [noiseFilter ]
+//    
+//    CIFilter *noiseFilter = [CIFilter filterWithName:@"CIRandomGenerator"];
+//    CIImage *noise = [noiseFilter ]
     
     
 //    [[NSColor redColor] set];

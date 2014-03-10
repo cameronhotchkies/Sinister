@@ -731,11 +731,6 @@
     
     Hand *rv;
     
-    // check for existence
-    if (self.parsedHandCache == nil) {
-        NSLog(@"NILS");
-    }
-    
     Hand* exist = [self.parsedHandCache objectForKey:title.handID];
     if (exist != nil) {
         // Already parsed, don't bother

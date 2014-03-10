@@ -26,7 +26,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Seat"
                                               inManagedObjectContext:aMOC];
@@ -83,7 +82,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                               inManagedObjectContext:aMOC];
@@ -131,7 +129,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                               inManagedObjectContext:aMOC];
@@ -181,7 +178,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                               inManagedObjectContext:aMOC];
@@ -226,7 +222,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                               inManagedObjectContext:aMOC];
@@ -271,7 +266,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                               inManagedObjectContext:aMOC];
@@ -316,7 +310,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                               inManagedObjectContext:aMOC];
@@ -361,7 +354,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                               inManagedObjectContext:aMOC];
@@ -396,7 +388,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Action"
                                               inManagedObjectContext:aMOC];
@@ -431,7 +422,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Player"
                                               inManagedObjectContext:aMOC];
@@ -467,7 +457,6 @@
     SRSAppDelegate *d = [NSApplication sharedApplication].delegate;
     NSManagedObjectContext *aMOC = d.managedObjectContext;
     
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Seat"
                                               inManagedObjectContext:aMOC];
@@ -561,22 +550,22 @@
                 // In the event of a split pot this gets complex
                 // TODO: scrub the actions to see if either actually won anything
                 // Otherwise don't adjust sum
-                for (Action* a in s.actions) {
-                    if (a.action == ActionEventWins) {
-                        // This appears to be due to the rake
-                        NSLog(@"Both players lost, but villain won");
-                    }
-                }
-                for (Action* a in heroSeat.actions) {
-                    if (a.action == ActionEventWins) {
-                        NSLog(@"Both players lost, but hero won");
-                    }
-                }
+//                for (Action* a in s.actions) {
+//                    if (a.action == ActionEventWins) {
+//                        // This appears to be due to the rake
+//                        NSLog(@"Both players lost, but villain won");
+//                    }
+//                }
+//                for (Action* a in heroSeat.actions) {
+//                    if (a.action == ActionEventWins) {
+//                        NSLog(@"Both players lost, but hero won");
+//                    }
+//                }
             } else if ([heroDelta compare:[NSDecimalNumber zero]] == NSOrderedDescending
                        && [villainDelta compare:[NSDecimalNumber zero]] == NSOrderedDescending) {
                 // Both won, this could be a split pot as well
                 // TODO: figure this out
-                NSLog(@"Split pot, both players win");
+//                NSLog(@"Split pot, both players win");
             } else {
                 NSDecimalNumber* realDelta = [villainDelta absoluteMinimum:heroDelta];
                 

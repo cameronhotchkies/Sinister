@@ -38,8 +38,6 @@
 }
 
 - (void)generateEVforHands {
-    
-    // create the fetch request to get all Employees matching the IDs
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Seat"
                                               inManagedObjectContext:self.aMOC];
@@ -50,6 +48,8 @@
     
     NSError *error;
     NSArray *seats = [self.aMOC executeFetchRequest:fetchRequest error:&error];
+    
+    NSInteger seatCount = seats.count;
     
     NSMutableDictionary* cardPayouts = [NSMutableDictionary dictionary];
     
@@ -89,12 +89,20 @@
             }
             
             [payouts addPayout:a.chipDelta];
+            payouts.handCount = seatCount;
      
             [cardPayouts setObject:payouts forKey:holeString];
         }
     }
     
     [self.evArray addObjects:[cardPayouts allValues]];
+    
+    double expected=0, actual=0;
+    
+    for (SRSHandExpectedValue* ev in [cardPayouts allValues]) {
+        expected += ev.expectedFrequency;
+        actual += ev.seen;
+    }
     
     NSComparator comparisonBlock = ^(id first,id second) {
         NSString* h1 = (NSString*)first;
@@ -152,6 +160,12 @@
                                                          ascending:NO
                                                         comparator:comparisonBlock];
     [self.evArray setSortDescriptors:[NSArray arrayWithObject:sd]];
+}
+
+
+- (double)getFrequency:(id)sender {
+//    NSLog(@"OK");
+    return 0;
 }
 
 @end
