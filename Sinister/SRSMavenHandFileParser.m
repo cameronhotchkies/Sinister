@@ -38,7 +38,7 @@
         NSString* dateChunk = [titleLine substringWithRange:[match rangeAtIndex:2]];
         
         NSDate* d = [self.dateFormat dateFromString:dateChunk];
-        title.date = [d timeIntervalSince1970];
+        title.date = [d timeIntervalSinceReferenceDate];
         
         return title;
     }

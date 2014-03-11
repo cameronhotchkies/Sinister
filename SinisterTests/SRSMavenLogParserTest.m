@@ -84,9 +84,15 @@ Rake (0.03)";
     
     XCTAssert([handID isEqualToString:@"12345679-010"], @"Match hand ID");
     
-    NSDate *date = [NSDate dateWithString:@"2014-01-16 23:59:34"];
-    // TODO:fix this
-    //XCTAssertEqual(h.date, [date timeIntervalSince1970], @"Match hand date");
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    
+    NSDate *date = [dateFormatter dateFromString:@"2014-01-16 23:59:34"];
+    
+    NSTimeInterval a = h.date;
+    NSTimeInterval b = [date timeIntervalSinceReferenceDate];
+    
+    XCTAssertEqual(a, b, @"Match hand date");
     
     NSString *gameInfo = h.game;
     XCTAssert([gameInfo isEqualToString:@"NL Hold'em (2 - 10) - Blinds 0.05/0.10"], @"Test game name parsing");
@@ -496,10 +502,16 @@ Rake (0.08)";
     
     XCTAssert([handID isEqualToString:@"16693885-51"], @"Match hand ID");
     
-    NSDate *date = [NSDate dateWithString:@"2014-01-17 00:04:15"];
     
-    // TODO: fix this
-    // XCTAssertEqual(h.date, [date timeIntervalSince1970], @"Match hand date");
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    
+    NSDate *date = [dateFormatter dateFromString:@"2014-01-17 00:04:15"];
+    
+    NSTimeInterval a = [date timeIntervalSinceReferenceDate];
+    NSTimeInterval b = h.date;
+    
+    XCTAssertEqual(b, a, @"Match hand date");
     
     NSString *gameInfo = h.game;
     XCTAssert([gameInfo isEqualToString:@"NL Hold'em (2 - 10) - Blinds 0.05/0.10"], @"Test game name parsing");
