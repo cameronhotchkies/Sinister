@@ -835,14 +835,15 @@
                 inContext:fastContext];
     }
     
+    rv.rake = [NSDecimalNumber zero];
+    
     for (NSString* rakeOpt in [hdLines reverseObjectEnumerator]) {
         if ([rakeOpt hasPrefix:@"Rake ("]) {
             NSInteger rakeLen = rakeOpt.length;
             NSRange rakeRange = NSMakeRange(6, rakeLen - 7);
             NSString* rakeValue = [rakeOpt substringWithRange:rakeRange];
             
-            rv.rake = [NSDecimalNumber decimalNumberWithString:rakeValue];
-            break;
+            rv.rake = [rv.rake decimalNumberByAdding:[NSDecimalNumber decimalNumberWithString:rakeValue]];
         }
     }
     

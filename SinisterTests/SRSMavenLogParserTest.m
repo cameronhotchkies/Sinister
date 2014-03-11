@@ -444,6 +444,78 @@ VillainF adds 9.74 chips";
     
 }
 
+- (void)testMultipleRakes {
+    NSString* handData = @"Hand #12345678-729 - 2013-12-28 13:37:14\n\
+Game: NL Hold'em (2 - 10) - Blinds 0.05/0.10\n\
+Site: Seals With Clubs\n\
+Table: NLHE 6max .05/.10 #7\n\
+Seat 1: VillainA (9.54)\n\
+Seat 2: VillainB (34.49)\n\
+Seat 3: VillainC (3.54)\n\
+Seat 4: Hero (13.66)\n\
+Seat 5: VillainD (44.19)\n\
+Seat 6: VillainE (11.01)\n\
+VillainD has the dealer button\n\
+VillainE posts small blind 0.05\n\
+VillainA posts big blind 0.10\n\
+** Hole Cards **\n\
+Dealt to Hero [2d Ad]\n\
+VillainB has timed out\n\
+VillainB folds\n\
+VillainC raises to 0.40\n\
+Hero calls 0.40\n\
+VillainD raises to 1.50\n\
+VillainE folds\n\
+VillainA calls 1.40\n\
+VillainC calls 1.10\n\
+Hero calls 1.10\n\
+** Flop ** [Jc Tc 2s]\n\
+VillainA checks\n\
+VillainC checks\n\
+Hero checks\n\
+VillainD bets 1\n\
+VillainA folds\n\
+VillainC calls 1\n\
+Hero calls 1\n\
+** Turn ** [2c]\n\
+VillainC bets 1.04 (All-in)\n\
+Hero calls 1.04\n\
+VillainD raises to 3\n\
+Hero calls 1.96\n\
+** River ** [8c]\n\
+Hero checks\n\
+VillainD bets 9\n\
+Hero calls 8.16 (All-in)\n\
+VillainD refunded 0.84\n\
+** Side Pot 1 Show Down ** [Jc Tc 2s 2c 8c]\n\
+Hero shows [2d Ad] (Three of a Kind, Deuces +AJ)\n\
+VillainD shows [Jd Jh] (a Full House, Jacks full of Deuces)\n\
+VillainD wins Side Pot 1 (20.04) with a Full House\n\
+Rake (0.20)\n\
+** Main Pot Show Down ** [Jc Tc 2s 2c 8c]\n\
+VillainC shows [4s 4c] (a Flush, Jack high +T842)\n\
+VillainD wins Main Pot (11.87) with a Full House\n\
+Rake (0.30)";
+    
+    SRSMavenHandFileParser *p = [[SRSMavenHandFileParser alloc] init];
+    
+    NSManagedObjectContext* moc = [SRSMavenLogParserTest managedObjectContextForTests];
+    [p initialize:moc];
+    
+    Site* site = [self findOrCreateSealsSite:moc];
+    
+    Hand *h = [p parseHandData:handData forSite:site inContext:moc];
+//    NSOrderedSet *ss = h.seats;
+    
+    NSString *handID = h.handID;
+    
+    XCTAssert([handID isEqualToString:@"12345678-729"], @"Match hand ID");
+    
+    NSDecimalNumber* expected = [NSDecimalNumber decimalNumberWithString:@"0.50"];
+    NSDecimalNumber* rake = h.rake;
+    XCTAssert([expected compare:h.rake] == NSOrderedSame, @"Rakes added correctly");
+}
+
 - (void)testToShowdown {
     NSString* handData = @"Hand #16693885-51 - 2014-01-17 00:04:15\n\
 Game: NL Hold'em (2 - 10) - Blinds 0.05/0.10\n\
