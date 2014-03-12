@@ -2,14 +2,14 @@
 //  Hand.h
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 3/1/14.
+//  Created by Cameron Hotchkies on 3/11/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Action, Card, Player, Seat, Site, GameFormat;
+@class Action, Card, GameFormat, Player, Seat, Site;
 
 @interface Hand : NSManagedObject
 
@@ -18,14 +18,15 @@
 @property (nonatomic, retain) NSString * handID;
 @property (nonatomic, retain) NSDecimalNumber * rake;
 @property (nonatomic, retain) NSString * table;
+@property (nonatomic, retain) NSString * notes;
 @property (nonatomic, retain) NSOrderedSet *actions;
 @property (nonatomic, retain) Player *activePlayer;
 @property (nonatomic, retain) NSSet *flop;
+@property (nonatomic, retain) GameFormat *gameFormat;
 @property (nonatomic, retain) Card *river;
 @property (nonatomic, retain) NSOrderedSet *seats;
 @property (nonatomic, retain) Site *site;
 @property (nonatomic, retain) Card *turn;
-@property (nonatomic, retain) GameFormat *gameFormat;
 @end
 
 @interface Hand (CoreDataGeneratedAccessors)

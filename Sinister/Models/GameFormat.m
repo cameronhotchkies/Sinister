@@ -2,7 +2,7 @@
 //  GameFormat.m
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 3/1/14.
+//  Created by Cameron Hotchkies on 3/11/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
@@ -12,11 +12,11 @@
 
 @implementation GameFormat
 
-@dynamic maxPlayers;
 @dynamic bigBlind;
-@dynamic maxBuyin;
-@dynamic minBuyin;
 @dynamic flavor;
+@dynamic maxBuyin;
+@dynamic maxPlayers;
+@dynamic minBuyin;
 @dynamic hands;
 
 @end

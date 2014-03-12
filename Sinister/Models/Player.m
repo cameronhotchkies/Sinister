@@ -2,7 +2,7 @@
 //  Player.m
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 3/1/14.
+//  Created by Cameron Hotchkies on 3/11/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
@@ -16,6 +16,7 @@
 @implementation Player
 
 @dynamic name;
+@dynamic notes;
 @dynamic actions;
 @dynamic playedHands;
 @dynamic seats;

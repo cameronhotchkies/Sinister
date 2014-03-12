@@ -2,7 +2,7 @@
 //  Player.h
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 3/1/14.
+//  Created by Cameron Hotchkies on 3/11/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 @interface Player : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * notes;
 @property (nonatomic, retain) NSSet *actions;
 @property (nonatomic, retain) NSSet *playedHands;
 @property (nonatomic, retain) NSSet *seats;

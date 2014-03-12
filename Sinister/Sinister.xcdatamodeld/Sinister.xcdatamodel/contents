@@ -28,6 +28,7 @@
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="game" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="handID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rake" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="table" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="actions" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Action" inverseName="hand" inverseEntity="Action" syncable="YES"/>
@@ -47,6 +48,7 @@
     </entity>
     <entity name="Player" representedClassName="Player" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="actions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Action" inverseName="player" inverseEntity="Action" syncable="YES"/>
         <relationship name="playedHands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Hand" inverseName="activePlayer" inverseEntity="Hand" syncable="YES"/>
         <relationship name="seats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Seat" inverseName="player" inverseEntity="Seat" syncable="YES"/>
@@ -75,11 +77,11 @@
     <elements>
         <element name="Action" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Card" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="GameFormat" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Hand" positionX="0" positionY="0" width="0" height="0"/>
         <element name="ParsedFile" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Player" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Seat" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Site" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="GameFormat" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>
