@@ -31,16 +31,14 @@
                                               inManagedObjectContext:aMOC];
     
     [fetchRequest setEntity:entity];
-    //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@)", self]];
     
-    // make sure the results are sorted as well
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@)", self]];
     
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:@"hand.date"
                                                        ascending:NO];
     
     [fetchRequest setSortDescriptors: [NSArray arrayWithObject:sd]];
-//
+
     
     fetchRequest.resultType = NSDictionaryResultType;
     
@@ -48,16 +46,14 @@
     [lastSeenDescription setName:@"lastSeen"];
     
     NSExpression* dateExpression = [NSExpression expressionForKeyPath:@"hand.date"];
-    NSExpression* maxDate = [NSExpression expressionForFunction:@"max:"
-                                                      arguments:@[dateExpression]];
-    //[lastSeenDescription setExpression:maxDate];
+    
     [lastSeenDescription setExpression:dateExpression];
     
     [lastSeenDescription setExpressionResultType:NSDateAttributeType];
     
     fetchRequest.fetchLimit = 1;
     fetchRequest.propertiesToFetch = @[lastSeenDescription];
-//    NSArray* results = [aMOC executeFetchRequest:fetchRequest error:nil];
+    
     
     // Execute the fetch
     NSError *error;
@@ -65,11 +61,6 @@
     
     if ([seats count] > 0) {
         NSDictionary* d = [seats objectAtIndex:0];
-//        Seat* s = [seats objectAtIndex:0];
-//        Hand* h = s.hand;
-//        NSTimeInterval dt = h.date;
-
-//        NSTimeInterval dt = ();
         
         return [d objectForKey:@"lastSeen"];//[NSDate dateWithTimeIntervalSince1970:dt];;
     } else {
@@ -90,8 +81,6 @@
     
     // Show (6) or above could give false positives as it doesn't reflect real bet action
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d and action < 6)", self, ActionStreetPreflop]];
-    
-    // make sure the results are sorted as well
     
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:@"hand.handID"
                                                        ascending:NO];
@@ -137,8 +126,6 @@
     //and site.name == %@
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetPreflop]];
     
-    // make sure the results are sorted as well
-    
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:@"hand.handID"
                                                        ascending:NO];
     
@@ -183,16 +170,14 @@
                                               inManagedObjectContext:aMOC];
     
     [fetchRequest setEntity:entity];
-    //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street != %d)", self, ActionStreetPreflop]];
     
-    // make sure the results are sorted as well
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street != %d)", self, ActionStreetPreflop]];
     
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:@"hand.handID"
                                                        ascending:NO];
     
     [fetchRequest setSortDescriptors: [NSArray arrayWithObject:sd]];
-    // Execute the fetch
+
     NSError *error;
     NSArray *actions = [aMOC executeFetchRequest:fetchRequest error:&error];
     
@@ -227,10 +212,8 @@
                                               inManagedObjectContext:aMOC];
     
     [fetchRequest setEntity:entity];
-    //and site.name == %@
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetFlop]];
     
-    // make sure the results are sorted as well
+    [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetFlop]];
     
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:@"hand.handID"
                                                        ascending:NO];
@@ -274,8 +257,6 @@
     //and site.name == %@
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetTurn]];
     
-    // make sure the results are sorted as well
-    
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:@"hand.handID"
                                                        ascending:NO];
     
@@ -315,10 +296,7 @@
                                               inManagedObjectContext:aMOC];
     
     [fetchRequest setEntity:entity];
-    //and site.name == %@
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(player == %@ and street == %d)", self, ActionStreetRiver]];
-    
-    // make sure the results are sorted as well
     
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:@"hand.handID"
                                                        ascending:NO];
@@ -428,8 +406,6 @@
     
     [fetchRequest setEntity:entity];
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(name == %@ and site.name == %@)", name, site.name]];
-    
-    // make sure the results are sorted as well
     
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey: @"name"
                                                        ascending:YES];

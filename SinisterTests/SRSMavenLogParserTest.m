@@ -210,8 +210,6 @@ Rake (0.03)";
     [fetchRequest setEntity:entity];
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(name == %@)", @"Seals With Clubs"]];
     
-    // make sure the results are sorted as well
-    
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey: @"name"
                                                        ascending:YES];
     

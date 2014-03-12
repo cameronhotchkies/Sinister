@@ -161,8 +161,6 @@
     [fetchRequest setEntity:entity];
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(name == %@ and site.name == %@)", name, site.name]];
     
-    // make sure the results are sorted as well
-    
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey: @"name"
                                                        ascending:YES];
     
@@ -536,8 +534,6 @@
     [fetchRequest setEntity:entity];
     [fetchRequest setPredicate: [NSPredicate predicateWithFormat: @"(handID == %@ and site == %@)", handID, site]];
     
-    // make sure the results are sorted as well
-    
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:@"handID"
                                                        ascending:YES];
     
@@ -561,8 +557,6 @@
     
     [fetchRequest setEntity:entity];
     [fetchRequest setPredicate:nil];
-    
-    // make sure the results are sorted as well
     
     NSSortDescriptor* sd = [[NSSortDescriptor alloc] initWithKey:@"handID"
                                                        ascending:YES];

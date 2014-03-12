@@ -28,8 +28,6 @@
 		7E3E78331895EDA40073A08A /* Card+Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E78321895EDA40073A08A /* Card+Constants.m */; };
 		7E3E78381896F3B20073A08A /* SRSPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E78361896F3B20073A08A /* SRSPreferencesWindowController.m */; };
 		7E3E78391896F3B20073A08A /* SRSPreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E3E78371896F3B20073A08A /* SRSPreferencesWindowController.xib */; };
-		7E3E783D1896FE0C0073A08A /* SRSParseEngineWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E783B1896FE0C0073A08A /* SRSParseEngineWindowController.m */; };
-		7E3E783E1896FE0C0073A08A /* SRSParseEngineWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E3E783C1896FE0C0073A08A /* SRSParseEngineWindowController.xib */; };
 		7E3E7853189757270073A08A /* Player+Stats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E7852189757270073A08A /* Player+Stats.m */; };
 		7E3E78571897589F0073A08A /* SRSPlayerStatsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E3E78551897589F0073A08A /* SRSPlayerStatsWindowController.m */; };
 		7E3E78581897589F0073A08A /* SRSPlayerStatsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E3E78561897589F0073A08A /* SRSPlayerStatsWindowController.xib */; };
@@ -168,9 +166,6 @@
 		7E3E78351896F3B20073A08A /* SRSPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSPreferencesWindowController.h; sourceTree = "<group>"; };
 		7E3E78361896F3B20073A08A /* SRSPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSPreferencesWindowController.m; sourceTree = "<group>"; };
 		7E3E78371896F3B20073A08A /* SRSPreferencesWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SRSPreferencesWindowController.xib; sourceTree = "<group>"; };
-		7E3E783A1896FE0C0073A08A /* SRSParseEngineWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSParseEngineWindowController.h; path = Internal/SRSParseEngineWindowController.h; sourceTree = "<group>"; };
-		7E3E783B1896FE0C0073A08A /* SRSParseEngineWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSParseEngineWindowController.m; path = Internal/SRSParseEngineWindowController.m; sourceTree = "<group>"; };
-		7E3E783C1896FE0C0073A08A /* SRSParseEngineWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SRSParseEngineWindowController.xib; path = Internal/SRSParseEngineWindowController.xib; sourceTree = "<group>"; };
 		7E3E7851189757270073A08A /* Player+Stats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Player+Stats.h"; path = "Models/Player+Stats.h"; sourceTree = "<group>"; };
 		7E3E7852189757270073A08A /* Player+Stats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Player+Stats.m"; path = "Models/Player+Stats.m"; sourceTree = "<group>"; };
 		7E3E78541897589F0073A08A /* SRSPlayerStatsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSPlayerStatsWindowController.h; sourceTree = "<group>"; };
@@ -546,9 +541,6 @@
 				7E3E78351896F3B20073A08A /* SRSPreferencesWindowController.h */,
 				7E3E78361896F3B20073A08A /* SRSPreferencesWindowController.m */,
 				7E3E78371896F3B20073A08A /* SRSPreferencesWindowController.xib */,
-				7E3E783A1896FE0C0073A08A /* SRSParseEngineWindowController.h */,
-				7E3E783B1896FE0C0073A08A /* SRSParseEngineWindowController.m */,
-				7E3E783C1896FE0C0073A08A /* SRSParseEngineWindowController.xib */,
 				7E3E78541897589F0073A08A /* SRSPlayerStatsWindowController.h */,
 				7E3E78551897589F0073A08A /* SRSPlayerStatsWindowController.m */,
 				7E3E78561897589F0073A08A /* SRSPlayerStatsWindowController.xib */,
@@ -703,7 +695,6 @@
 				7E73540718C6946400FCAB31 /* JS.eps in Resources */,
 				7E02EA07188AF05A001A41C7 /* MainMenu.xib in Resources */,
 				7E7353EA18C6946400FCAB31 /* 8D.eps in Resources */,
-				7E3E783E1896FE0C0073A08A /* SRSParseEngineWindowController.xib in Resources */,
 				7E7353DC18C6946400FCAB31 /* 7C.eps in Resources */,
 				7E7353E218C6946400FCAB31 /* QC.eps in Resources */,
 				7E73540B18C6986C00FCAB31 /* Blue_Back.eps in Resources */,
@@ -767,7 +758,6 @@
 				7E75B26D18C2C49B0062C7AD /* Seat.m in Sources */,
 				7E8E531818A58A4500E8425A /* SRSInitialSetupWindowController.m in Sources */,
 				7E75B27318C2C49B0062C7AD /* Hand.m in Sources */,
-				7E3E783D1896FE0C0073A08A /* SRSParseEngineWindowController.m in Sources */,
 				7E3E78381896F3B20073A08A /* SRSPreferencesWindowController.m in Sources */,
 				7E75B27618C2C49B0062C7AD /* GameFormat.m in Sources */,
 				7E75B26418C2C49A0062C7AD /* Player.m in Sources */,
