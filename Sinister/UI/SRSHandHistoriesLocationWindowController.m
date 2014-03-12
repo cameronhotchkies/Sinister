@@ -32,7 +32,6 @@
 
 - (IBAction)addNewHandHistoryPath:(id)sender
 {
-    // TODO: add
     NSOpenPanel* openDlg = [NSOpenPanel openPanel];
     [openDlg setCanChooseFiles:NO];
     [openDlg setCanChooseDirectories:YES];

@@ -97,7 +97,7 @@
         
         for (NSURL *u in files)
         {
-            handHistory = [u absoluteString];
+            handHistory = [u path];
         }
         
         self.sealsDetectedPath.stringValue = handHistory;

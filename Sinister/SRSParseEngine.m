@@ -167,7 +167,7 @@
     
     @synchronized(self) {
         if ([actualMod compare:storedMod] == NSOrderedDescending) {
-            // TODO: Parse
+            // Parse
             NSString* f = [NSString stringWithContentsOfURL:[NSURL fileURLWithPath:filePath]
                                                    encoding:NSUTF8StringEncoding
                                                       error:nil];
