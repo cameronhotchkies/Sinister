@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "SRSSeatViewController.h"
 #import "Hand.h"
+#import "Action+Constants.h"
 
 @interface SRSHandReplayWindowController : NSWindowController
 
@@ -33,6 +34,17 @@
 @property (weak) IBOutlet NSView* seat7View;
 @property (weak) IBOutlet NSView* seat8View;
 
+@property (strong) IBOutlet NSTextView* actionText;
+@property (strong) IBOutlet NSTextView* notes;
+
+@property (strong) Hand* hand;
+
+@property (assign) NSInteger currentAction;
+@property (assign) ActionStreet street;
+
 - (void)setHand:(Hand*)hand;
+
+- (IBAction)nextAction:(id)sender;
+- (IBAction)prevAction:(id)sender;
 
 @end

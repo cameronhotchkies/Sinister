@@ -229,6 +229,7 @@
                 
                 sbAction.hand = hand;
                 sbAction.seat = s;
+                sbAction.supplement = SupplementPostSmallBlind;
                 sbAction.player = s.player;
                 
                 
@@ -267,6 +268,7 @@
                 
                 bbAction.hand = hand;
                 bbAction.seat = s;
+                bbAction.supplement = SupplementPostBigBlind;
                 bbAction.player = s.player;
                 break;
             }

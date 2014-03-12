@@ -2,7 +2,7 @@
 //  Card.h
 //  Sinister
 //
-//  Created by Cameron Hotchkies on 3/11/14.
+//  Created by Cameron Hotchkies on 3/12/14.
 //  Copyright (c) 2014 Cameron Hotchkies. All rights reserved.
 //
 

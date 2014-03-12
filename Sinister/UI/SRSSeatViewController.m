@@ -53,9 +53,8 @@ Seat* __strong _seat;
         img2eps = [NSString stringWithFormat:@"%@.eps", [[((Card*) [arr objectAtIndex:1]) printable] uppercaseString]];
     }
     
-    NSImage* img1Pre = [NSImage imageNamed:img1eps];//@"KH.eps"];
-    NSImage* img2Pre = [NSImage imageNamed:img2eps];//@"KS.eps"];
-    
+    NSImage* img1Pre = [NSImage imageNamed:img1eps];
+    NSImage* img2Pre = [NSImage imageNamed:img2eps];
     
     CGRect c1Frame = CGRectMake(15, 20, 50, 70);
     CGRect c2Frame = CGRectMake(25, 16, 50, 70);

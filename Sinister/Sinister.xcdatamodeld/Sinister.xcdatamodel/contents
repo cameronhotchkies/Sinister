@@ -4,6 +4,7 @@
         <attribute name="action" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="bet" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="street" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="supplement" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="hand" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Hand" inverseName="actions" inverseEntity="Hand" syncable="YES"/>
         <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="actions" inverseEntity="Player" syncable="YES"/>
         <relationship name="seat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Seat" inverseName="actions" inverseEntity="Seat" syncable="YES"/>
@@ -47,7 +48,7 @@
         <relationship name="site" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Site" inverseName="parsedHandFiles" inverseEntity="Site" syncable="YES"/>
     </entity>
     <entity name="Player" representedClassName="Player" syncable="YES">
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="actions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Action" inverseName="player" inverseEntity="Action" syncable="YES"/>
         <relationship name="playedHands" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Hand" inverseName="activePlayer" inverseEntity="Hand" syncable="YES"/>

@@ -28,6 +28,12 @@ typedef NS_ENUM(NSInteger, ActionEvent) {
     ActionEventWins = 8
 };
 
+typedef NS_ENUM(NSInteger, ActionSupplement) {
+    SupplementPostBigBlind = 1,
+    SupplementPostSmallBlind = 2,
+    SupplementPostAnte = 3
+};
+
 @interface Action (Constants)
 
 @end

@@ -10,4 +10,6 @@
 
 @interface SRSSeatBackgroundView : NSView
 
+@property (assign) BOOL vacant;
+
 @end

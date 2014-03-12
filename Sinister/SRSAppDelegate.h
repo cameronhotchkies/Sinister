@@ -10,7 +10,6 @@
 
 #import "SRSHandHistoriesLocationWindowController.h"
 #import "SRSPreferencesWindowController.h"
-#import "SRSParseEngineWindowController.h"
 #import "SRSPlayerStatsWindowController.h"
 #import "SRSHandExpectedValueWindowController.h"
 #import "SRSParseEngine.h"
@@ -23,7 +22,6 @@
 
 @property (strong) SRSHandHistoriesLocationWindowController *handLocController;
 @property (strong) SRSPreferencesWindowController *preferences;
-@property (strong) SRSParseEngineWindowController *parseEngineController;
 @property (strong) SRSPlayerStatsWindowController *playerStats;
 @property (strong) SRSHandExpectedValueWindowController* expectedValues;
 @property (strong) SRSInitialSetupWindowController* initialSetup;
