@@ -108,6 +108,8 @@
 		7E9C357D189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C357B189C56BC002C47A2 /* SRSHandExpectedValueWindowController.m */; };
 		7E9C357E189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C357C189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib */; };
 		7E9C3582189C87D9002C47A2 /* SRSHandExpectedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E9C3581189C87D9002C47A2 /* SRSHandExpectedValue.m */; };
+		7EA7D18918D3DC8F00EA597A /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = 7EA7D18818D3DC8F00EA597A /* LICENSE.md */; };
+		7EA7D18B18D3DE9800EA597A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7EA7D18A18D3DE9800EA597A /* README.md */; };
 		7EDA52D118AEC96C001D5371 /* SRSLogImportProgressWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDA52CF18AEC96C001D5371 /* SRSLogImportProgressWindowController.m */; };
 		7EDA52D218AEC96C001D5371 /* SRSLogImportProgressWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EDA52D018AEC96C001D5371 /* SRSLogImportProgressWindowController.xib */; };
 		7EDC771C18D0437D00BBEB53 /* GameFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDC771B18D0437D00BBEB53 /* GameFormat.m */; };
@@ -263,6 +265,8 @@
 		7E9C357C189C56BC002C47A2 /* SRSHandExpectedValueWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SRSHandExpectedValueWindowController.xib; sourceTree = "<group>"; };
 		7E9C3580189C87D9002C47A2 /* SRSHandExpectedValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSHandExpectedValue.h; path = Models/SRSHandExpectedValue.h; sourceTree = "<group>"; };
 		7E9C3581189C87D9002C47A2 /* SRSHandExpectedValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSHandExpectedValue.m; path = Models/SRSHandExpectedValue.m; sourceTree = "<group>"; };
+		7EA7D18818D3DC8F00EA597A /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE.md; path = Sinister/LICENSE.md; sourceTree = "<group>"; };
+		7EA7D18A18D3DE9800EA597A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		7EDA52CE18AEC96C001D5371 /* SRSLogImportProgressWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRSLogImportProgressWindowController.h; path = UI/SRSLogImportProgressWindowController.h; sourceTree = "<group>"; };
 		7EDA52CF18AEC96C001D5371 /* SRSLogImportProgressWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRSLogImportProgressWindowController.m; path = UI/SRSLogImportProgressWindowController.m; sourceTree = "<group>"; };
 		7EDA52D018AEC96C001D5371 /* SRSLogImportProgressWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SRSLogImportProgressWindowController.xib; path = UI/SRSLogImportProgressWindowController.xib; sourceTree = "<group>"; };
@@ -310,6 +314,8 @@
 		7E02E9E4188AF05A001A41C7 = {
 			isa = PBXGroup;
 			children = (
+				7EA7D18A18D3DE9800EA597A /* README.md */,
+				7EA7D18818D3DC8F00EA597A /* LICENSE.md */,
 				7E02E9F6188AF05A001A41C7 /* Sinister */,
 				7E02EA17188AF05A001A41C7 /* SinisterTests */,
 				7E02E9EF188AF05A001A41C7 /* Frameworks */,
@@ -630,7 +636,7 @@
 			attributes = {
 				CLASSPREFIX = SRS;
 				LastUpgradeCheck = 0500;
-				ORGANIZATIONNAME = "Cameron Hotchkies";
+				ORGANIZATIONNAME = "Srs Biznas";
 				TargetAttributes = {
 					7E02EA10188AF05A001A41C7 = {
 						TestTargetID = 7E02E9EC188AF05A001A41C7;
@@ -674,6 +680,7 @@
 				7E73540518C6946400FCAB31 /* 9S.eps in Resources */,
 				7E73540F18C8148200FCAB31 /* TD.eps in Resources */,
 				7E02EA2D188AFAEC001A41C7 /* SRSHandHistoriesLocationWindowController.xib in Resources */,
+				7EA7D18918D3DC8F00EA597A /* LICENSE.md in Resources */,
 				7E27A01D18A44C9400240919 /* SRSPlayerHandsWindowController.xib in Resources */,
 				7E7353DE18C6946400FCAB31 /* 9C.eps in Resources */,
 				7E7353E918C6946400FCAB31 /* 7D.eps in Resources */,
@@ -712,6 +719,7 @@
 				7E7353DD18C6946400FCAB31 /* 8C.eps in Resources */,
 				7E7353FA18C6946400FCAB31 /* JH.eps in Resources */,
 				7E7353EC18C6946400FCAB31 /* AD.eps in Resources */,
+				7EA7D18B18D3DE9800EA597A /* README.md in Resources */,
 				7E3E78581897589F0073A08A /* SRSPlayerStatsWindowController.xib in Resources */,
 				7E7353E818C6946400FCAB31 /* 6D.eps in Resources */,
 				7E7353F818C6946400FCAB31 /* 9H.eps in Resources */,
