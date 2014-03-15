@@ -44,6 +44,21 @@
     [self.seat7View addSubview:self.seat7ViewController.view];
     [self.seat8View addSubview:self.seat8ViewController.view];
     [self.seat9View addSubview:self.seat9ViewController.view];
+    
+    NSMutableArray* sv = [NSMutableArray array];
+    
+    [sv addObject:self.seat1ViewController];
+    [sv addObject:self.seat2ViewController];
+    [sv addObject:self.seat3ViewController];
+    [sv addObject:self.seat4ViewController];
+    [sv addObject:self.seat5ViewController];
+    [sv addObject:self.seat6ViewController];
+    [sv addObject:self.seat7ViewController];
+    [sv addObject:self.seat8ViewController];
+    [sv addObject:self.seat9ViewController];
+    
+    self.seatViews = sv;
+    
 }
 
 - (Hand*)hand {
@@ -58,41 +73,40 @@
     for (Seat* s in hand.seats) {
         NSInteger position = s.position;
         
-        switch (position) {
-            case 1:
-                self.seat1ViewController.seat = s;
-                break;
-            case 2:
-                self.seat2ViewController.seat = s;
-                break;
-            case 3:
-                self.seat3ViewController.seat = s;
-                break;
-            case 4:
-                self.seat4ViewController.seat = s;
-                break;
-            case 5:
-                self.seat5ViewController.seat = s;
-                break;
-            case 6:
-                self.seat6ViewController.seat = s;
-                break;
-            case 7:
-                self.seat7ViewController.seat = s;
-                break;
-            case 8:
-                self.seat8ViewController.seat = s;
-                break;
-            case 9:
-                self.seat9ViewController.seat = s;
-                break;
-            default:
-                break;
+        ((SRSSeatViewController*)[self.seatViews objectAtIndex:(position-1)]).seat = s;
+        
+    }
+}
+
+- (void)performFoldAction:(Action*)action {
+    Player *p = action.player;
+
+    NSString* playerName = p.name;
+    [self addTextToActionLog:[NSString stringWithFormat:@"%@ folds", playerName]];
+    
+    for (SRSSeatViewController* svc in self.seatViews) {
+        if ([svc.playerName isEqualToString:playerName]) {
+            [svc fold];
         }
     }
 }
 
-- (NSString*)readablePost:(NSString*)betAmount forAction:(Action*)action {
+- (void)performCheckAction:(Action*)action {
+    Player *p = action.player;
+    NSString* playerName = p.name;
+    [self addTextToActionLog:[NSString stringWithFormat:@"%@ checks", playerName]];
+}
+
+- (void)performPostAction:(Action*)action {
+    Player *p = action.player;
+    NSString* playerName = p.name;
+    
+    // Bet amount
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+    NSString* betAmount = [formatter stringFromNumber:action.bet];
+    
+    // Blind type
     NSString* blindType = @"";
     
     if (action.supplement == SupplementPostBigBlind) {
@@ -103,42 +117,110 @@
         blindType = @"";
     }
     
-    return [NSString stringWithFormat:@"%@ posts %@ blind of %@\n", action.player.name, blindType, betAmount];
+    [self addTextToActionLog:[NSString stringWithFormat:@"%@ posts %@ blind of %@", playerName, blindType, betAmount]];
 }
 
-- (NSString*)readableRaise:(NSString*)betAmount forAction:(Action*)action {
-    return [NSString stringWithFormat:@"%@ raises to %@\n", action.player.name, betAmount];
-}
-
-- (NSString*)readableAction:(Action*)action {
-    Player *p;
+- (void)performCallAction:(Action*)action {
+    Player *p = action.player;
+    NSString* playerName = p.name;
     
-    p = action.player;
-    
+    // Bet Amount
     NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle: NSNumberFormatterCurrencyStyle];
     NSString* betAmount = [formatter stringFromNumber:action.bet];
     
+    [self addTextToActionLog:[NSString stringWithFormat:@"%@ calls %@", playerName, betAmount]];
+}
+
+- (void)performBetAction:(Action*)action {
+    Player *p = action.player;
+    NSString* playerName = p.name;
+    
+    // Bet Amount
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+    NSString* betAmount = [formatter stringFromNumber:action.bet];
+    
+    [self addTextToActionLog:[NSString stringWithFormat:@"%@ bets %@", playerName, betAmount]];
+}
+
+- (void)performRaiseAction:(Action*)action {
+    Player *p = action.player;
+    NSString* playerName = p.name;
+    
+    // Bet Amount
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+    NSString* betAmount = [formatter stringFromNumber:action.bet];
+    
+    [self addTextToActionLog:[NSString stringWithFormat:@"%@ raises to %@", playerName, betAmount]];
+}
+
+- (void)performShowAction:(Action*)action {
+    Player *p = action.player;
+    NSString* playerName = p.name;
+    
+    // TODO: add cards
+    [self addTextToActionLog:[NSString stringWithFormat:@"%@ shows %@", playerName, @"cards"]];
+}
+
+- (void)performWinAction:(Action*)action {
+    Player *p = action.player;
+    NSString* playerName = p.name;
+    
+    // Bet Amount
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+    NSString* betAmount = [formatter stringFromNumber:action.bet];
+    
+    [self addTextToActionLog:[NSString stringWithFormat:@"%@ wins %@", playerName, betAmount]];
+}
+
+- (void)performRefundAction:(Action*)action {
+    Player *p = action.player;
+    NSString* playerName = p.name;
+    
+    // Bet Amount
+    NSNumberFormatter * formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle: NSNumberFormatterCurrencyStyle];
+    NSString* betAmount = [formatter stringFromNumber:action.bet];
+    
+    [self addTextToActionLog:[NSString stringWithFormat:@"%@ refunded %@", playerName, betAmount]];
+}
+
+- (void)performAction:(Action*)action {
+    
     switch (action.action) {
         case ActionEventFold:
-            return [NSString stringWithFormat:@"%@ folds\n", p.name];
+            [self performFoldAction:action];
             break;
         case ActionEventCheck:
-            return [NSString stringWithFormat:@"%@ checks\n", p.name];
+            [self performCheckAction:action];
+            break;
         case ActionEventPost:
-            return [self readablePost:betAmount forAction:action];
+            [self performPostAction:action];
+            break;
         case ActionEventCall:
-            return [NSString stringWithFormat:@"%@ calls %@\n", p.name, betAmount];
+            [self performCallAction:action];
+            break;
         case ActionEventBet:
-            return [NSString stringWithFormat:@"%@ bets %@\n", p.name, betAmount];
+            [self performBetAction:action];
+            break;
         case ActionEventRaise:
-            return [self readableRaise:betAmount forAction:action];
+            [self performRaiseAction:action];
+            break;
         case ActionEventShow:
-            // TODO: add cards
-            return [NSString stringWithFormat:@"%@ shows %@\n", p.name, @"cards"];
+            [self performShowAction:action];
+            break;
+        case ActionEventRefunded:
+            [self performRefundAction:action];
+            break;
+        case ActionEventWins:
+            [self performWinAction:action];
+            break;
         default:
             NSLog(@"Unhandled Action: %d", action.action);
-            return @"";
+            break;
     }
 }
 
@@ -162,23 +244,24 @@
     }
 }
 
+- (void)addTextToActionLog:(NSString*)newText {
+    self.actionText.string = [self.actionText.string stringByAppendingFormat:@"%@\n", newText];
+    [self.actionText scrollRangeToVisible: NSMakeRange(self.actionText.string.length, 0)];
+}
+
 - (IBAction)nextAction:(id)sender {
     if (self.currentAction < self.hand.actions.count) {
         
         Action* newAction = [self.hand.actions objectAtIndex:self.currentAction];
         
-        NSString* newActionText = [self readableAction:newAction];
-        
         if (newAction.street != self.street) {
-            
             NSString* streetText = [self streetToText:newAction.street];
             self.actionText.string = [self.actionText.string stringByAppendingString:streetText];
             
             self.street = newAction.street;
         }
         
-        self.actionText.string = [self.actionText.string stringByAppendingString:newActionText];
-        [self.actionText scrollRangeToVisible: NSMakeRange(self.actionText.string.length, 0)];
+        [self performAction:newAction];
         
         self.currentAction += 1;
     }

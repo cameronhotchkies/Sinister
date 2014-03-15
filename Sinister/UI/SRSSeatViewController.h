@@ -13,9 +13,13 @@
 @interface SRSSeatViewController : NSViewController
 
 @property (weak) IBOutlet NSView* backCircle;
-@property (weak) IBOutlet NSTextField* playerName;
+@property (weak) IBOutlet NSTextField* playerNameView;
 @property (weak) IBOutlet NSView* dealerButton;
 
+@property (strong) NSString* playerName;
+
 @property (strong) Seat* seat;
+
+- (void)fold;
 
 @end

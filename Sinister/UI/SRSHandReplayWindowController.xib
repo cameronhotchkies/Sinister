@@ -136,7 +136,7 @@
                         </constraints>
                         <buttonCell key="cell" type="roundRect" bezelStyle="roundedRect" image="NSRightFacingTriangleTemplate" imagePosition="only" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pfU-W5-9d0">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="controlContent"/>
+                            <font key="font" metaFont="cellTitle"/>
                         </buttonCell>
                         <connections>
                             <action selector="nextAction:" target="-2" id="QJO-UK-o0d"/>
@@ -150,13 +150,13 @@
                         </constraints>
                         <buttonCell key="cell" type="roundRect" bezelStyle="roundedRect" image="NSLeftFacingTriangleTemplate" imagePosition="only" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Dj5-cn-Mer">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="controlContent"/>
+                            <font key="font" metaFont="cellTitle"/>
                         </buttonCell>
                         <connections>
                             <action selector="prevAction:" target="-2" id="TlX-xs-BKU"/>
                         </connections>
                     </button>
-                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="W2x-Oh-Mf9" customClass="SRSFeltTableView">
+                    <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W2x-Oh-Mf9" customClass="SRSFeltTableView">
                         <rect key="frame" x="130" y="269" width="443" height="206"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </customView>

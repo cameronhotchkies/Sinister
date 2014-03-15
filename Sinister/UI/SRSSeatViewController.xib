@@ -9,7 +9,7 @@
             <connections>
                 <outlet property="backCircle" destination="42c-bb-nAg" id="4Y5-YE-3BW"/>
                 <outlet property="dealerButton" destination="qlk-y6-p9n" id="NOP-ge-88X"/>
-                <outlet property="playerName" destination="f9L-O9-Rkv" id="owM-5C-Ifz"/>
+                <outlet property="playerNameView" destination="f9L-O9-Rkv" id="bBW-cO-Syn"/>
                 <outlet property="view" destination="1" id="2"/>
             </connections>
         </customObject>

@@ -10,4 +10,6 @@
 
 @interface SRSFeltTableView : NSView
 
+@property (strong) CALayer* feltBackLayer;
+
 @end

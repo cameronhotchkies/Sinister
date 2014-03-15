@@ -34,8 +34,8 @@ Seat* __strong _seat;
 - (void)loadView {
     [super loadView];
     if (_seat == nil) {
-        self.playerName.stringValue = @"[vacant]";
-        self.playerName.textColor = [NSColor grayColor];
+        self.playerNameView.stringValue = @"[vacant]";
+        self.playerNameView.textColor = [NSColor grayColor];
     } else {
         NSString* pn = _seat.player.name;
     }
@@ -60,6 +60,10 @@ Seat* __strong _seat;
     CGRect c2Frame = CGRectMake(25, 16, 50, 70);
     NSImageView* c1 = [[NSImageView alloc] initWithFrame:c1Frame];
     NSImageView* c2 = [[NSImageView alloc] initWithFrame:c2Frame];
+    
+    c1.identifier = @"card";
+    c2.identifier = @"card";
+    
     [c1 setImage:img1Pre];
     [c2 setImage:img2Pre];
     
@@ -68,11 +72,28 @@ Seat* __strong _seat;
     [self.view addSubview:c2];
 }
 
+- (void)fold {
+    
+    NSMutableArray* cardViews = [NSMutableArray array];
+    
+    for (NSView* v in self.view.subviews) {
+        if ([v.identifier isEqualToString:@"card"]) {
+            [cardViews addObject:v];
+        }
+    }
+    
+    for (NSView* vc in cardViews) {
+        [vc removeFromSuperview];
+    }
+    
+}
 
 - (void)setSeat:(Seat *)seat {
     _seat = seat;
-    [self.playerName setStringValue:seat.player.name];
-    self.playerName.textColor = [NSColor blackColor];
+    self.playerName = seat.player.name;
+    
+    [self.playerNameView setStringValue:self.playerName];
+    self.playerNameView.textColor = [NSColor blackColor];
     
     NSRect bgFrame = CGRectMake(0, 0, self.backCircle.frame.size.width, self.backCircle.frame.size.height);
     SRSSeatBackgroundView* bg = [[SRSSeatBackgroundView alloc] initWithFrame:bgFrame];

@@ -37,6 +37,8 @@
 @property (strong) IBOutlet NSTextView* actionText;
 @property (strong) IBOutlet NSTextView* notes;
 
+@property (strong) NSArray* seatViews;
+
 @property (strong) Hand* hand;
 
 @property (assign) NSInteger currentAction;
