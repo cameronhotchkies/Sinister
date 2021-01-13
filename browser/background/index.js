@@ -16,10 +16,10 @@ const addArtificialLag = () => {
     var filter = {
       urls: lagTargets,
     };
-    var opt_extraInfoSpec = ["blocking"];
-    var wr = chrome.webRequest;
-    wr.handlerBehaviorChanged();
-    wr.onBeforeRequest.addListener(callback, filter, opt_extraInfoSpec);
+    const extraInfoSpec = ["blocking"];
+    var webRequest = chrome.webRequest;
+    webRequest.handlerBehaviorChanged();
+    webRequest.onBeforeRequest.addListener(callback, filter, extraInfoSpec);
   });
 };
 
@@ -35,7 +35,7 @@ const handleInterceptedMessage = (message) => {
   }
 };
 
-const onMessageListener = (request, sender) => {
+const onMessageListener = (request /*, sender */) => {
   // console.log(
   //   sender.tab
   //     ? "from a content script:" + sender.tab.url

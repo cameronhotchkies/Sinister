@@ -5,13 +5,13 @@ const removeSite = (siteToRemove) => () => {
 
     chrome.storage.sync.set(
       { activeSites: JSON.stringify(updated) },
-      restore_options
+      restoreOptions
     );
   });
 };
 
 // Saves options to chrome.storage
-function save_site() {
+function saveSite() {
   const newSiteInput = document.getElementById("new-site");
   const newSite = newSiteInput.value;
 
@@ -24,7 +24,7 @@ function save_site() {
         activeSites: JSON.stringify(updatedSites),
       },
       () => {
-        restore_options();
+        restoreOptions();
         // Update status to let user know options were saved.
         var status = document.getElementById("status");
 
@@ -40,7 +40,7 @@ function save_site() {
 
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
-function restore_options() {
+function restoreOptions() {
   // eslint-disable-next-line no-undef
   withActiveSites((activeSites) => {
     const enabledSiteList = document.getElementById("enabled-sites");
@@ -60,5 +60,5 @@ function restore_options() {
     });
   });
 }
-document.addEventListener("DOMContentLoaded", restore_options);
-document.getElementById("add").addEventListener("click", save_site);
+document.addEventListener("DOMContentLoaded", restoreOptions);
+document.getElementById("add").addEventListener("click", saveSite);
