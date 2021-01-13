@@ -1,0 +1,33 @@
+{
+  "name": "sinister",
+  "version": "0.0.1",
+  "description": "Browser extension for Sinister Poker Hand Analysis",
+  "main": "index.js",
+  "author": "Cameron Hotchkies <cameron@semisafe.com>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint action background content"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.3.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "prettier": "^2.2.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended"
+    ],
+    "parser": "babel-eslint",
+    "plugins": [
+      "prettier"
+    ],
+    "env": {
+      "browser": true,
+      "webextensions": true,
+      "es6": true
+    }
+  }
+}
