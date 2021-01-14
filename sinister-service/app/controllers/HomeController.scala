@@ -1,11 +1,12 @@
 package controllers
 
-import javax.inject._
+import models.{GameStateMessage, HandSummary}
 import play.api._
-import play.api.libs.json.{JsDefined, JsString, JsValue, Json}
+import play.api.libs.json._
 import play.api.mvc._
 
-import java.io.{BufferedWriter, File, FileWriter}
+import java.io.{BufferedWriter, File, FileInputStream, FileWriter}
+import javax.inject._
 
 /**
   * This controller creates an `Action` to handle HTTP requests to the
@@ -15,7 +16,7 @@ import java.io.{BufferedWriter, File, FileWriter}
 class HomeController @Inject() (val controllerComponents: ControllerComponents)
     extends BaseController {
 
-  val logger: Logger = Logger(this.getClass)
+  val logger: Logger = Logger("application")
 
   /**
     * Create an Action to render an HTML page.
@@ -45,7 +46,8 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     }
 
   def logGameState(rawState: JsValue): Unit = {
-    val stateId = (rawState \ "id").toOption.map(_.toString()).getOrElse("mismatch")
+    val stateId =
+      (rawState \ "id").toOption.map(_.toString()).getOrElse("mismatch")
 
     writeFile(s"$stateId.json", rawState.toString())
   }
@@ -56,4 +58,78 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     bw.write(s)
     bw.close()
   }
+
+  case class Result(hands: Seq[HandSummary], gameCount: Int)
+  object Result {
+    implicit val format: Format[Result] = Json.format[Result]
+  }
+
+  def enumerateCache(): List[File] = {
+    val d = new File("logs/hands")
+    if (d.exists && d.isDirectory) {
+      d.listFiles.filter(_.isFile).toList
+    } else {
+      List[File]()
+    }
+
+  }
+
+  def parseLogCache(): Action[AnyContent] =
+    Action { implicit request: Request[AnyContent] =>
+
+      val cachedFiles = enumerateCache()
+
+      val parseCacheFiles = cachedFiles.flatMap { rawHandFile =>
+        {
+          val source = new FileInputStream(rawHandFile)
+          val parsed = Json.parse(source)
+          Json.fromJson[GameStateMessage](parsed) match {
+            case JsSuccess(value, path) =>
+              Option(value)
+            case JsError(errors) =>
+              logger.error(errors.toString())
+              None
+          }
+        }
+      }
+
+      val byGameId = parseCacheFiles.groupBy(_.gameState.gameId)
+      val handDetails = byGameId.map {
+        case (gameId, messages) => {
+          logger.info(s"MSGS: ${messages}")
+          val gameStates = messages
+            .sortBy(_.id)
+            .map(_.gameState)
+          val players = HandSummary.summarizePlayers(gameStates)
+          val bigBlinders = gameStates.map(_.bigBlindIndex).distinct
+          val smallBlinders = gameStates.map(_.smallBlindIndex).distinct
+
+          assert(bigBlinders.length == 1)
+          assert(smallBlinders.length == 1)
+
+          HandSummary(
+            gameId,
+            players,
+            bigBlinders.head,
+            smallBlinders.head
+          )
+        }
+      }
+        .toSeq
+        .sortBy(_.handId)
+
+      logger.info(s"PBH: ${handDetails}")
+
+      val gameIds = parseCacheFiles
+        .map(gameStateMessage => {
+          gameStateMessage.gameState.gameId.toString
+        })
+        .distinct
+
+      val transformedResult = Result(handDetails, gameIds.length)
+
+      Ok(Json.toJson(transformedResult))
+
+    }
+
 }
