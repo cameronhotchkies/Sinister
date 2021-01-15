@@ -25,5 +25,32 @@ class CardSpec extends AnyWordSpecLike with must.Matchers {
 
       asJson mustBe expected
     }
+
+    "deserialize a hand" in {
+      val sampleHand = "42;36"
+
+      val deserialized = Card.deserialize(sampleHand)
+
+      deserialized mustBe List(
+        Card(42),
+        Card(36)
+      )
+    }
+
+    "deserialize an hand" in {
+      val sampleHand = ""
+
+      val deserialized = Card.deserialize(sampleHand)
+
+      deserialized mustBe Nil
+    }
+
+    "ignore an unknown hand" in {
+      val sampleHand = "-1;-1"
+
+      val deserialized = Card.deserialize(sampleHand)
+
+      deserialized mustBe Nil
+    }
   }
 }

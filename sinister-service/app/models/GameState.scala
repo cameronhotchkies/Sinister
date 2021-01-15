@@ -9,7 +9,8 @@ case class GameState(
                       gameId: Int,
                       seatedPlayers: Seq[SeatedPlayer],
                       smallBlindIndex: Int,
-                      bigBlindIndex: Int
+                      bigBlindIndex: Int,
+                      dealer: Dealer
                     ) {}
 object GameState {
 
@@ -19,7 +20,8 @@ object GameState {
       (JsPath \ "gi").read[Int] and
       (JsPath \ "s").read[Seq[SeatedPlayer]] and
       (JsPath \ "sb").read[Int] and
-      (JsPath \ "bb").read[Int]
+      (JsPath \ "bb").read[Int] and
+      (JsPath \ "d").read[Dealer]
     )(GameState.apply _)
   //    implicit val format: Format[GameState] = Json.format[GameState]
 }
