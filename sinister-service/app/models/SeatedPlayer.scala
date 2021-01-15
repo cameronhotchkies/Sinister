@@ -37,23 +37,11 @@ case class SeatedPlayer(
   }
 }
 object SeatedPlayer {
-  def deserializeCards(cardData: String): Seq[Card] = {
-    if (cardData != "-1;-1") {
-      cardData.split(";")
-        .filter(_.nonEmpty)
-        .map(_.toInt)
-        .map(Card.apply)
-        .toSeq
-    } else {
-      // special case, muck maybe?
-      Nil
-    }
-  }
 
   implicit val reads: Reads[SeatedPlayer] = (
     (JsPath \ "n").read[String] and
       (JsPath \ "lvl").read[Int] and
-      (JsPath \ "d").read[String].map(deserializeCards)
+      (JsPath \ "d").read[String].map(Card.deserialize)
     )(SeatedPlayer.apply _)
   implicit val writes: Writes[SeatedPlayer] = Json.writes[SeatedPlayer]
   implicit val format: Format[SeatedPlayer] = Format(reads, writes)

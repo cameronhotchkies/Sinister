@@ -61,7 +61,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
   case class Result(hands: Seq[HandSummary], gameCount: Int)
   object Result {
-    implicit val format: Format[Result] = Json.format[Result]
+    implicit val writes: Writes[Result] = Json.writes[Result]
   }
 
   def enumerateCache(): List[File] = {
@@ -87,6 +87,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
             case JsSuccess(value, path) =>
               Option(value)
             case JsError(errors) =>
+              logger.error(s"PRSED: $parsed")
               logger.error(errors.toString())
               None
           }
@@ -95,30 +96,18 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
       val byGameId = parseCacheFiles.groupBy(_.gameState.gameId)
       val handDetails = byGameId.map {
-        case (gameId, messages) => {
-          logger.info(s"MSGS: ${messages}")
+        case (gameId, messages) =>
+          logger.info(s"MSGS: $messages")
           val gameStates = messages
             .sortBy(_.id)
             .map(_.gameState)
-          val players = HandSummary.summarizePlayers(gameStates)
-          val bigBlinders = gameStates.map(_.bigBlindIndex).distinct
-          val smallBlinders = gameStates.map(_.smallBlindIndex).distinct
 
-          assert(bigBlinders.length == 1)
-          assert(smallBlinders.length == 1)
-
-          HandSummary(
-            gameId,
-            players,
-            bigBlinders.head,
-            smallBlinders.head
-          )
-        }
+          HandSummary.summarize(gameId, gameStates)
       }
         .toSeq
         .sortBy(_.handId)
 
-      logger.info(s"PBH: ${handDetails}")
+      logger.info(s"PBH: $handDetails")
 
       val gameIds = parseCacheFiles
         .map(gameStateMessage => {

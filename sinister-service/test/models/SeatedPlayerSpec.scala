@@ -1,40 +1,11 @@
 package models
 
 import org.scalatest.matchers._
-import org.scalatest.matchers.must.Matchers._
-import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.wordspec._
 import play.api.libs.json.Json
 
 class SeatedPlayerSpec extends AnyWordSpecLike with must.Matchers {
   "Seated Player" must {
-
-    "deserialize a hand" in {
-      val sampleHand = "42;36"
-
-      val deserialized = SeatedPlayer.deserializeCards(sampleHand)
-
-      deserialized mustBe List(
-        Card(42),
-        Card(36)
-      )
-    }
-
-    "deserialize an hand" in {
-      val sampleHand = ""
-
-      val deserialized = SeatedPlayer.deserializeCards(sampleHand)
-
-      deserialized mustBe Nil
-    }
-
-    "ignore an unknown hand" in {
-      val sampleHand = "-1;-1"
-
-      val deserialized = SeatedPlayer.deserializeCards(sampleHand)
-
-      deserialized mustBe Nil
-    }
-
     "merge as expected" in {
       val playerName = "test39"
       val playerLevel = 40
@@ -73,9 +44,14 @@ class SeatedPlayerSpec extends AnyWordSpecLike with must.Matchers {
       val playerName = "test39"
       val playerLevel = 74
       val player1a =
-        SeatedPlayer(name = playerName, level = playerLevel, dealtCards = List(
-          Card(15),Card(16)
-        ))
+        SeatedPlayer(
+          name = playerName,
+          level = playerLevel,
+          dealtCards = List(
+            Card(15),
+            Card(16)
+          )
+        )
       val player1b = SeatedPlayer(
         name = playerName,
         level = playerLevel,
@@ -88,4 +64,28 @@ class SeatedPlayerSpec extends AnyWordSpecLike with must.Matchers {
       merged.dealtCards.map(_.readable) mustBe List("5s", "6c")
     }
   }
+
+  "deserialize from JSON" in {
+    val rawPlayerData =
+      """
+        |{
+        |  "n": "testPlayer",
+        |  "lvl": 67,
+        |  "d": "14;15"
+        |}
+        |""".stripMargin
+
+    val playerData_ = Json
+      .parse(rawPlayerData)
+      .validate[SeatedPlayer]
+
+    val o = playerData_.asOpt
+    o mustNot be(None)
+
+    val player = playerData_.get
+    player.dealtCards.map(_.readable) mustBe List("5h", "5s")
+    player.name mustBe "testPlayer"
+    player.level mustBe 67
+  }
+
 }
