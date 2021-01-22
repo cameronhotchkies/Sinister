@@ -1,8 +1,8 @@
 package models
 
+import io.circe.Json
 import org.scalatest.matchers._
 import org.scalatest.wordspec.AnyWordSpecLike
-import play.api.libs.json.Json
 
 class CardSpec extends AnyWordSpecLike with must.Matchers {
   "Card" must {
@@ -17,11 +17,9 @@ class CardSpec extends AnyWordSpecLike with must.Matchers {
     "serialize to JSON as expected" in {
       val card = Card(48)
 
-      val asJson = Json.toJson(card)
+      val asJson = Card.encoder(card)
 
-      val expected = Json.obj(
-        "value" -> "Ac"
-      )
+      val expected = Json.fromString("Ac")
 
       asJson mustBe expected
     }

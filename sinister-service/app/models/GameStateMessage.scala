@@ -1,6 +1,7 @@
 package models
 
-import play.api.libs.json.{Json, Reads}
+import io.circe._
+import io.circe.generic.semiauto._
 
 case class GameStateMessage(
     id: Int,
@@ -8,5 +9,5 @@ case class GameStateMessage(
     events: Seq[GameStateEvent]
 )
 object GameStateMessage {
-  implicit val reads: Reads[GameStateMessage] = Json.reads[GameStateMessage]
+  implicit val decoder: Decoder[GameStateMessage] = deriveDecoder
 }

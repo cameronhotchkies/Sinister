@@ -1,17 +1,26 @@
 package models
 
-import play.api.libs.json.{Json, Writes}
+import io.circe.{Decoder, Encoder, Json}
+import io.circe.generic.semiauto.deriveDecoder
 
 case class Card(ordinal: Int) {
-  def readable: String = {
-    val rank = Card.Ranks(ordinal / 4)
-    val suit = Card.Suits(ordinal % 4)
+  val faceDown: Boolean = ordinal == -1
 
-    s"$rank$suit"
+  def readable: String = {
+    if (ordinal < 0) {
+      "Xx"
+    } else {
+      val rank = Card.Ranks(ordinal / 4)
+      val suit = Card.Suits(ordinal % 4)
+
+      s"$rank$suit"
+    }
   }
 }
 
 object Card {
+  implicit val decoder: Decoder[Card] = deriveDecoder
+
   def deserialize(cardData: String): Seq[Card] = {
     if (cardData != "-1;-1") {
       cardData.split(";")
@@ -27,9 +36,6 @@ object Card {
 
   val Suits = List("c", "d", "h", "s")
   val Ranks = List("2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A")
-  implicit val writes: Writes[Card] = (card: Card) => {
-    Json.obj(
-      "value" -> card.readable
-    )
-  }
+
+  implicit val encoder: Encoder[Card] = (a: Card) => Json.fromString(a.readable)
 }

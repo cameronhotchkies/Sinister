@@ -1,8 +1,8 @@
 package models
 
+import io.circe.parser
 import org.scalatest.matchers._
 import org.scalatest.wordspec.AnyWordSpecLike
-import play.api.libs.json.Json
 
 class DealerSpec extends AnyWordSpecLike with must.Matchers {
   "Dealer" must {
@@ -31,9 +31,11 @@ class DealerSpec extends AnyWordSpecLike with must.Matchers {
           |}
           |""".stripMargin
 
-      val parsed = Json.parse(raw).validate[Dealer]
-
-      parsed.get.cards.map(_.readable) mustBe List("4c", "Qh")
+      parser
+        .decode[Dealer](raw)
+        .map { parsed =>
+          parsed.cards.map(_.readable) mustBe List("4c", "Qh")
+        }
     }
   }
 }

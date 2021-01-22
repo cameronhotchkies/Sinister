@@ -1,14 +1,15 @@
 package models
 
+import io.circe.parser
 import org.scalatest.matchers._
 import org.scalatest.wordspec._
-import play.api.libs.json.Json
+import scaffolding._
 
 class SeatedPlayerSpec extends AnyWordSpecLike with must.Matchers {
   "Seated Player" must {
     "merge as expected" in {
       val playerName = "test39"
-      val playerLevel = 40
+      val playerLevel = Option(40)
       val player1a =
         SeatedPlayer(name = playerName, level = playerLevel, dealtCards = Nil)
       val player1b = SeatedPlayer(
@@ -25,9 +26,9 @@ class SeatedPlayerSpec extends AnyWordSpecLike with must.Matchers {
 
     "merge from reserved seat" in {
       val playerName = "test39"
-      val playerLevel = 57
+      val playerLevel = Option(57)
       val player1a =
-        SeatedPlayer(name = "RESERVED", level = 0, dealtCards = Nil)
+        SeatedPlayer(name = "RESERVED", level = None, dealtCards = Nil)
       val player1b = SeatedPlayer(
         name = playerName,
         level = playerLevel,
@@ -46,7 +47,7 @@ class SeatedPlayerSpec extends AnyWordSpecLike with must.Matchers {
       val player1a =
         SeatedPlayer(
           name = playerName,
-          level = playerLevel,
+          level = Option(playerLevel),
           dealtCards = List(
             Card(15),
             Card(16)
@@ -54,13 +55,15 @@ class SeatedPlayerSpec extends AnyWordSpecLike with must.Matchers {
         )
       val player1b = SeatedPlayer(
         name = playerName,
-        level = playerLevel,
+        level = Option(playerLevel),
         dealtCards = Nil
       )
 
       val merged = player1a.merge(player1b)
       merged.name mustBe playerName
-      merged.level mustBe playerLevel
+
+      merged.level mustNot be(empty)
+      merged.level.get mustBe playerLevel
       merged.dealtCards.map(_.readable) mustBe List("5s", "6c")
     }
   }
@@ -75,17 +78,22 @@ class SeatedPlayerSpec extends AnyWordSpecLike with must.Matchers {
         |}
         |""".stripMargin
 
-    val playerData_ = Json
+    val playerDataJson = parser
       .parse(rawPlayerData)
-      .validate[SeatedPlayer]
 
-    val o = playerData_.asOpt
-    o mustNot be(None)
+    playerDataJson.map(json => {
+      val seatedPlayer = SeatedPlayer.decoder.decodeJson(json)
 
-    val player = playerData_.get
-    player.dealtCards.map(_.readable) mustBe List("5h", "5s")
-    player.name mustBe "testPlayer"
-    player.level mustBe 67
+      seatedPlayer.fold(
+        { _ => fail() },
+        { player =>
+          player.dealtCards.map(_.readable) mustBe List("5h", "5s")
+          player.name mustBe "testPlayer"
+          player.level must be(defined)
+          player.level.get mustBe 67
+        }
+      )
+    })
   }
 
 }
