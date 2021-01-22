@@ -1,7 +1,7 @@
 package models
 
-import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json._
+import io.circe.generic.semiauto.deriveEncoder
+import io.circe.{Decoder, Encoder, HCursor}
 
 case class Dealer(
     cards: Seq[Card]
@@ -16,5 +16,12 @@ case class Dealer(
 }
 
 object Dealer {
-  implicit val reads: Reads[Dealer] = (JsPath \ "c").read[String].map(Card.deserialize).map(Dealer.apply)
+  implicit val decoder: Decoder[Dealer] = (c: HCursor) =>
+    for {
+      rawCards <- c.downField("c").as[String]
+    } yield {
+      Dealer(Card.deserialize(rawCards))
+    }
+
+  implicit val encoder: Encoder[Dealer] = deriveEncoder
 }

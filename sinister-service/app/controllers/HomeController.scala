@@ -1,12 +1,16 @@
 package controllers
 
-import models.{GameStateMessage, HandSummary}
+import io.circe.generic.semiauto._
+import io.circe.syntax._
+import io.circe.{Encoder, Json, parser}
+import models.{GameStateMessage, Hand, HandSummary}
 import play.api._
-import play.api.libs.json._
+import play.api.libs.circe._
 import play.api.mvc._
 
 import java.io.{BufferedWriter, File, FileInputStream, FileWriter}
 import javax.inject._
+import scala.io.Source
 
 /**
   * This controller creates an `Action` to handle HTTP requests to the
@@ -14,7 +18,8 @@ import javax.inject._
   */
 @Singleton
 class HomeController @Inject() (val controllerComponents: ControllerComponents)
-    extends BaseController {
+    extends BaseController
+    with Circe {
 
   val logger: Logger = Logger("application")
 
@@ -32,22 +37,28 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
   def sink(): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      val bodyJson = Json.parse(request.body.asText.getOrElse(""))
+      val bodyText = request.body.asText.getOrElse("")
 
-      val messageType = bodyJson \ "t"
+      val parsed = parser.parse(bodyText)
 
-      messageType match {
-        case JsDefined(JsString("GameState")) =>
-          logGameState(bodyJson)
-        case default => logger.warn("skipped")
-      }
+      parsed.map(bodyJson => {
+        val t = (bodyJson \\ "t").head.as[String]
+        t.getOrElse("--skipped--") match {
+          case "GameState" =>
+            logGameState(bodyJson)
+          case x => logger.warn(s"skipped: $x")
+        }
+      })
 
       Ok("sunk")
     }
 
-  def logGameState(rawState: JsValue): Unit = {
+  def logGameState(rawState: Json): Unit = {
     val stateId =
-      (rawState \ "id").toOption.map(_.toString()).getOrElse("mismatch")
+      (rawState \\ "id").head
+        .as[Int]
+        .map(_.toString())
+        .getOrElse("mismatch")
 
     writeFile(s"$stateId.json", rawState.toString())
   }
@@ -59,9 +70,9 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     bw.close()
   }
 
-  case class Result(hands: Seq[HandSummary], gameCount: Int)
+  case class Result(hands: Seq[Hand], gameCount: Int)
   object Result {
-    implicit val writes: Writes[Result] = Json.writes[Result]
+    implicit val encoder: Encoder[Result] = deriveEncoder
   }
 
   def enumerateCache(): List[File] = {
@@ -71,43 +82,47 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     } else {
       List[File]()
     }
-
   }
 
   def parseLogCache(): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-
       val cachedFiles = enumerateCache()
 
-      val parseCacheFiles = cachedFiles.flatMap { rawHandFile =>
-        {
-          val source = new FileInputStream(rawHandFile)
-          val parsed = Json.parse(source)
-          Json.fromJson[GameStateMessage](parsed) match {
-            case JsSuccess(value, path) =>
-              Option(value)
-            case JsError(errors) =>
-              logger.error(s"PRSED: $parsed")
-              logger.error(errors.toString())
-              None
+      val parseCacheFiles: Seq[GameStateMessage] = cachedFiles.flatMap {
+        rawHandFile =>
+          {
+            val source = new FileInputStream(rawHandFile)
+            val jsonContent = Source.fromInputStream(source).mkString
+            val circeParsed = parser.decode[GameStateMessage](jsonContent)
+
+            circeParsed match {
+              case Left(value) =>
+                logger.warn(s"parsing error: $value")
+                None
+              case Right(value) => Option(value)
+            }
           }
+      }
+
+      val byGameId = parseCacheFiles
+        .groupBy(_.gameState.gameId)
+        .map {
+          case (x, y) => x -> y.sortBy(_.id)
         }
-      }
 
-      val byGameId = parseCacheFiles.groupBy(_.gameState.gameId)
-      val handDetails = byGameId.map {
-        case (gameId, messages) =>
-          logger.info(s"MSGS: $messages")
-          val gameStates = messages
-            .sortBy(_.id)
-            .map(_.gameState)
+      val handDetails = byGameId
+        .map {
+          case (gameId, messages) =>
+            val gameStates = messages
+              .sortBy(_.id)
+              .map(_.gameState)
 
-          HandSummary.summarize(gameId, gameStates)
-      }
+            val handSummary = HandSummary.summarize(gameId, gameStates)
+            val events = messages.flatMap(_.events)
+            Hand(handSummary, events)
+        }
         .toSeq
-        .sortBy(_.handId)
-
-      logger.info(s"PBH: $handDetails")
+        .sortBy(_.summary.handId)
 
       val gameIds = parseCacheFiles
         .map(gameStateMessage => {
@@ -117,8 +132,11 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
       val transformedResult = Result(handDetails, gameIds.length)
 
-      Ok(Json.toJson(transformedResult))
+      val encoded = deriveEncoder[Result]
+        .encodeObject(transformedResult)
+        .asJson
 
+      Ok(encoded)
     }
 
 }

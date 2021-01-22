@@ -10,6 +10,16 @@ scalaVersion := "2.13.4"
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
 
+val circeVersion = "0.12.3"
+
+libraryDependencies ++= Seq(
+  "io.circe" %% "circe-core",
+  "io.circe" %% "circe-generic",
+  "io.circe" %% "circe-parser"
+).map(_ % circeVersion)
+
+libraryDependencies += "io.circe" %% "circe-generic-extras" % "0.13.0"
+libraryDependencies += "com.dripower" %% "play-circe" % "2812.0"
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.semisafe.controllers._"
 

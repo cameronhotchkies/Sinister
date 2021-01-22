@@ -1,25 +1,30 @@
 package models
 
-import play.api.libs.json.{Format, Json, Reads, Writes}
+import io.circe.Encoder
+import io.circe.generic.semiauto.deriveEncoder
 
 case class HandSummary(
     handId: Int,
-    seatedPlayers: Seq[SeatedPlayer],
+    seatedPlayers: Seq[Option[SeatedPlayer]],
     bigBlindIndex: Int,
     smallBlindIndex: Int,
-    board: Seq[Card]
+    board: Seq[Card],
+    events: Seq[GameStateEvent]
 ) {
-  val bigBlind: SeatedPlayer = seatedPlayers(bigBlindIndex)
-  val smallBlind: SeatedPlayer = seatedPlayers(smallBlindIndex)
-  protected def unapply(): (Int, Seq[SeatedPlayer], SeatedPlayer, Int) = {
+  val bigBlind: SeatedPlayer = seatedPlayers(bigBlindIndex).get
+  val smallBlind: SeatedPlayer = seatedPlayers(smallBlindIndex).get
+  protected def unapply()
+      : (Int, Seq[Option[SeatedPlayer]], SeatedPlayer, Int) = {
     (handId, seatedPlayers, bigBlind, smallBlindIndex)
   }
 }
 object HandSummary {
   def summarize(gameId: Int, gameStates: Seq[GameState]): HandSummary = {
-    val dealerSummary = gameStates.map(_.dealer).reduce((l,r) => {
-      l.merge(r)
-    })
+    val dealerSummary = gameStates
+      .map(_.dealer)
+      .reduce((l, r) => {
+        l.merge(r)
+      })
 
     val playerSummary = summarizePlayers(gameStates)
 
@@ -34,25 +39,25 @@ object HandSummary {
       playerSummary,
       bigBlinders.head,
       smallBlinders.head,
-      dealerSummary.cards
+      dealerSummary.cards,
+      Nil
     )
   }
 
-  def summarizePlayers(gameStates: Seq[GameState]): Seq[SeatedPlayer] = {
+  def summarizePlayers(
+      gameStates: Seq[GameState]
+  ): Seq[Option[SeatedPlayer]] = {
     val players = gameStates
       .map(_.seatedPlayers)
     players.reduce((l, r) => {
-      l.lazyZip(r) map (_.merge(_))
+      l.lazyZip(r) map {
+        case (Some(x), None)    => Option(x)
+        case (None, Some(y))    => Option(y)
+        case (Some(x), Some(y)) => Option(x.merge(y))
+        case (None, None)       => None
+      }
     })
   }
 
-  implicit val writes: Writes[HandSummary] = (handDetail: HandSummary) => {
-    Json.obj(
-      "handId" -> handDetail.handId,
-      "seatedPlayers" -> handDetail.seatedPlayers,
-      "bigBlind" -> handDetail.bigBlind,
-      "smallBlind" -> handDetail.smallBlind,
-      "board" -> handDetail.board
-    )
-  }
+  implicit val encoder: Encoder[HandSummary] = deriveEncoder
 }
