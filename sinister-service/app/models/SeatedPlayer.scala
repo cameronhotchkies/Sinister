@@ -32,7 +32,7 @@ case class SeatedPlayer(
       case (a, b) if a == b => this.dealtCards
       case (_, Nil)           => this.dealtCards
       case (Nil, _)           => that.dealtCards
-      case default =>
+      case _ =>
         logger.warn(s"($name) this: $dealtCards vs that: ${that.dealtCards}")
         ???
     }

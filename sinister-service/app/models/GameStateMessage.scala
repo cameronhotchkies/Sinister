@@ -2,6 +2,7 @@ package models
 
 import io.circe._
 import io.circe.generic.semiauto._
+import models.gamestate.GameStateEvent
 
 case class GameStateMessage(
     id: Int,
