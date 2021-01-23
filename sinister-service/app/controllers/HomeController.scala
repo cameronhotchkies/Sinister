@@ -3,6 +3,7 @@ package controllers
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import io.circe.{Encoder, Json, parser}
+import models.gamestate.GameNarrative
 import models.{GameStateMessage, Hand, HandSummary}
 import play.api._
 import play.api.libs.circe._
@@ -78,7 +79,10 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
   def enumerateCache(): List[File] = {
     val d = new File("logs/hands")
     if (d.exists && d.isDirectory) {
-      d.listFiles.filter(_.isFile).toList
+      d.listFiles
+        .filter(_.isFile)
+        .filter(_.getName.endsWith("json"))
+        .toList
     } else {
       List[File]()
     }
@@ -88,9 +92,11 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     Action { implicit request: Request[AnyContent] =>
       val cachedFiles = enumerateCache()
 
-      val parseCacheFiles: Seq[GameStateMessage] = cachedFiles.flatMap {
+      val parseCacheFiles: Seq[GameStateMessage] = cachedFiles
+        .flatMap {
         rawHandFile =>
           {
+            logger.info(s"Opening: $rawHandFile")
             val source = new FileInputStream(rawHandFile)
             val jsonContent = Source.fromInputStream(source).mkString
             val circeParsed = parser.decode[GameStateMessage](jsonContent)
@@ -117,12 +123,26 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
               .sortBy(_.id)
               .map(_.gameState)
 
-            val handSummary = HandSummary.summarize(gameId, gameStates)
-            val events = messages.flatMap(_.events)
-            Hand(handSummary, events)
+            val events = messages
+              .flatMap(_.events)
+
+            val handSummary = HandSummary
+              .summarize(gameId, gameStates, events)
+
+            val filteredEvents = events.filter(_.isInstanceOf[GameNarrative])
+
+            if (gameId == 75578234) {
+              logger.info(s"filtered: $filteredEvents")
+
+            }
+            Hand(handSummary, filteredEvents)
         }
         .toSeq
         .sortBy(_.summary.handId)
+
+
+//      logger.info(s"Hand Details: $handDetails")
+
 
       val gameIds = parseCacheFiles
         .map(gameStateMessage => {

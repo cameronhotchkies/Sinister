@@ -9,17 +9,19 @@ case class GameState(
     seatedPlayers: Seq[Option[SeatedPlayer]],
     smallBlindIndex: Int,
     bigBlindIndex: Int,
-    dealer: Dealer
+    dealer: Dealer,
+    additionalData: GameStateAddition
 ) {}
 object GameState {
 
-  implicit val decoder: Decoder[GameState] = Decoder.forProduct6(
+  implicit val decoder: Decoder[GameState] = Decoder.forProduct7(
     "ti",
     "gi",
     "s",
     "sb",
     "bb",
-    "d"
+    "d",
+    "m"
   )(GameState.apply)
 
   implicit val encoder: Encoder[GameState] = deriveEncoder
