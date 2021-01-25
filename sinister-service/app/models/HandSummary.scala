@@ -3,7 +3,7 @@ package models
 import io.circe.{Encoder, Json}
 import io.circe.generic.semiauto.deriveEncoder
 import models.HandSummary.logger
-import models.gamestate.{AppliesToPlayer, GameStateEvent}
+import models.gamestate.{AppliesToPlayer, DealPlayerCard, GameStateEvent}
 import models.gamestate.playeraction.{MuckCards, ShowCards}
 import play.api.Logger
 
@@ -19,6 +19,14 @@ case class HandSummary(
   val bigBlind: SeatedPlayer = seatedPlayers(bigBlindIndex).get
   val smallBlind: SeatedPlayer = seatedPlayers(smallBlindIndex).get
 
+  val playersDealtIn: Seq[String] = events
+    .filter { event => event.isInstanceOf[DealPlayerCard]}
+    .map(_.asInstanceOf[AppliesToPlayer].seatIndex)
+    .distinct
+    .flatMap(seatedPlayers(_)
+      .map(_.name)
+    )
+
   val playersInvolvedInShowdown: Seq[Int] = events.filter{ event => {
     val cardShowingBehavior = event.isInstanceOf[ShowCards] || event.isInstanceOf[MuckCards]
     cardShowingBehavior
@@ -27,6 +35,14 @@ case class HandSummary(
       logger.info(s"FE: $event")
       event.asInstanceOf[AppliesToPlayer].seatIndex
     })
+
+  val isComplete: Boolean = {
+    val phases = stages.count(_ == 0)
+
+    if (phases < 2) false
+    else if (phases == 2) true
+    else ???
+  }
 
   protected def unapply()
       : (Int, Seq[Option[SeatedPlayer]], SeatedPlayer, Int) = {
@@ -100,6 +116,7 @@ object HandSummary {
           summary.playersInvolvedInShowdown
             .map(Json.fromInt))
       )
+      .add("isComplete", Json.fromBoolean(summary.isComplete))
       .remove("events")
 
     logger.info(s"Derived: $derived"  )
