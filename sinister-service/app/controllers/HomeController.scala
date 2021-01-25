@@ -71,7 +71,11 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     bw.close()
   }
 
-  case class Result(hands: Seq[Hand], gameCount: Int)
+  case class Result(
+      hands: Seq[Hand],
+      gameCount: Int,
+      players: Seq[(String, Int)]
+  )
   object Result {
     implicit val encoder: Encoder[Result] = deriveEncoder
   }
@@ -93,8 +97,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
       val cachedFiles = enumerateCache()
 
       val parseCacheFiles: Seq[GameStateMessage] = cachedFiles
-        .flatMap {
-        rawHandFile =>
+        .flatMap { rawHandFile =>
           {
             logger.info(s"Opening: $rawHandFile")
             val source = new FileInputStream(rawHandFile)
@@ -108,7 +111,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
               case Right(value) => Option(value)
             }
           }
-      }
+        }
 
       val byGameId = parseCacheFiles
         .groupBy(_.gameState.gameId)
@@ -140,9 +143,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
         .toSeq
         .sortBy(_.summary.handId)
 
-
 //      logger.info(s"Hand Details: $handDetails")
-
 
       val gameIds = parseCacheFiles
         .map(gameStateMessage => {
@@ -150,7 +151,14 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
         })
         .distinct
 
-      val transformedResult = Result(handDetails, gameIds.length)
+      val participants = handDetails.flatMap { hand =>
+        hand.summary.playersDealtIn
+      }
+        .groupBy(a => a)
+        .map(s => (s._1, s._2.size))
+        .toSeq
+
+      val transformedResult = Result(handDetails, gameIds.length, participants)
 
       val encoded = deriveEncoder[Result]
         .encodeObject(transformedResult)
