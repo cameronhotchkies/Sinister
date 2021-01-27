@@ -1,11 +1,14 @@
 package models.gamestate
 
-import io.circe.Json
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
+import models.importer.GameStateEvent
 
-case object EnterNextStage extends GameStateEvent with GameNarrative {
-  def apply(): Any = ???
+case class EnterNextStage(stage: Int = -1)
+    extends GameStateEvent
+    with HandEvent {}
 
-  override def encoded: Json = {
-    Json.obj("nextPhase" -> Json.fromBoolean(true))
-  }
+object EnterNextStage extends GameStateEvent with GameNarrative {
+  implicit val decoder: Decoder[EnterNextStage] = deriveDecoder
+  implicit val encoder: Encoder.AsObject[EnterNextStage] = deriveEncoder
 }

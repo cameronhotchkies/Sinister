@@ -2,18 +2,20 @@ package controllers
 
 import io.circe.generic.semiauto._
 import io.circe.syntax._
-import io.circe.{Encoder, Json, parser}
-import models.gamestate.GameNarrative
-import models.{GameStateMessage, Hand, HandSummary}
+import io.circe.{Decoder, Encoder, Json, parser}
+import models.gamestate.{GameNarrative, HandEvent}
+import models.importer.GameState.toHandState
+import models.importer.GameStateEvent.toHandEvent
+import models.importer.GameStateMessage
+import models.{Hand, HandSummary, Participant}
 import play.api._
 import play.api.libs.circe._
 import play.api.mvc._
 
 import java.io.{BufferedWriter, File, FileInputStream, FileWriter}
-import java.nio.file.{Files, Paths}
+import java.nio.file.Files
 import javax.inject._
 import scala.io.Source
-import scala.util.hashing.MurmurHash3
 
 /**
   * This controller creates an `Action` to handle HTTP requests to the
@@ -25,8 +27,6 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     with Circe {
 
   val logger: Logger = Logger("application")
-
-  val playerData = "player_data"
 
   /**
     * Create an Action to render an HTML page.
@@ -75,27 +75,6 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     bw.close()
   }
 
-  case class Participant(
-      name: String,
-      handsPlayed: Int
-  ) {
-    val hash = {
-      val fwHash = MurmurHash3.stringHash(name)
-      val bwHash = MurmurHash3.stringHash(name.reverse)
-
-      f"$fwHash%08x$bwHash%08x"
-    }
-  }
-  object Participant {
-    implicit val encoder: Encoder[Participant] = (participant) => {
-      Json.obj(
-        "name" -> Json.fromString(participant.name),
-        "handsPlayed" -> Json.fromInt(participant.handsPlayed),
-        "hash" -> Json.fromString(participant.hash)
-      )
-    }
-  }
-
   case class Result(
       hands: Seq[Hand],
       gameCount: Int,
@@ -121,22 +100,31 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     m.gameStateMessage
   }
 
-  def readCachedFiles(cachedFiles: Seq[File]) = {
+  def readCachedFiles(cachedFiles: Seq[File]): Seq[MessageWithSource] = {
     cachedFiles.flatMap { rawHandFile =>
       {
         logger.info(s"Opening: $rawHandFile")
         val source = new FileInputStream(rawHandFile)
         val jsonContent = Source.fromInputStream(source).mkString
-        val circeParsed = parser.decode[GameStateMessage](jsonContent)
+        val typeDecoder = for {
+          messageType <- Decoder[String].prepare(_.downField("t"))
+        } yield messageType
 
-        circeParsed match {
-          case Left(value) =>
-            logger.warn(s"parsing error: $value")
-            None
-          case Right(value) =>
-            Option(
-              MessageWithSource(value, rawHandFile)
-            )
+        parser.decode(jsonContent)(typeDecoder) match {
+          case Right("GameState") =>
+            val circeParsed = parser.decode[GameStateMessage](jsonContent)
+
+            circeParsed match {
+              case Left(value) =>
+                logger.warn(s"parsing error: $value")
+                logger.warn(s"Source JSON: $jsonContent")
+                None
+              case Right(value) =>
+                Option(
+                  MessageWithSource(value, rawHandFile)
+                )
+            }
+          case _ => None
         }
       }
     }
@@ -144,7 +132,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
   def ensurePlayerDirectoryExists(player: Participant): Unit = {
     val playerHash = player.hash
-    val playerDataDir = s"player_data/$playerHash"
+    val playerDataDir = s"${HomeController.playerData}/$playerHash"
 
     val f = new File(playerDataDir)
     if (!f.exists()) {
@@ -155,22 +143,24 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
   def saveSerializedHand(hand: Hand, player: Participant): Unit = {
     val serializedHand = Hand.encoder(hand).toString()
     val handId = hand.summary.handId
-    val filename = s"$playerData/${player.hash}/$handId.json"
+    val filename = s"${HomeController.playerData}/${player.hash}/$handId.json"
     val file = new File(filename)
     val bw = new BufferedWriter(new FileWriter(file))
     bw.write(serializedHand)
     bw.close()
-}
+  }
 
   def syndicateCompletedHands(hands: Seq[Hand]): Unit = {
     hands
       .filter { hand => hand.summary.isComplete }
-      .foreach { hand => {
-        hand.summary.playersDealtIn.map { player =>
-          val participant = Participant(player, 1)
-          ensurePlayerDirectoryExists(participant)
-          saveSerializedHand(hand, participant)
-        }}
+      .foreach { hand =>
+        {
+          hand.summary.playersDealtIn.map { player =>
+            val participant = Participant(player, 1)
+            ensurePlayerDirectoryExists(participant)
+            saveSerializedHand(hand, participant)
+          }
+        }
       }
   }
 
@@ -197,11 +187,13 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
             val events = messages
               .flatMap(_.events)
+              .map(toHandEvent)
 
             val handSummary = HandSummary
-              .summarize(gameId, gameStates, events)
+              .summarize(gameId, gameStates.map(toHandState), events)
 
-            val filteredEvents = events.filter(_.isInstanceOf[GameNarrative])
+            val filteredEvents: Seq[HandEvent] = events
+              .filter(_.isInstanceOf[GameNarrative])
 
             Hand(
               handSummary,
@@ -240,4 +232,8 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
       Ok(encoded)
     }
 
+}
+
+object HomeController {
+  val playerData = "player_data"
 }

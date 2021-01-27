@@ -1,19 +1,24 @@
 package models.gamestate.playeraction
 
 import io.circe.{Encoder, Json}
+import models.gamestate.HandEvent
 
 case class UnknownPlayerAction(subAction: Int, rawJson: Json)
-    extends PlayerAction {
+    extends PlayerAction
+    with HandEvent {
   override val seatIndex: Int = -1
   val encoded: Json = UnknownPlayerAction.encoder(this)
 }
 
 object UnknownPlayerAction {
-  implicit val encoder: Encoder[UnknownPlayerAction] = Encoder.forProduct3(
-    "undefinedPlayerAction",
-    "subAction",
-    "source"
-  ) { source => {
-    (true, source.subAction, source.rawJson)
-  }}
+  implicit val encoder: Encoder.AsObject[UnknownPlayerAction] =
+    Encoder.forProduct3(
+      "undefinedPlayerAction",
+      "subAction",
+      "source"
+    ) { source =>
+      {
+        (true, source.subAction, source.rawJson)
+      }
+    }
 }

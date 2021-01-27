@@ -1,12 +1,16 @@
 package models.gamestate.playeraction
 
-import io.circe.{Encoder, Json}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder, Json}
+import models.gamestate.HandEvent
 
-case class Call(seatIndex: Int, amount: Int) extends PlayerAction {
+case class Call(seatIndex: Int, amount: Int)
+    extends PlayerAction
+    with HandEvent {
   def encoded: Json = Call.encoder(this)
 }
 
 object Call {
-  implicit val encoder: Encoder[Call] =
-    Encoder.forProduct2("player", "call")(call => (call.seatIndex, call.amount))
+  implicit val encoder: Encoder.AsObject[Call] = deriveEncoder
+  implicit val decoder: Decoder[Call] = deriveDecoder
 }

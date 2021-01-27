@@ -1,16 +1,17 @@
 package models.gamestate
 
-import io.circe.generic.semiauto.deriveEncoder
-import io.circe.{Decoder, Encoder, HCursor, Json}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder, Json}
+import models.importer.GameStateEvent
 
-case class WinHandEvent(
+case class WinHand(
     seatIndex: Int,
     amount: Int,
     rawHandDetail: String
 ) extends GameStateEvent
     with AppliesToPlayer
-    with GameNarrative {
-  override def encoded: Json = WinHandEvent.encoder(this)
+    with GameNarrative
+    with HandEvent {
 
   def extrapolateHandRank(): String = {
     if (rawHandDetail.nonEmpty) {
@@ -31,19 +32,14 @@ case class WinHandEvent(
   }
 }
 
-object WinHandEvent {
-  implicit val encoder: Encoder[WinHandEvent] = (a: WinHandEvent) => {
-    val encoder = deriveEncoder[WinHandEvent]
+object WinHand {
+  implicit val encoder: Encoder.AsObject[WinHand] = (a: WinHand) => {
+    val encoder = deriveEncoder[WinHand]
       .encodeObject(a)
       .add("handRank", Json.fromString(a.extrapolateHandRank()))
-    Json.fromJsonObject(encoder)
+
+    Json.fromJsonObject(encoder).asObject.get
   }
-  implicit val decoder: Decoder[WinHandEvent] =
-    (c: HCursor) => {
-      for {
-        seatIndex <- c.downField("seat-idx").as[Int]
-        amount <- c.downField("amount").as[Int]
-        rawHandDetail <- c.downField("hcm").as[String]
-      } yield WinHandEvent(seatIndex, amount, rawHandDetail)
-    }
+
+  implicit val decoder: Decoder[WinHand] = deriveDecoder
 }

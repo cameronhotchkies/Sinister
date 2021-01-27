@@ -1,13 +1,15 @@
 package models.gamestate
 
-import io.circe.{Encoder, Json}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
+import models.importer.GameStateEvent
 
 case class DealCommunityCard(seatIndex: Int)
     extends GameStateEvent
-    with AppliesToPlayer {
-  override def encoded: Json = DealCommunityCard.encoder(this)
-}
+    with AppliesToPlayer
+    with HandEvent {}
 
 object DealCommunityCard {
-  implicit val encoder: Encoder[DealCommunityCard] = Encoder.forProduct1("dealCommunityCard")(DealCommunityCard.unapply)
+  implicit val encoder: Encoder.AsObject[DealCommunityCard] = deriveEncoder
+  implicit val decoder: Decoder[DealCommunityCard] = deriveDecoder
 }

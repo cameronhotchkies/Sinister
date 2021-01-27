@@ -37,5 +37,8 @@ object Card {
   val Suits = List("c", "d", "h", "s")
   val Ranks = List("2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A")
 
-  implicit val encoder: Encoder[Card] = (a: Card) => Json.fromString(a.readable)
+  implicit val encoder: Encoder[Card] = Encoder.forProduct2(
+    "ordinal",
+    "readable"
+  )(card => (card.ordinal, card.readable))
 }
