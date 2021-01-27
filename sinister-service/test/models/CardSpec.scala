@@ -1,6 +1,7 @@
 package models
 
 import io.circe.Json
+import io.circe.syntax.EncoderOps
 import org.scalatest.matchers._
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -19,7 +20,12 @@ class CardSpec extends AnyWordSpecLike with must.Matchers {
 
       val asJson = Card.encoder(card)
 
-      val expected = Json.fromString("Ac")
+      val expected = Json.fromFields(
+        List(
+          "ordinal" -> 48.asJson,
+          "readable" -> "Ac".asJson
+        )
+      )
 
       asJson mustBe expected
     }

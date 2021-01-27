@@ -1,40 +1,52 @@
 package models
 
-import io.circe.{Encoder, Json}
-import io.circe.generic.semiauto.deriveEncoder
+import io.circe.{Decoder, Encoder, Json}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import models.HandSummary.logger
-import models.gamestate.{AppliesToPlayer, DealPlayerCard, GameStateEvent}
+import models.gamestate.{AppliesToPlayer, DealPlayerCard, HandEvent, WinHand}
 import models.gamestate.playeraction.{MuckCards, ShowCards}
 import play.api.Logger
 
 case class HandSummary(
     handId: Int,
-    seatedPlayers: Seq[Option[SeatedPlayer]],
+    seatedPlayers: Seq[Option[HandPlayer]],
     bigBlindIndex: Int,
     smallBlindIndex: Int,
     board: Seq[Card],
-    events: Seq[GameStateEvent],
+    events: Seq[HandEvent],
     stages: List[Int]
 ) {
-  val bigBlind: SeatedPlayer = seatedPlayers(bigBlindIndex).get
-  val smallBlind: SeatedPlayer = seatedPlayers(smallBlindIndex).get
+  val bigBlind: HandPlayer = seatedPlayers(bigBlindIndex).get
+  val smallBlind: HandPlayer = seatedPlayers(smallBlindIndex).get
 
   val playersDealtIn: Seq[String] = events
-    .filter { event => event.isInstanceOf[DealPlayerCard]}
+    .filter { event => event.isInstanceOf[DealPlayerCard] }
     .map(_.asInstanceOf[AppliesToPlayer].seatIndex)
     .distinct
-    .flatMap(seatedPlayers(_)
-      .map(_.name)
+    .flatMap(
+      seatedPlayers(_)
+        .map(_.name)
     )
 
-  val playersInvolvedInShowdown: Seq[Int] = events.filter{ event => {
-    val cardShowingBehavior = event.isInstanceOf[ShowCards] || event.isInstanceOf[MuckCards]
-    cardShowingBehavior
-  }}
+  val playersInvolvedInShowdown: Seq[Int] = events
+    .filter { event =>
+      {
+        val cardShowingBehavior =
+          event.isInstanceOf[ShowCards] || event.isInstanceOf[MuckCards]
+        cardShowingBehavior
+      }
+    }
     .map(event => {
-      logger.info(s"FE: $event")
       event.asInstanceOf[AppliesToPlayer].seatIndex
     })
+
+  def winners(): Seq[String] = {
+    events
+      .filter(_.isInstanceOf[WinHand])
+      .map(_.asInstanceOf[WinHand].seatIndex)
+      .distinct
+      .map(seatedPlayers(_).get.name)
+  }
 
   val isComplete: Boolean = {
     val phases = stages.count(_ == 0)
@@ -44,35 +56,39 @@ case class HandSummary(
     else ???
   }
 
-  protected def unapply()
-      : (Int, Seq[Option[SeatedPlayer]], SeatedPlayer, Int) = {
+  protected def unapply(): (Int, Seq[Option[HandPlayer]], HandPlayer, Int) = {
     (handId, seatedPlayers, bigBlind, smallBlindIndex)
   }
 }
 object HandSummary {
-  val logger = Logger("application")
+  val logger: Logger = Logger("application")
 
-  def summarize(gameId: Int, gameStates: Seq[GameState], gameEvents: Seq[GameStateEvent]): HandSummary = {
-    val dealerSummary = gameStates
+  def summarize(
+      gameId: Int,
+      handStates: Seq[HandState],
+      handEvents: Seq[HandEvent]
+  ): HandSummary = {
+    val dealerSummary = handStates
       .map(_.dealer)
       .reduce((l, r) => {
         l.merge(r)
       })
 
-    val playerSummary = summarizePlayers(gameStates)
+    val playerSummary = summarizePlayers(handStates)
 
-    val bigBlinders = gameStates.map(_.bigBlindIndex).distinct
-    val smallBlinders = gameStates.map(_.smallBlindIndex).distinct
+    val bigBlinders = handStates.map(_.bigBlindIndex).distinct
+    val smallBlinders = handStates.map(_.smallBlindIndex).distinct
 
-    val stages = gameStates
+    val stages = handStates
       .map(_.additionalData.stage)
-      .foldLeft[List[Int]](Nil) { (acc, stage) => {
-        acc match {
-          case Nil => acc :+ stage
-          case _ :+ t if t == stage => acc
-          case _ => acc :+ stage
+      .foldLeft[List[Int]](Nil) { (acc, stage) =>
+        {
+          acc match {
+            case Nil                  => acc :+ stage
+            case _ :+ t if t == stage => acc
+            case _                    => acc :+ stage
+          }
         }
-      }
       }
 
     logger.info(s"Stages: $stages")
@@ -86,43 +102,42 @@ object HandSummary {
       bigBlinders.head,
       smallBlinders.head,
       dealerSummary.cards,
-      gameEvents,
+      handEvents,
       stages
     )
   }
 
   def summarizePlayers(
-                        gameStates: Seq[GameState]
-                      ): Seq[Option[SeatedPlayer]] = {
+      gameStates: Seq[HandState]
+  ): Seq[Option[HandPlayer]] = {
     val players = gameStates
-      .map(_.seatedPlayers)
+      .map(_.handPlayers)
     players.reduce((l, r) => {
       l.lazyZip(r) map {
-        case (Some(x), None) => Option(x)
-        case (None, Some(y)) => Option(y)
+        case (Some(x), None)    => Option(x)
+        case (None, Some(y))    => Option(y)
         case (Some(x), Some(y)) => Option(x.merge(y))
-        case (None, None) => None
+        case (None, None)       => None
       }
     })
   }
 
   implicit val encoder: Encoder[HandSummary] = (summary: HandSummary) => {
-    logger.info(s"PL in SD: ${summary.playersInvolvedInShowdown}")
     val derived = deriveEncoder[HandSummary]
       .encodeObject(summary)
       .add(
         "playersInvolvedInShowdown",
         Json.fromValues(
           summary.playersInvolvedInShowdown
-            .map(Json.fromInt))
+            .map(Json.fromInt)
+        )
       )
       .add("isComplete", Json.fromBoolean(summary.isComplete))
       .remove("events")
 
-    logger.info(s"Derived: $derived"  )
-
     Json.fromJsonObject(derived)
   }
 
+  implicit val decoder: Decoder[HandSummary] = deriveDecoder
 
 }

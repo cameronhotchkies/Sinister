@@ -1,69 +1,60 @@
 package models.gamestate.playeraction
 
-import io.circe.Json
-import models.gamestate.{AppliesToPlayer, GameNarrative, GameStateEvent}
+import io.circe.syntax.EncoderOps
+import io.circe.{Decoder, Encoder}
+import models.gamestate.{AppliesToPlayer, GameNarrative, HandEvent}
+import models.importer.GameStateEvent
 
 trait PlayerAction
     extends GameStateEvent
     with GameNarrative
     with AppliesToPlayer
+    with HandEvent
 
 object PlayerAction {
 
-  private val FOLD = Some(1)
-  private val CHECK = Some(2)
-  private val CALL = Some(3)
-  private val SMALL_BLIND = Some(6)
-  private val BIG_BLIND = Some(7)
-  private val BET = Some(8)
-  private val RAISE = Some(9)
-  private val SHOW_CARDS = Some(10)
-  private val MUCK_CARDS = Some(11)
-  private val DO_NOT_SHOW_CARDS = Some(16)
-  private val FIRST_TO_ACT = Some(26)
+  val FOLD = 1
+  val CHECK = 2
+  val CALL = 3
+  val SMALL_BLIND = 6
+  val BIG_BLIND = 7
+  val BET = 8
+  val RAISE = 9
+  val SHOW_CARDS = 10
+  val MUCK_CARDS = 11
+  val UNKNOWN_PLACTION = 15
+  val DO_NOT_SHOW_CARDS = 16
+  val FIRST_TO_ACT = 26
 
-  def interpret(rawJson: Json): GameStateEvent = {
+  implicit val decoderPlayerAction: Decoder[PlayerAction] = for {
+    plactionType <- Decoder[Int].prepare(_.downField("plaction"))
+    value <- plactionType match {
+      case SMALL_BLIND => SmallBlind.decoder
+      case BIG_BLIND   => BigBlind.decoder
+    }
+  } yield value
 
-    rawJson.asObject
-      .map(jso => {
-
-        val actionType = jso("action").flatMap(_.asNumber.flatMap(_.toInt))
-        val extractedSeatIndex =
-          jso("seat-idx").flatMap(_.asNumber.flatMap(_.toInt))
-        val extractedAmount = jso("amount").flatMap(_.asNumber.flatMap(_.toInt))
-
-        val playerAction =
-          (actionType, extractedSeatIndex, extractedAmount) match {
-
-            case (None, _, _) => ???
-            case (FOLD, Some(seatIndex), _) =>
-              PlayerFold(seatIndex)
-            case (CHECK, Some(seatIndex), _) =>
-              Check(seatIndex)
-            case (CALL, Some(seatIndex), Some(amount)) =>
-              Call(seatIndex, amount)
-            case (SMALL_BLIND, Some(seatIndex), Some(amount)) =>
-              SmallBlind(seatIndex, amount)
-            case (BIG_BLIND, Some(seatIndex), Some(amount)) =>
-              BigBlind(seatIndex, amount)
-            case (BET, Some(seatIndex), Some(amount)) =>
-              Bet(seatIndex, amount)
-            case (RAISE, Some(seatIndex), Some(amount)) =>
-              Raise(seatIndex, amount)
-            case (SHOW_CARDS, Some(seatIndex), _) =>
-              ShowCards(seatIndex)
-            case (MUCK_CARDS, Some(seatIndex), _) =>
-              MuckCards(seatIndex)
-            case (DO_NOT_SHOW_CARDS, Some(seatIndex), _) =>
-              DoNotShowCards(seatIndex)
-            case (FIRST_TO_ACT, Some(seatIndex), _) =>
-              FirstToAct(seatIndex)
-            case (Some(actionType), _, _) =>
-              UnknownPlayerAction(actionType, rawJson)
-          }
-
-        playerAction
-      })
-      .getOrElse(UnknownPlayerAction(-89, rawJson))
-  }
+  implicit val encodePlayerAction: Encoder.AsObject[PlayerAction] =
+    Encoder.AsObject {
+      case b: Bet => b.asJsonObject.add("plaction", BET.asJson)
+      case bb: BigBlind =>
+        bb.asJsonObject.add("plaction", BIG_BLIND.asJson)
+      case c: Call  => c.asJsonObject.add("plaction", CALL.asJson)
+      case c: Check => c.asJsonObject.add("plaction", CHECK.asJson)
+      case dnsc: DoNotShowCards =>
+        dnsc.asJsonObject
+          .add("plaction", DO_NOT_SHOW_CARDS.asJson)
+      case fta: FirstToAct =>
+        fta.asJsonObject
+          .add("plaction", FIRST_TO_ACT.asJson)
+      case f: Fold       => f.asJsonObject.add("plaction", FOLD.asJson)
+      case mc: MuckCards => mc.asJsonObject.add("plaction", MUCK_CARDS.asJson)
+      case r: Raise =>
+        r.asJsonObject.add("plaction", RAISE.asJson)
+      case sb: SmallBlind =>
+        sb.asJsonObject.add("plaction", SMALL_BLIND.asJson)
+      case sc: ShowCards => sc.asJsonObject.add("plaction", SHOW_CARDS.asJson)
+      case upa: UnknownPlayerAction =>
+        upa.asJsonObject.add("plaction", UNKNOWN_PLACTION.asJson)
+    }
 }

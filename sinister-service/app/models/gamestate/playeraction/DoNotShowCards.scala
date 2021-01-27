@@ -1,11 +1,12 @@
 package models.gamestate.playeraction
 
-import io.circe.{Encoder, Json}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
+import models.gamestate.HandEvent
 
-case class DoNotShowCards(seatIndex: Int) extends PlayerAction {
-  override def encoded: Json = DoNotShowCards.encoder(this)
-}
+case class DoNotShowCards(seatIndex: Int) extends PlayerAction with HandEvent {}
 
 object DoNotShowCards {
-  implicit val encoder: Encoder[DoNotShowCards] = Encoder.forProduct1("doNotShowCards")(DoNotShowCards.unapply)
+  implicit val encoder: Encoder.AsObject[DoNotShowCards] = deriveEncoder
+  implicit val decoder: Decoder[DoNotShowCards] = deriveDecoder
 }

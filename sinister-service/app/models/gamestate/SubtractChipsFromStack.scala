@@ -1,20 +1,15 @@
 package models.gamestate
 
-import io.circe.{Encoder, Json}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
+import models.importer.GameStateEvent
 
-case class SubtractChipsFromStack(seatIndex: Int, amount: Int)
+case class SubtractChipsFromStack(seatIndex: Int, subtractChips: Int)
     extends GameStateEvent
-    with AppliesToPlayer {
-  override def encoded: Json =
-    SubtractChipsFromStack.encoder(this)
-}
+    with AppliesToPlayer
+    with HandEvent {}
 
 object SubtractChipsFromStack {
-  implicit val encoder: Encoder[SubtractChipsFromStack] =
-    Encoder.forProduct2(
-      "subtractChips",
-      "player"
-    ) { scfs =>
-      (scfs.seatIndex, scfs.amount)
-    }
+  implicit val encoder: Encoder.AsObject[SubtractChipsFromStack] = deriveEncoder
+  implicit val decoder: Decoder[SubtractChipsFromStack] = deriveDecoder
 }
