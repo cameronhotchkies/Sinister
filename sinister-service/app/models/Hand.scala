@@ -1,10 +1,9 @@
 package models
 
-import io.circe.{Decoder, Encoder, Json}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import models.Hand.logger
-import models.gamestate.{AppliesToPlayer, DealPlayerCard, HandEvent, WinHand}
+import io.circe.{Decoder, Encoder, Json}
 import models.gamestate.playeraction.{MuckCards, ShowCards}
+import models.gamestate._
 import play.api.Logger
 
 case class Hand(
@@ -28,6 +27,12 @@ case class Hand(
         .map(_.name)
     )
 
+  def positionForPlayer(playerName: String): Int = {
+    seatedPlayers.indexWhere(_.exists(_.name == playerName))
+  }
+
+  lazy val preflopEvents: Seq[HandEvent] = events.takeWhile(!_.isInstanceOf[EnterNextStage])
+
   val playersInvolvedInShowdown: Seq[Int] = events
     .filter { event =>
       {
@@ -41,11 +46,13 @@ case class Hand(
     })
 
   def winners(): Seq[String] = {
-    events
+    val winningPlayers = events
       .filter(_.isInstanceOf[WinHand])
       .map(_.asInstanceOf[WinHand].seatIndex)
       .distinct
       .map(seatedPlayers(_).get.name)
+
+    winningPlayers
   }
 
   val isComplete: Boolean = {
@@ -133,11 +140,9 @@ object Hand {
         )
       )
       .add("isComplete", Json.fromBoolean(summary.isComplete))
-      .remove("events")
 
     Json.fromJsonObject(derived)
   }
 
   implicit val decoder: Decoder[Hand] = deriveDecoder
-
 }

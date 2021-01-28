@@ -1,6 +1,7 @@
 package models.gamestate.playeraction
 
-import io.circe.{Encoder, Json}
+import io.circe.generic.semiauto.deriveDecoder
+import io.circe.{Decoder, Encoder, Json}
 import models.gamestate.HandEvent
 
 case class UnknownPlayerAction(subAction: Int, rawJson: Json)
@@ -21,4 +22,6 @@ object UnknownPlayerAction {
         (true, source.subAction, source.rawJson)
       }
     }
+
+  implicit val decoder: Decoder[UnknownPlayerAction] = deriveDecoder
 }

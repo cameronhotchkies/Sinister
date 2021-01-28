@@ -4,6 +4,7 @@ import io.circe.syntax.EncoderOps
 import io.circe.{Decoder, Encoder}
 import models.gamestate.{AppliesToPlayer, GameNarrative, HandEvent}
 import models.importer.GameStateEvent
+import play.api.Logger
 
 trait PlayerAction
     extends GameStateEvent
@@ -26,11 +27,27 @@ object PlayerAction {
   val DO_NOT_SHOW_CARDS = 16
   val FIRST_TO_ACT = 26
 
+  val logger = Logger("application")
+
   implicit val decoderPlayerAction: Decoder[PlayerAction] = for {
     plactionType <- Decoder[Int].prepare(_.downField("plaction"))
     value <- plactionType match {
-      case SMALL_BLIND => SmallBlind.decoder
-      case BIG_BLIND   => BigBlind.decoder
+      case BET               => Bet.decoder
+      case BIG_BLIND         => BigBlind.decoder
+      case CALL              => Call.decoder
+      case CHECK             => Check.decoder
+      case DO_NOT_SHOW_CARDS => DoNotShowCards.decoder
+      case FIRST_TO_ACT      => FirstToAct.decoder
+      case FOLD              => Fold.decoder
+      case MUCK_CARDS        => MuckCards.decoder
+      case RAISE             => Raise.decoder
+      case SHOW_CARDS        => ShowCards.decoder
+      case SMALL_BLIND       => SmallBlind.decoder
+      case UNKNOWN_PLACTION => UnknownPlayerAction.decoder
+      case other => {
+        logger.error(s"Unhandled Plaction: $plactionType")
+        ???
+      }
     }
   } yield value
 

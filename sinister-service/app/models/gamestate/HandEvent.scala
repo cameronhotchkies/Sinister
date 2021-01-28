@@ -24,11 +24,25 @@ object HandEvent {
   implicit val decodeHandEvent: Decoder[HandEvent] = for {
     eventType <- Decoder[Int].prepare(_.downField("type"))
     value <- eventType match {
+      case DEAL_COMMUNITY            => DealCommunityCard.decoder
+      case DEAL_PLAYER               => DealPlayerCard.decoder
       case DEALER_RAKE               => DealerRake.decoder
+      case NEXT_STAGE                => EnterNextStage.decoder
+      case PLAYER_ACTION             => PlayerAction.decoderPlayerAction
+      case SHOW_HAND                 => ShowHand.decoder
+      case SUBTRACT_CHIPS_FROM_POT   => SubtractChipsFromPot.decoder
       case SUBTRACT_CHIPS_FROM_STACK => SubtractChipsFromStack.decoder
+      case TABLE_MESSAGE             => TableMessage.decoder
       case TRANSFER_ACTION           => TransferAction.decoder
       case TRANSFER_BUTTON           => TransferButton.decoder
-      case other                     => Decoder.failedWithMessage(s"invalid type: $other")
+      case WIN_HAND => {
+        WinHand.decoder
+      }
+      case WIN_POT => WinPot.decoder
+      case other => {
+        ???
+        Decoder.failedWithMessage(s"invalid type: $other")
+      }
     }
   } yield value
 

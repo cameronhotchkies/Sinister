@@ -140,9 +140,9 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     }
   }
 
-  def saveSerializedHand(hand: HandArchive, player: Participant): Unit = {
-    val serializedHand = HandArchive.encoder(hand).toString()
-    val handId = hand.summary.handId
+  def saveSerializedHand(handArchive: HandArchive, player: Participant): Unit = {
+    val serializedHand = HandArchive.encoder(handArchive).toString()
+    val handId = handArchive.hand.handId
     val filename = s"${HomeController.playerData}/${player.hash}/$handId.json"
     val file = new File(filename)
     val bw = new BufferedWriter(new FileWriter(file))
@@ -152,13 +152,13 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
   def syndicateCompletedHands(hands: Seq[HandArchive]): Unit = {
     hands
-      .filter { hand => hand.summary.isComplete }
-      .foreach { hand =>
+      .filter { handArchive => handArchive.hand.isComplete }
+      .foreach { handArchive =>
         {
-          hand.summary.playersDealtIn.map { player =>
+          handArchive.hand.playersDealtIn.map { player =>
             val participant = Participant(player, 1)
             ensurePlayerDirectoryExists(participant)
-            saveSerializedHand(hand, participant)
+            saveSerializedHand(handArchive, participant)
           }
         }
       }
@@ -202,7 +202,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
             )
         }
         .toSeq
-        .sortBy(_.summary.handId)
+        .sortBy(_.hand.handId)
 
       val gameIds = parseCacheFiles
         .map(gameStateMessage => {
@@ -211,8 +211,8 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
         .distinct
 
       val participants = handDetails
-        .flatMap { hand =>
-          hand.summary.playersDealtIn
+        .flatMap { handArchive =>
+          handArchive.hand.playersDealtIn
         }
         .groupBy(a => a)
         .map {
