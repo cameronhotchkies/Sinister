@@ -7,7 +7,7 @@ import models.gamestate.{GameNarrative, HandEvent}
 import models.importer.GameState.toHandState
 import models.importer.GameStateEvent.toHandEvent
 import models.importer.GameStateMessage
-import models.{Hand, HandSummary, Participant}
+import models.{HandArchive, HandSummary, Participant}
 import play.api._
 import play.api.libs.circe._
 import play.api.mvc._
@@ -76,9 +76,9 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
   }
 
   case class Result(
-      hands: Seq[Hand],
-      gameCount: Int,
-      players: Seq[Participant]
+                     hands: Seq[HandArchive],
+                     gameCount: Int,
+                     players: Seq[Participant]
   )
   object Result {
     implicit val encoder: Encoder[Result] = deriveEncoder
@@ -140,8 +140,8 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     }
   }
 
-  def saveSerializedHand(hand: Hand, player: Participant): Unit = {
-    val serializedHand = Hand.encoder(hand).toString()
+  def saveSerializedHand(hand: HandArchive, player: Participant): Unit = {
+    val serializedHand = HandArchive.encoder(hand).toString()
     val handId = hand.summary.handId
     val filename = s"${HomeController.playerData}/${player.hash}/$handId.json"
     val file = new File(filename)
@@ -150,7 +150,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     bw.close()
   }
 
-  def syndicateCompletedHands(hands: Seq[Hand]): Unit = {
+  def syndicateCompletedHands(hands: Seq[HandArchive]): Unit = {
     hands
       .filter { hand => hand.summary.isComplete }
       .foreach { hand =>
@@ -195,7 +195,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
             val filteredEvents: Seq[HandEvent] = events
               .filter(_.isInstanceOf[GameNarrative])
 
-            Hand(
+            HandArchive(
               handSummary,
               filteredEvents,
               sources
