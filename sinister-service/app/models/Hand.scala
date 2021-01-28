@@ -2,12 +2,12 @@ package models
 
 import io.circe.{Decoder, Encoder, Json}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import models.HandSummary.logger
+import models.Hand.logger
 import models.gamestate.{AppliesToPlayer, DealPlayerCard, HandEvent, WinHand}
 import models.gamestate.playeraction.{MuckCards, ShowCards}
 import play.api.Logger
 
-case class HandSummary(
+case class Hand(
     handId: Int,
     seatedPlayers: Seq[Option[HandPlayer]],
     bigBlindIndex: Int,
@@ -60,14 +60,14 @@ case class HandSummary(
     (handId, seatedPlayers, bigBlind, smallBlindIndex)
   }
 }
-object HandSummary {
+object Hand {
   val logger: Logger = Logger("application")
 
   def summarize(
       gameId: Int,
       handStates: Seq[HandState],
       handEvents: Seq[HandEvent]
-  ): HandSummary = {
+  ): Hand = {
     val dealerSummary = handStates
       .map(_.dealer)
       .reduce((l, r) => {
@@ -96,7 +96,7 @@ object HandSummary {
     assert(bigBlinders.length == 1)
     assert(smallBlinders.length == 1)
 
-    HandSummary(
+    Hand(
       gameId,
       playerSummary,
       bigBlinders.head,
@@ -122,8 +122,8 @@ object HandSummary {
     })
   }
 
-  implicit val encoder: Encoder[HandSummary] = (summary: HandSummary) => {
-    val derived = deriveEncoder[HandSummary]
+  implicit val encoder: Encoder[Hand] = (summary: Hand) => {
+    val derived = deriveEncoder[Hand]
       .encodeObject(summary)
       .add(
         "playersInvolvedInShowdown",
@@ -138,6 +138,6 @@ object HandSummary {
     Json.fromJsonObject(derived)
   }
 
-  implicit val decoder: Decoder[HandSummary] = deriveDecoder
+  implicit val decoder: Decoder[Hand] = deriveDecoder
 
 }

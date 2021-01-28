@@ -7,7 +7,7 @@ import models.gamestate.{GameNarrative, HandEvent}
 import models.importer.GameState.toHandState
 import models.importer.GameStateEvent.toHandEvent
 import models.importer.GameStateMessage
-import models.{HandArchive, HandSummary, Participant}
+import models.{HandArchive, Hand, Participant}
 import play.api._
 import play.api.libs.circe._
 import play.api.mvc._
@@ -189,7 +189,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
               .flatMap(_.events)
               .map(toHandEvent)
 
-            val handSummary = HandSummary
+            val handSummary = Hand
               .summarize(gameId, gameStates.map(toHandState), events)
 
             val filteredEvents: Seq[HandEvent] = events
