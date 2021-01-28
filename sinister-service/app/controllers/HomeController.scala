@@ -7,13 +7,14 @@ import models.gamestate.{GameNarrative, HandEvent}
 import models.importer.GameState.toHandState
 import models.importer.GameStateEvent.toHandEvent
 import models.importer.GameStateMessage
-import models.{HandArchive, Hand, Participant}
+import models.{Hand, HandArchive, Participant}
 import play.api._
 import play.api.libs.circe._
 import play.api.mvc._
 
 import java.io.{BufferedWriter, File, FileInputStream, FileWriter}
-import java.nio.file.Files
+import java.nio.file.{Files, Paths}
+import java.time.Instant
 import javax.inject._
 import scala.io.Source
 
@@ -44,16 +45,25 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     Action { implicit request: Request[AnyContent] =>
       val bodyText = request.body.asText.getOrElse("")
 
-      val parsed = parser.parse(bodyText)
+      if (bodyText.nonEmpty && bodyText != "null") {
+        val parsed = parser.parse(bodyText)
 
-      parsed.map(bodyJson => {
-        val t = (bodyJson \\ "t").head.as[String]
-        t.getOrElse("--skipped--") match {
-          case "GameState" =>
-            logGameState(bodyJson)
-          case x => logger.warn(s"skipped: $x")
-        }
-      })
+        // logger.info(s"BT: $bodyText")
+
+        parsed.map(bodyJson => {
+          val ts = (bodyJson \\ "t")
+          if (ts.isEmpty) {
+            logger.info(s"BT: $bodyText")
+          } else {
+            val t = (bodyJson \\ "t").head.as[String]
+            t.getOrElse("--skipped--") match {
+              case "GameState" =>
+                logGameState(bodyJson)
+              case x => logger.warn(s"skipped: $x")
+            }
+          }
+        })
+      }
 
       Ok("sunk")
     }
@@ -65,27 +75,28 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
         .map(_.toString())
         .getOrElse("mismatch")
 
-    writeFile(s"$stateId.json", rawState.toString())
+    val ts = Instant.now().toEpochMilli
+    writeFile(s"$ts.json", rawState.toString())
   }
 
   def writeFile(filename: String, s: String): Unit = {
-    val file = new File(s"logs/hands/$filename")
+    val file = new File(s"${HomeController.handSink}/$filename")
     val bw = new BufferedWriter(new FileWriter(file))
     bw.write(s)
     bw.close()
   }
 
   case class Result(
-                     hands: Seq[HandArchive],
-                     gameCount: Int,
-                     players: Seq[Participant]
+      hands: Seq[HandArchive],
+      gameCount: Int,
+      players: Seq[Participant]
   )
   object Result {
     implicit val encoder: Encoder[Result] = deriveEncoder
   }
 
   def enumerateCache(): List[File] = {
-    val d = new File("logs/hands")
+    val d = new File(s"${HomeController}")
     if (d.exists && d.isDirectory) {
       d.listFiles
         .filter(_.isFile)
@@ -140,7 +151,10 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     }
   }
 
-  def saveSerializedHand(handArchive: HandArchive, player: Participant): Unit = {
+  def saveSerializedHand(
+      handArchive: HandArchive,
+      player: Participant
+  ): Unit = {
     val serializedHand = HandArchive.encoder(handArchive).toString()
     val handId = handArchive.hand.handId
     val filename = s"${HomeController.playerData}/${player.hash}/$handId.json"
@@ -150,18 +164,64 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     bw.close()
   }
 
+  def compressSources(handArchive: HandArchive): Option[String] = {
+    import java.io.FileOutputStream
+    import java.util.zip.ZipOutputStream
+    import java.util.zip.ZipEntry
+    import java.nio.file.Files
+    import java.nio.file.Paths
+    val zipFileName = new File(
+      s"${HomeController.playerData}/${handArchive.hand.handId}.zip"
+    )
+
+    val fos = new FileOutputStream(zipFileName)
+    val zos = new ZipOutputStream(fos)
+
+    handArchive.sources.foreach { sourceFilename =>
+      val sourceFile = s"${HomeController.handSink}/$sourceFilename"
+
+      zos.putNextEntry(new ZipEntry(sourceFile))
+      val bytes: Array[Byte] = Files.readAllBytes(Paths.get(sourceFile))
+      zos.write(bytes, 0, bytes.length)
+      zos.closeEntry()
+    }
+
+    zos.close()
+    val compressed = zipFileName.length()
+    logger.info(s"Compressed: $zipFileName [$compressed]")
+
+    if (compressed > 0) {
+      Option(zipFileName.getName)
+    } else {
+      None
+    }
+  }
+
   def syndicateCompletedHands(hands: Seq[HandArchive]): Unit = {
-    hands
+    val handCount = hands.length
+
+    val completedHands = hands
       .filter { handArchive => handArchive.hand.isComplete }
-      .foreach { handArchive =>
-        {
-          handArchive.hand.playersDealtIn.map { player =>
-            val participant = Participant(player, 1)
-            ensurePlayerDirectoryExists(participant)
-            saveSerializedHand(handArchive, participant)
-          }
+
+    logger.info(s"${completedHands.length} completed out of $handCount")
+
+    completedHands.foreach { handArchive =>
+      {
+        handArchive.hand.playersDealtIn.foreach { player =>
+          val participant = Participant(player, 1)
+          ensurePlayerDirectoryExists(participant)
+          saveSerializedHand(handArchive, participant)
         }
+
+        val compressedFile = compressSources(handArchive)
+        compressedFile.foreach(_ => {
+          handArchive.sources.foreach { sourceFile =>
+            val path = Paths.get(s"${HomeController.handSink}/$sourceFile")
+            Files.delete(path)
+          }
+        })
       }
+    }
   }
 
   def parseLogCache(): Action[AnyContent] =
@@ -236,4 +296,6 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
 object HomeController {
   val playerData = "player_data"
+
+  val handSink = "logs/hands"
 }
