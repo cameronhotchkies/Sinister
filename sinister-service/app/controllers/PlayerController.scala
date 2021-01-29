@@ -94,12 +94,40 @@ class PlayerController @Inject() (
         bettingEvents
       })
       .map(BettingEvents.tupled)
-      .reduce(_ + _)
+      .fold(BettingEvents(Nil, Nil))(_ + _)
 
     val aggressionFactor =
       ((playerWagers.aggressor.length.toDouble / playerWagers.passive.length) * 10).round / 10d
 
     aggressionFactor
+  }
+
+  def generatePlayStyle(hands: Seq[Hand], player: String): PlayStyle = {
+    val voluntaryPlayed = voluntarilyPlayedHands(hands, player)
+    val playedCount = hands.length
+
+    val aggressivelyPlayed = voluntaryPlayed.filter(hand => {
+      val playerPosition = hand.positionForPlayer(player)
+      val aggressiveAction = hand.preflopEvents.exists {
+        case r: Raise => r.seatIndex == playerPosition
+        case _        => false
+      }
+
+      aggressiveAction
+    })
+
+    val aggressionFactor = calculateAggressionFactor(player, hands)
+
+    val vpipHands = voluntaryPlayed.length
+    val pfrHands = aggressivelyPlayed.length
+
+    val vpip = ((vpipHands.toDouble / playedCount) * 1000).round / 10f
+    val pfr = ((pfrHands.toDouble / playedCount) * 1000).round / 10f
+
+    val aggressionRatio = ((pfr / vpip) * 1000).round / 100f
+
+    PlayStyle(vpip, pfr, aggressionRatio, aggressionFactor)
+
   }
 
   def playerStats(player: String): Action[AnyContent] =
@@ -110,38 +138,32 @@ class PlayerController @Inject() (
       }
 
       val playedCount = enumerated.length
-
-      val voluntaryPlayed = voluntarilyPlayedHands(enumerated, player)
-
-      val aggressivelyPlayed = voluntaryPlayed.filter(hand => {
-        val playerPosition = hand.positionForPlayer(player)
-        val aggressiveAction = hand.preflopEvents.exists {
-          case r: Raise => r.seatIndex == playerPosition
-          case _        => false
-        }
-
-        aggressiveAction
-      })
-
-      val aggressionFactor = calculateAggressionFactor(player, enumerated)
-
-      val vpipHands = voluntaryPlayed.length
-      val pfrHands = aggressivelyPlayed.length
-
-      val vpip = ((vpipHands.toDouble / playedCount) * 1000).round / 10f
-      val pfr = ((pfrHands.toDouble / playedCount) * 1000).round / 10f
       val wins = enumerated.filter { hand: Hand =>
         hand.winners().contains(player)
       }
 
-      val aggressionRatio = ((pfr / vpip) * 1000).round / 100f
+      val playStyle = generatePlayStyle(enumerated, player)
 
-      val playStyle = PlayStyle(vpip, pfr, aggressionRatio, aggressionFactor)
+      val recentHands =
+        enumerated.sortBy(_.handId)(Ordering.Int.reverse).take(80)
+      val recentPlayStyle = generatePlayStyle(recentHands, player)
+
+      val fullTableHands =
+        enumerated.filter(_.seatedPlayers.flatten.length >= 7)
+      val fullTableStyle = generatePlayStyle(fullTableHands, player)
+
+      val shortHanded =
+        enumerated.filter(_.seatedPlayers.flatten.length < 7)
+      val shortHandedStyle = generatePlayStyle(shortHanded, player)
+
 
       val outgoing = Json.obj(
-        "seen" -> Json.fromInt(enumerated.length),
+        "seen" -> playedCount.asJson,
         "won" -> Json.fromInt(wins.length),
-        "playStyle" -> playStyle.asJson
+        "playStyle" -> playStyle.asJson,
+        "recentStyle" -> recentPlayStyle.asJson,
+        "fullTableStyle" -> fullTableStyle.asJson,
+        "shortHandedStyle" -> shortHandedStyle.asJson
       )
       Ok(outgoing)
     }
