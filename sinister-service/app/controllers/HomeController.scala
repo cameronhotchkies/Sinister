@@ -96,7 +96,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
   }
 
   def enumerateCache(): List[File] = {
-    val d = new File(s"${HomeController}")
+    val d = new File(s"${HomeController.handSink}")
     if (d.exists && d.isDirectory) {
       d.listFiles
         .filter(_.isFile)
