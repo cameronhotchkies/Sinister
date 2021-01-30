@@ -249,8 +249,13 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
               .flatMap(_.events)
               .map(toHandEvent)
 
+            val startTime = messages
+              .map(_.gameStateMessage.ts)
+              .map(Instant.ofEpochMilli)
+              .min
+
             val handSummary = Hand
-              .summarize(gameId, gameStates.map(toHandState), events)
+              .summarize(gameId, gameStates.map(toHandState), events, startTime)
 
             val filteredEvents: Seq[HandEvent] = events
               .filter(_.isInstanceOf[GameNarrative])

@@ -1,10 +1,13 @@
 package models
 
+import io.circe.generic.extras.{ConfiguredJsonCodec, JsonKey}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder, Json}
 import models.gamestate.playeraction.{MuckCards, ShowCards}
 import models.gamestate._
 import play.api.Logger
+
+import java.time.Instant
 
 case class Hand(
     handId: Int,
@@ -13,7 +16,8 @@ case class Hand(
     smallBlindIndex: Int,
     board: Seq[Card],
     events: Seq[HandEvent],
-    stages: List[Int]
+    stages: List[Int],
+    startDate: Instant
 ) {
   val bigBlind: HandPlayer = seatedPlayers(bigBlindIndex).get
   val smallBlind: HandPlayer = seatedPlayers(smallBlindIndex).get
@@ -31,7 +35,8 @@ case class Hand(
     seatedPlayers.indexWhere(_.exists(_.name == playerName))
   }
 
-  lazy val preflopEvents: Seq[HandEvent] = events.takeWhile(!_.isInstanceOf[EnterNextStage])
+  lazy val preflopEvents: Seq[HandEvent] =
+    events.takeWhile(!_.isInstanceOf[EnterNextStage])
 
   val playersInvolvedInShowdown: Seq[Int] = events
     .filter { event =>
@@ -73,7 +78,8 @@ object Hand {
   def summarize(
       gameId: Int,
       handStates: Seq[HandState],
-      handEvents: Seq[HandEvent]
+      handEvents: Seq[HandEvent],
+      startTime: Instant
   ): Hand = {
     val dealerSummary = handStates
       .map(_.dealer)
@@ -110,7 +116,8 @@ object Hand {
       smallBlinders.head,
       dealerSummary.cards,
       handEvents,
-      stages
+      stages,
+      startTime
     )
   }
 
