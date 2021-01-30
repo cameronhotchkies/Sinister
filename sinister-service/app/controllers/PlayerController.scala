@@ -27,7 +27,7 @@ class PlayerController @Inject() (
 
     val f: File = new File(playerDataDir)
 
-    f.listFiles()
+    f.listFiles().toIndexedSeq
   }
 
   def enumeratePastHandsForPlayer(
