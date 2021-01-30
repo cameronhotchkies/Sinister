@@ -1,7 +1,7 @@
 package controllers
 
 import io.circe.syntax.EncoderOps
-import io.circe.{Json, parser, Error => CError}
+import io.circe.{Json, ParsingFailure, parser, Error => CError}
 import models.gamestate.playeraction.{Bet, Call, Raise}
 import models.gamestate.{AppliesToPlayer, HandEvent}
 import models.opponent.PlayStyle
@@ -20,17 +20,21 @@ class PlayerController @Inject() (
 ) extends BaseController
     with Circe {
 
-  def enumeratePastHandsForPlayer(
-      player: String
-  ): Array[Either[CError, HandArchive]] = {
+  def handsStoredForPlayer(player: String): Seq[File] = {
     val participant = Participant(player, -1)
 
     val playerDataDir = s"${HomeController.playerData}/${participant.hash}"
 
     val f: File = new File(playerDataDir)
 
-    val previousHands = f.listFiles()
-    if (previousHands != null) {
+    f.listFiles()
+  }
+
+  def enumeratePastHandsForPlayer(
+      player: String
+  ): Seq[HandArchive] = {
+    val previousHands = handsStoredForPlayer(player)
+    val parseResults = if (previousHands != null) {
       previousHands.map(handData => {
         val fis = new FileInputStream(handData)
         val jsonContent = Source.fromInputStream(fis).mkString
@@ -38,7 +42,11 @@ class PlayerController @Inject() (
         parsed
       })
     } else {
-      Array[Either[CError, HandArchive]]()
+      Seq[Either[CError, HandArchive]]()
+    }
+
+    parseResults.collect {
+      case Right(a) => a
     }
   }
 
@@ -132,10 +140,7 @@ class PlayerController @Inject() (
 
   def playerStats(player: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      val enumerated = enumeratePastHandsForPlayer(player).flatMap {
-        case Right(h: HandArchive) => Some(h.hand)
-        case Left(_)               => None
-      }
+      val enumerated = enumeratePastHandsForPlayer(player).map(_.hand)
 
       val playedCount = enumerated.length
       val wins = enumerated.filter { hand: Hand =>
@@ -156,7 +161,6 @@ class PlayerController @Inject() (
         enumerated.filter(_.seatedPlayers.flatten.length < 7)
       val shortHandedStyle = generatePlayStyle(shortHanded, player)
 
-
       val outgoing = Json.obj(
         "seen" -> playedCount.asJson,
         "won" -> Json.fromInt(wins.length),
@@ -167,4 +171,39 @@ class PlayerController @Inject() (
       )
       Ok(outgoing)
     }
+
+  def listHands(player: String): Action[AnyContent] =
+    Action {
+      val playerHands = enumeratePastHandsForPlayer(player).map(_.hand.handId)
+      Ok(playerHands.asJson)
+    }
+
+  def handStats(player: String, handId: Int): Action[AnyContent] =
+    Action { implicit request: Request[AnyContent] =>
+      val participant = Participant(player, -1)
+
+      val handData =
+        s"${HomeController.playerData}/${participant.hash}/$handId.json"
+
+      val f: File = new File(handData)
+
+      val parseResult = if (f.exists()) {
+        val fis = new FileInputStream(f)
+        val jsonContent = Source.fromInputStream(fis).mkString
+        val parsed = parser.decode[HandArchive](jsonContent)
+        parsed
+
+      } else {
+        Left(ParsingFailure)
+      }
+
+      val handJson = parseResult
+        .map(handArchive => {
+          handArchive.hand.asJson
+        })
+        .getOrElse("".asJson)
+
+      Ok(handJson)
+    }
+
 }

@@ -12,6 +12,8 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 +nocsrf
 POST    /sink                       controllers.HomeController.sink()
 
-GET     /player/:player             controllers.PlayerController.playerStats(player: String)
+GET     /player/:player                controllers.PlayerController.playerStats(player: String)
+GET     /player/:player/hands          controllers.PlayerController.listHands(player: String)
+GET     /player/:player/hands/:handId  controllers.PlayerController.handStats(player: String, handId: Int)
 
 GET     /cache/parsed               controllers.HomeController.parseLogCache()
