@@ -3,14 +3,11 @@ package models
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder, Json}
 import models.Hand.logger
-import models.gamestate.playeraction.{
-  BigBlind,
-  MuckCards,
-  ShowCards,
-  SmallBlind
-}
 import models.gamestate._
+import models.gamestate.playeraction.{BigBlind, MuckCards, ShowCards, SmallBlind}
 import play.api.Logger
+
+import java.time.Instant
 
 case class Hand(
     handId: Int,
@@ -19,7 +16,8 @@ case class Hand(
     smallBlindIndex: Int,
     board: Seq[Card],
     events: Seq[HandEvent],
-    stages: List[Int]
+    stages: List[Int],
+    startDate: Instant
 ) {
   val bigBlind: Option[HandPlayer] = {
     val bigBlindAction = events.collectFirst {
@@ -106,7 +104,8 @@ object Hand {
   def summarize(
       gameId: Int,
       handStates: Seq[HandState],
-      handEvents: Seq[HandEvent]
+      handEvents: Seq[HandEvent],
+      startTime: Instant
   ): Hand = {
     val dealerSummary = handStates
       .map(_.dealer)
@@ -143,7 +142,8 @@ object Hand {
       smallBlinders.head,
       dealerSummary.cards,
       handEvents,
-      stages
+      stages,
+      startTime
     )
   }
 

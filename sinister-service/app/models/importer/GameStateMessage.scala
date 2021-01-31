@@ -5,6 +5,7 @@ import io.circe.generic.semiauto._
 
 case class GameStateMessage(
     id: Int,
+    ts: Long,
     gameState: GameState,
     events: Seq[GameStateEvent]
 )
