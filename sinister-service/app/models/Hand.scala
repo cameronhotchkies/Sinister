@@ -3,14 +3,8 @@ package models
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder, Json}
 import models.Hand.logger
-import models.gamestate.playeraction.{
-  BigBlind,
-  MuckCards,
-  ShowCards,
-  SmallBlind
-}
 import models.gamestate._
-import models.gamestate.playeraction.{MuckCards, ShowCards}
+import models.gamestate.playeraction.{BigBlind, MuckCards, ShowCards, SmallBlind}
 import play.api.Logger
 
 import java.time.Instant
