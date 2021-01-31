@@ -76,7 +76,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
         .getOrElse("mismatch")
 
     val ts = Instant.now().toEpochMilli
-    writeFile(s"$ts.json", rawState.toString())
+    writeFile(s"$ts-$stateId.json", rawState.toString())
   }
 
   def writeFile(filename: String, s: String): Unit = {
