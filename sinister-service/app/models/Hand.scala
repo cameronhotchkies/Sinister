@@ -2,7 +2,13 @@ package models
 
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder, Json}
-import models.gamestate.playeraction.{MuckCards, ShowCards}
+import models.Hand.logger
+import models.gamestate.playeraction.{
+  BigBlind,
+  MuckCards,
+  ShowCards,
+  SmallBlind
+}
 import models.gamestate._
 import play.api.Logger
 
@@ -15,8 +21,26 @@ case class Hand(
     events: Seq[HandEvent],
     stages: List[Int]
 ) {
-  val bigBlind: HandPlayer = seatedPlayers(bigBlindIndex).get
-  val smallBlind: HandPlayer = seatedPlayers(smallBlindIndex).get
+  val bigBlind: Option[HandPlayer] = {
+    val bigBlindAction = events.collectFirst {
+      case bb: BigBlind => bb
+    }
+
+    val bbcount = events.count(_.isInstanceOf[BigBlind])
+    if (bbcount > 1) {
+      logger.info(s"Too many ($bbcount) bb: $handId")
+    }
+    assert(events.count(_.isInstanceOf[BigBlind]) <= 1)
+
+    bigBlindAction.flatMap(bba => seatedPlayers(bba.seatIndex))
+  }
+  val smallBlind: Option[HandPlayer] = {
+    val smallBlindAction = events.collectFirst {
+      case sb: SmallBlind => sb
+    }
+
+    smallBlindAction.flatMap(sba => seatedPlayers(sba.seatIndex))
+  }
 
   val playersDealtIn: Seq[String] = events
     .filter { event => event.isInstanceOf[DealPlayerCard] }
@@ -31,7 +55,8 @@ case class Hand(
     seatedPlayers.indexWhere(_.exists(_.name == playerName))
   }
 
-  lazy val preflopEvents: Seq[HandEvent] = events.takeWhile(!_.isInstanceOf[EnterNextStage])
+  lazy val preflopEvents: Seq[HandEvent] =
+    events.takeWhile(!_.isInstanceOf[EnterNextStage])
 
   val playersInvolvedInShowdown: Seq[Int] = events
     .filter { event =>
@@ -59,11 +84,19 @@ case class Hand(
     val phases = stages.count(_ == 0)
 
     if (phases < 2) false
-    else if (phases == 2) true
-    else ???
+    else if (phases == 2) {
+      if (bigBlind.isEmpty) {
+        // missing big blind is indicative of a corrupt hand parse
+        false
+      } else {
+        // more can come here
+        true
+      }
+    } else ???
   }
 
-  protected def unapply(): (Int, Seq[Option[HandPlayer]], HandPlayer, Int) = {
+  protected def unapply()
+      : (Int, Seq[Option[HandPlayer]], Option[HandPlayer], Int) = {
     (handId, seatedPlayers, bigBlind, smallBlindIndex)
   }
 }
