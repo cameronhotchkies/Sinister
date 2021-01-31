@@ -24,11 +24,15 @@ const addArtificialLag = () => {
 };
 
 const handleInterceptedMessage = (message) => {
+  const messageWithTimestamp = { ...message };
+
+  messageWithTimestamp.ts = Date.now();
+
   try {
     fetch(SINK_TARGET, {
       method: "POST",
       mode: "no-cors",
-      body: JSON.stringify(message),
+      body: JSON.stringify(messageWithTimestamp),
     });
   } catch {
     // ignored
