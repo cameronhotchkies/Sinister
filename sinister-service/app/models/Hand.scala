@@ -24,13 +24,15 @@ case class Hand(
       case bb: BigBlind => bb
     }
 
-    val bbcount = events.count(_.isInstanceOf[BigBlind])
-    if (bbcount > 1) {
-      logger.info(s"Too many ($bbcount) bb: $handId")
-    }
-    assert(events.count(_.isInstanceOf[BigBlind]) <= 1)
+    val bbEvents = events.filter(_.isInstanceOf[BigBlind])
+    if (bbEvents.length > 1) {
+      logger.info(s"Too many (${bbEvents.length}) bb: $handId")
+      logger.info(s"BBE: ${bbEvents}")
+      // this could be extra or dead blinds?
 
-    bigBlindAction.flatMap(bba => seatedPlayers(bba.seatIndex))
+    }
+
+    bigBlindAction.flatMap(bba => seatedPlayers(bigBlindIndex))
   }
   val smallBlind: Option[HandPlayer] = {
     val smallBlindAction = events.collectFirst {

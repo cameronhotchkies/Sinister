@@ -1,7 +1,21 @@
 package models.importer
 
 import io.circe.{Decoder, HCursor}
-import models.gamestate.playeraction.PlayerAction.{BET, BIG_BLIND, CALL, CHECK, DO_NOT_SHOW_CARDS, FIRST_TO_ACT, FOLD, MUCK_CARDS, RAISE, SHOW_CARDS, SMALL_BLIND, UNKNOWN_PLACTION}
+import models.gamestate.playeraction.PlayerAction.{
+  BET,
+  BIG_BLIND,
+  CALL,
+  CHECK,
+  DO_NOT_SHOW_CARDS,
+  FIRST_TO_ACT,
+  FOLD,
+  MUCK_CARDS,
+  RAISE,
+  SHOW_CARDS,
+  SMALL_BLIND,
+  UNKNOWN_PLACTION,
+  UNKNOWN_PLACTION_25
+}
 import models.gamestate.playeraction._
 import play.api.Logger
 
@@ -68,18 +82,19 @@ object PlayerActionDecoders {
     for {
       plactionType <- Decoder[Int].prepare(_.downField("action"))
       value <- plactionType match {
-        case BET               => bet
-        case BIG_BLIND         => bigBlind
-        case CALL              => call
-        case CHECK             => check
-        case DO_NOT_SHOW_CARDS => doNotShowCards
-        case FIRST_TO_ACT      => firstToAct
-        case FOLD              => fold
-        case MUCK_CARDS        => muckCards
-        case RAISE             => raise
-        case SHOW_CARDS        => showCards
-        case SMALL_BLIND       => smallBlind
-        case UNKNOWN_PLACTION  => unknownPlayerAction
+        case BET                 => bet
+        case BIG_BLIND           => bigBlind
+        case CALL                => call
+        case CHECK               => check
+        case DO_NOT_SHOW_CARDS   => doNotShowCards
+        case FIRST_TO_ACT        => firstToAct
+        case FOLD                => fold
+        case MUCK_CARDS          => muckCards
+        case RAISE               => raise
+        case SHOW_CARDS          => showCards
+        case SMALL_BLIND         => smallBlind
+        case UNKNOWN_PLACTION    => unknownPlayerAction
+        case UNKNOWN_PLACTION_25 => unknownPlayerAction
         case _ =>
           logger.info(s"PLACTION: $plactionType")
           ???
