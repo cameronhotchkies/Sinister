@@ -1,10 +1,9 @@
 package models
 
-import io.circe.generic.extras.{ConfiguredJsonCodec, JsonKey}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder, Json}
-import models.gamestate.playeraction.{MuckCards, ShowCards}
 import models.gamestate._
+import models.gamestate.playeraction.{MuckCards, ShowCards}
 import play.api.Logger
 
 import java.time.Instant
