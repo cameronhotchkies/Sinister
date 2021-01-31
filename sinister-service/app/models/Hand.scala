@@ -1,6 +1,5 @@
 package models
 
-import io.circe.generic.extras.{ConfiguredJsonCodec, JsonKey}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder, Json}
 import models.Hand.logger
