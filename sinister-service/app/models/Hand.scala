@@ -107,7 +107,8 @@ object Hand {
       gameId: Int,
       handStates: Seq[HandState],
       handEvents: Seq[HandEvent],
-      startTime: Instant
+      startTime: Instant,
+      startingChipsByPlayer: Map[String, Int]
   ): Hand = {
     val dealerSummary = handStates
       .map(_.dealer)
@@ -116,6 +117,10 @@ object Hand {
       })
 
     val playerSummary = summarizePlayers(handStates)
+      .map(_.map{ player => {
+        val correctChips = startingChipsByPlayer.getOrElse(player.name, 0)
+        player.copy(startingChips = correctChips)
+      }})
 
     val bigBlinders = handStates.map(_.bigBlindIndex).distinct
     val smallBlinders = handStates.map(_.smallBlindIndex).distinct

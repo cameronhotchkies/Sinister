@@ -7,7 +7,8 @@ import play.api.Logger
 case class HandPlayer(
     name: String,
     level: Option[Int],
-    dealtCards: Seq[Card]
+    dealtCards: Seq[Card],
+    startingChips: Int
 ) {
   val logger: Logger = Logger("application")
   def merge(that: HandPlayer): HandPlayer = {
@@ -37,7 +38,9 @@ case class HandPlayer(
         ???
     }
 
-    HandPlayer(resolvedName, resolvedLevel, resolvedCards)
+    val resolvedStartingChips = Math.max(this.startingChips, that.startingChips)
+
+    HandPlayer(resolvedName, resolvedLevel, resolvedCards, resolvedStartingChips)
   }
 }
 object HandPlayer {
