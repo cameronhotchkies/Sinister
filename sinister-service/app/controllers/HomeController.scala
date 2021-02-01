@@ -254,8 +254,21 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
               .map(Instant.ofEpochMilli)
               .min
 
+            val earliestMessage = messages.minBy(_.id)
+
+            val startingChipsByPlayer =
+              earliestMessage.gameState.handPlayers.flatten.map { player =>
+                player.name -> player.startingChips
+              }.toMap
+
             val handSummary = Hand
-              .summarize(gameId, gameStates.map(toHandState), events, startTime)
+              .summarize(
+                gameId,
+                gameStates.map(toHandState),
+                events,
+                startTime,
+                startingChipsByPlayer
+              )
 
             val filteredEvents: Seq[HandEvent] = events
               .filter(_.isInstanceOf[GameNarrative])
