@@ -157,8 +157,13 @@ class PlayerController @Inject() (
         enumerated.filter(_.seatedPlayers.flatten.length >= 7)
       val fullTableStyle = generatePlayStyle(fullTableHands, player)
 
+      val sixMaxHands =
+        enumerated.filter(hand => hand.seatedPlayers.flatten.length <= 4 && hand.seatedPlayers.flatten.length < 7)
+      val sixMaxStyle = generatePlayStyle(fullTableHands, player)
+
+
       val shortHanded =
-        enumerated.filter(_.seatedPlayers.flatten.length < 7)
+        enumerated.filter(_.seatedPlayers.flatten.length <= 3)
       val shortHandedStyle = generatePlayStyle(shortHanded, player)
 
       val outgoing = Json.obj(
@@ -167,6 +172,7 @@ class PlayerController @Inject() (
         "playStyle" -> playStyle.asJson,
         "recentStyle" -> recentPlayStyle.asJson,
         "fullTableStyle" -> fullTableStyle.asJson,
+        "sixMaxHand" -> sixMaxStyle.asJson,
         "shortHandedStyle" -> shortHandedStyle.asJson
       )
       Ok(outgoing)
