@@ -1,10 +1,11 @@
 package controllers
 
-import controllers.HomeController
+import actors.ActorRoot
+import models.importer.HandComposer
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
-import play.api.test._
 import play.api.test.Helpers._
+import play.api.test._
 
 /**
   * Add your spec here.
@@ -20,7 +21,9 @@ class HomeControllerSpec
   "HomeController GET" should {
 
     "render the index page from a new instance of controller" in {
-      val controller = new HomeController(stubControllerComponents())
+      val actorRoot = inject[ActorRoot]
+      val handComposer = inject[HandComposer]
+      val controller = new HomeController(stubControllerComponents(), actorRoot, handComposer)
       val home = controller.index().apply(FakeRequest(GET, "/"))
 
       status(home) mustBe OK

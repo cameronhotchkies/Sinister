@@ -14,6 +14,7 @@ import models.gamestate.playeraction.PlayerAction.{
   SHOW_CARDS,
   SMALL_BLIND,
   UNKNOWN_PLACTION,
+  UNKNOWN_PLACTION_13,
   UNKNOWN_PLACTION_25
 }
 import models.gamestate.playeraction._
@@ -94,6 +95,7 @@ object PlayerActionDecoders {
         case SHOW_CARDS          => showCards
         case SMALL_BLIND         => smallBlind
         case UNKNOWN_PLACTION    => unknownPlayerAction
+        case UNKNOWN_PLACTION_13 => unknownPlayerAction
         case UNKNOWN_PLACTION_25 => unknownPlayerAction
         case _ =>
           logger.info(s"PLACTION: $plactionType")

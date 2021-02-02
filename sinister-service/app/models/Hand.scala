@@ -1,13 +1,20 @@
 package models
 
+import cats.data.OptionT
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder, Json}
 import models.Hand.logger
 import models.gamestate._
-import models.gamestate.playeraction.{BigBlind, MuckCards, ShowCards, SmallBlind}
+import models.gamestate.playeraction.{
+  BigBlind,
+  MuckCards,
+  ShowCards,
+  SmallBlind
+}
 import play.api.Logger
 
 import java.time.Instant
+import scala.concurrent.{ExecutionContext, Future}
 
 case class Hand(
     handId: Int,
@@ -17,7 +24,8 @@ case class Hand(
     board: Seq[Card],
     events: Seq[HandEvent],
     stages: List[Int],
-    startDate: Instant
+    startDate: Instant,
+    table: Option[Table]
 ) {
   val bigBlind: Option[HandPlayer] = {
     val bigBlindAction = events.collectFirst {
@@ -108,8 +116,9 @@ object Hand {
       handStates: Seq[HandState],
       handEvents: Seq[HandEvent],
       startTime: Instant,
-      startingChipsByPlayer: Map[String, Int]
-  ): Hand = {
+      startingChipsByPlayer: Map[String, Int],
+      table: OptionT[Future, Table]
+  )(implicit ec: ExecutionContext): Future[Hand] = {
     val dealerSummary = handStates
       .map(_.dealer)
       .reduce((l, r) => {
@@ -139,19 +148,22 @@ object Hand {
 
     logger.info(s"Stages: $stages")
 
-    assert(bigBlinders.length == 1)
-    assert(smallBlinders.length == 1)
-
-    Hand(
-      gameId,
-      playerSummary,
-      bigBlinders.head,
-      smallBlinders.head,
-      dealerSummary.cards,
-      handEvents,
-      stages,
-      startTime
+//    assert(bigBlinders.length == 1)
+//    assert(smallBlinders.length == 1)
+    table.value.map(oTable =>
+      Hand(
+        gameId,
+        playerSummary,
+        bigBlinders.head,
+        smallBlinders.head,
+        dealerSummary.cards,
+        handEvents,
+        stages,
+        startTime,
+        oTable
+      )
     )
+
   }
 
   def summarizePlayers(

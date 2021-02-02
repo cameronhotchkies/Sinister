@@ -1,12 +1,15 @@
 package controllers
 
+import actors.{ActorRoot, TableRegistry}
+import cats.data._
+import cats.implicits._
 import io.circe.generic.semiauto._
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder, Json, parser}
+import io.circe._
 import models.gamestate.{GameNarrative, HandEvent}
 import models.importer.GameState.toHandState
 import models.importer.GameStateEvent.toHandEvent
-import models.importer.GameStateMessage
+import models.importer.{GameStateMessage, HandComposer, TablesList, Table => ImportTable}
 import models.{Hand, HandArchive, Participant}
 import play.api._
 import play.api.libs.circe._
@@ -16,6 +19,7 @@ import java.io.{BufferedWriter, File, FileInputStream, FileWriter}
 import java.nio.file.{Files, Paths}
 import java.time.Instant
 import javax.inject._
+import scala.concurrent.Future
 import scala.io.Source
 
 /**
@@ -23,11 +27,16 @@ import scala.io.Source
   * application's home page.
   */
 @Singleton
-class HomeController @Inject() (val controllerComponents: ControllerComponents)
-    extends BaseController
+class HomeController @Inject() (
+    val controllerComponents: ControllerComponents,
+    val actorRoot: ActorRoot,
+    val handComposer: HandComposer
+) extends BaseController
     with Circe {
 
   val logger: Logger = Logger("application")
+
+  implicit val ec = controllerComponents.executionContext
 
   /**
     * Create an Action to render an HTML page.
@@ -41,14 +50,34 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
       Ok(views.html.index())
     }
 
+  def processIncomingTableList(bodyJson: Json): Either[DecodingFailure, Unit] = {
+    logger.info(s"TablesList")
+    bodyJson
+      .as[TablesList]
+      .map { tableList =>
+        val tablesJson = tableList.tables
+          .filter { table =>
+            table.hcursor
+              .downField("n").as[String]
+              .isRight
+          }
+
+        val tables = tablesJson
+          .map(_.as[ImportTable].map(_.toTable))
+          .collect {
+            case Right(table) => table
+          }
+
+        actorRoot.tableRegistry ! TableRegistry.AddTables(tables)
+      }
+  }
+
   def sink(): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       val bodyText = request.body.asText.getOrElse("")
 
       if (bodyText.nonEmpty && bodyText != "null") {
         val parsed = parser.parse(bodyText)
-
-        // logger.info(s"BT: $bodyText")
 
         parsed.map(bodyJson => {
           val ts = (bodyJson \\ "t")
@@ -59,6 +88,10 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
             t.getOrElse("--skipped--") match {
               case "GameState" =>
                 logGameState(bodyJson)
+              case "TablesList" =>
+                processIncomingTableList(bodyJson)
+              case "PlayerTables" =>
+                logger.info(s"PlayerTables: $bodyJson")
               case x => logger.warn(s"skipped: $x")
             }
           }
@@ -166,10 +199,8 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
   def compressSources(handArchive: HandArchive): Option[String] = {
     import java.io.FileOutputStream
-    import java.util.zip.ZipOutputStream
-    import java.util.zip.ZipEntry
-    import java.nio.file.Files
-    import java.nio.file.Paths
+    import java.nio.file.{Files, Paths}
+    import java.util.zip.{ZipEntry, ZipOutputStream}
     val zipFileName = new File(
       s"${HomeController.playerData}/${handArchive.hand.handId}.zip"
     )
@@ -225,7 +256,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
   }
 
   def parseLogCache(): Action[AnyContent] =
-    Action { implicit request: Request[AnyContent] =>
+    Action.async { implicit request: Request[AnyContent] =>
       val cachedFiles = enumerateCache()
 
       val parseCacheFiles = readCachedFiles(cachedFiles)
@@ -236,51 +267,66 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
           case (x, y) => x -> y.sortBy(_.id)
         }
 
-      val handDetails = byGameId
-        .map {
-          case (gameId, messages) =>
-            val gameStates = messages
-              .sortBy(_.id)
-              .map(_.gameState)
+      val handDetailsInverted = byGameId.map {
+        case (gameId, messages) =>
+          val gameStates = messages
+            .sortBy(_.id)
+            .map(_.gameState)
 
-            val sources = messages.map(_.source.getName)
+          val tableAsync1 =
+            gameStates
+              .collectFirst { gs => gs.tableId }
+              .flatTraverse { tableId =>
+                handComposer.tableById(tableId)
+              }
 
-            val events = messages
-              .flatMap(_.events)
-              .map(toHandEvent)
+          val tableAsync = OptionT(tableAsync1)
 
-            val startTime = messages
-              .map(_.gameStateMessage.ts)
-              .map(Instant.ofEpochMilli)
-              .min
+          val sources = messages.map(_.source.getName)
 
-            val earliestMessage = messages.minBy(_.id)
+          val events = messages
+            .flatMap(_.events)
+            .map(toHandEvent)
 
-            val startingChipsByPlayer =
-              earliestMessage.gameState.handPlayers.flatten.map { player =>
-                player.name -> player.startingChips
-              }.toMap
+          val startTime = messages
+            .map(_.gameStateMessage.ts)
+            .map(Instant.ofEpochMilli)
+            .min
 
-            val handSummary = Hand
-              .summarize(
-                gameId,
-                gameStates.map(toHandState),
-                events,
-                startTime,
-                startingChipsByPlayer
-              )
+          val earliestMessage = messages.minBy(_.id)
 
-            val filteredEvents: Seq[HandEvent] = events
-              .filter(_.isInstanceOf[GameNarrative])
+          val startingChipsByPlayer =
+            earliestMessage.gameState.handPlayers.flatten.map { player =>
+              player.name -> player.startingChips
+            }.toMap
 
+          val handSummaryAsync = Hand
+            .summarize(
+              gameId,
+              gameStates.map(toHandState),
+              events,
+              startTime,
+              startingChipsByPlayer,
+              tableAsync
+            )
+
+          val filteredEvents: Seq[HandEvent] = events
+            .filter(_.isInstanceOf[GameNarrative])
+
+          handSummaryAsync.map { handSummary =>
             HandArchive(
               handSummary,
               filteredEvents,
               sources
             )
+          }
+      }.toSeq
+
+      val handDetailsAsync = Future
+        .sequence(handDetailsInverted)
+        .map {
+          _.sortBy(_.hand.handId)
         }
-        .toSeq
-        .sortBy(_.hand.handId)
 
       val gameIds = parseCacheFiles
         .map(gameStateMessage => {
@@ -288,26 +334,29 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
         })
         .distinct
 
-      val participants = handDetails
-        .flatMap { handArchive =>
-          handArchive.hand.playersDealtIn
-        }
-        .groupBy(a => a)
-        .map {
-          case (a, b) =>
-            Participant(a, b.size)
-        }
-        .toSeq
+      val encodedAsync = handDetailsAsync.map { handDetails =>
+        val participants = handDetails
+          .flatMap { handArchive =>
+            handArchive.hand.playersDealtIn
+          }
+          .groupBy(a => a)
+          .map {
+            case (a, b) =>
+              Participant(a, b.size)
+          }
+          .toSeq
 
-      syndicateCompletedHands(handDetails)
+        syndicateCompletedHands(handDetails)
 
-      val transformedResult = Result(handDetails, gameIds.length, participants)
+        val transformedResult =
+          Result(handDetails, gameIds.length, participants)
 
-      val encoded = deriveEncoder[Result]
-        .encodeObject(transformedResult)
-        .asJson
+        deriveEncoder[Result]
+          .encodeObject(transformedResult)
+          .asJson
+      }
 
-      Ok(encoded)
+      encodedAsync.map(Ok(_))
     }
 
 }
