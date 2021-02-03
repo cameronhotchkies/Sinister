@@ -21,7 +21,8 @@ class TableRegistry extends Actor {
       context become active(newRegistry)
 
     case TableById(tableId) =>
-      sender() ! registry.get(tableId)
+      val matchingTable = registry.get(tableId)
+      sender() ! matchingTable
   }
 }
 

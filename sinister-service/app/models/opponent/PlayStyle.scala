@@ -15,42 +15,46 @@ case class PlayStyle(
 ) {
 
   def playType(): String = {
-    val frequency = if (vpip <= 14) {
-      PlayStyle.VeryTight
-    } else if (14 < vpip && vpip <= 23) {
-      PlayStyle.Tight
-    } else if (23 < vpip && vpip <= 32) {
-      PlayStyle.SemiLoose
-    } else if (32 < vpip && vpip <= 40) {
-      PlayStyle.Loose
-    } else if (40 < vpip) {
-      PlayStyle.VeryLoose
+    if (vpip + pfr + aggressionFactor +aggressionRatio == 0) {
+      "learning..."
     } else {
-      PlayStyle.Mismatch
+      val frequency = if (vpip <= 14) {
+        PlayStyle.VeryTight
+      } else if (14 < vpip && vpip <= 23) {
+        PlayStyle.Tight
+      } else if (23 < vpip && vpip <= 32) {
+        PlayStyle.SemiLoose
+      } else if (32 < vpip && vpip <= 40) {
+        PlayStyle.Loose
+      } else if (40 < vpip) {
+        PlayStyle.VeryLoose
+      } else {
+        PlayStyle.Mismatch
+      }
+
+      val betStyle = if (aggressionRatio >= 7) {
+        PlayStyle.Aggressive
+      } else {
+        PlayStyle.Passive
+      }
+
+      val category = (frequency, betStyle) match {
+
+        case (VeryTight, Passive) => "rock+"
+        case (VeryTight, Aggressive) => "nit"
+        case (Tight, Passive) => "rock"
+        case (Tight, Aggressive) => "TAG"
+        case (SemiLoose, Passive) => "fish"
+        case (SemiLoose, Aggressive) => "regular"
+        case (Loose, Passive) => "call-station"
+        case (Loose, Aggressive) => "LAG"
+        case (VeryLoose, Passive) => "whale"
+        case (VeryLoose, Aggressive) => "maniac"
+        case _ => "uk"
+      }
+
+      s"$frequency/$betStyle/$category"
     }
-
-    val betStyle = if (aggressionRatio >= 7) {
-      PlayStyle.Aggressive
-    } else {
-      PlayStyle.Passive
-    }
-
-    val category = (frequency, betStyle) match {
-
-      case (VeryTight, Passive)    => "rock+"
-      case (VeryTight, Aggressive) => "nit"
-      case (Tight, Passive)        => "rock"
-      case (Tight, Aggressive)     => "TAG"
-      case (SemiLoose, Passive)    => "fish"
-      case (SemiLoose, Aggressive) => "regular"
-      case (Loose, Passive)        => "call-station"
-      case (Loose, Aggressive)     => "LAG"
-      case (VeryLoose, Passive)    => "whale"
-      case (VeryLoose, Aggressive) => "maniac"
-      case _                       => "uk"
-    }
-
-    s"$frequency/$betStyle/$category"
   }
 }
 

@@ -63,6 +63,27 @@ case class Hand(
     seatedPlayers.indexWhere(_.exists(_.name == playerName))
   }
 
+  def bigBlindsWonByPlayer(player: String): Option[BigDecimal] = {
+    val playerSeat = positionForPlayer(player)
+
+    val chipMovementEvents = events.filter {
+      case subtractChipsFromStack: SubtractChipsFromStack =>
+        subtractChipsFromStack.seatIndex == playerSeat
+      case subtractChipsFromPot: SubtractChipsFromPot =>
+        subtractChipsFromPot.seatIndex == playerSeat
+      case _ => false
+    }
+
+    val chipDelta = chipMovementEvents.foldLeft(BigDecimal(0)) { (acc, event) =>
+      event match {
+        case SubtractChipsFromStack(_, chips)  => acc - chips
+        case SubtractChipsFromPot(_, _, chips) => acc + chips
+      }
+    }
+
+    table.map(chipDelta / _.bigBlind)
+  }
+
   lazy val preflopEvents: Seq[HandEvent] =
     events.takeWhile(!_.isInstanceOf[EnterNextStage])
 
@@ -126,10 +147,12 @@ object Hand {
       })
 
     val playerSummary = summarizePlayers(handStates)
-      .map(_.map{ player => {
-        val correctChips = startingChipsByPlayer.getOrElse(player.name, 0)
-        player.copy(startingChips = correctChips)
-      }})
+      .map(_.map { player =>
+        {
+          val correctChips = startingChipsByPlayer.getOrElse(player.name, 0)
+          player.copy(startingChips = correctChips)
+        }
+      })
 
     val bigBlinders = handStates.map(_.bigBlindIndex).distinct
     val smallBlinders = handStates.map(_.smallBlindIndex).distinct
