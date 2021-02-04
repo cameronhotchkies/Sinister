@@ -169,8 +169,6 @@ object Hand {
         }
       }
 
-    logger.info(s"Stages: $stages")
-
 //    assert(bigBlinders.length == 1)
 //    assert(smallBlinders.length == 1)
     table.value.map(oTable =>

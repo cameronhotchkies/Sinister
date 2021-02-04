@@ -16,4 +16,6 @@ GET     /player/:player                controllers.PlayerController.playerStats(
 GET     /player/:player/hands          controllers.PlayerController.listHands(player: String)
 GET     /player/:player/hands/:handId  controllers.PlayerController.handStats(player: String, handId: Int)
 
++nocsrf
+POST    /diag/table                 controllers.DiagnosticController.addTable()
 GET     /cache/parsed               controllers.HomeController.parseLogCache()
