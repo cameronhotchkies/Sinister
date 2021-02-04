@@ -22,6 +22,12 @@ class TableRegistry extends Actor {
 
     case TableById(tableId) =>
       val matchingTable = registry.get(tableId)
+      if (matchingTable.isEmpty) {
+        val tableResults = registry.values.map { table =>
+          (table.id, table.tableName)
+        }
+        logger.info(s"Missing Table: $tableId from $tableResults")
+      }
       sender() ! matchingTable
   }
 }

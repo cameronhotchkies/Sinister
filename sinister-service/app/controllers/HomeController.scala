@@ -9,7 +9,12 @@ import io.circe._
 import models.gamestate.{GameNarrative, HandEvent}
 import models.importer.GameState.toHandState
 import models.importer.GameStateEvent.toHandEvent
-import models.importer.{GameStateMessage, HandComposer, TablesList, Table => ImportTable}
+import models.importer.{
+  GameStateMessage,
+  HandComposer,
+  TablesList,
+  Table => ImportTable
+}
 import models.{Hand, HandArchive, Participant}
 import play.api._
 import play.api.libs.circe._
@@ -17,7 +22,7 @@ import play.api.mvc._
 
 import java.io.{BufferedWriter, File, FileInputStream, FileWriter}
 import java.nio.file.{Files, Paths}
-import java.time.Instant
+import java.time.{Duration, Instant}
 import javax.inject._
 import scala.concurrent.Future
 import scala.io.Source
@@ -50,7 +55,9 @@ class HomeController @Inject() (
       Ok(views.html.index())
     }
 
-  def processIncomingTableList(bodyJson: Json): Either[DecodingFailure, Unit] = {
+  def processIncomingTableList(
+      bodyJson: Json
+  ): Either[DecodingFailure, Unit] = {
     logger.info(s"TablesList")
     bodyJson
       .as[TablesList]
@@ -58,7 +65,8 @@ class HomeController @Inject() (
         val tablesJson = tableList.tables
           .filter { table =>
             table.hcursor
-              .downField("n").as[String]
+              .downField("n")
+              .as[String]
               .isRight
           }
 
@@ -147,7 +155,7 @@ class HomeController @Inject() (
   def readCachedFiles(cachedFiles: Seq[File]): Seq[MessageWithSource] = {
     cachedFiles.flatMap { rawHandFile =>
       {
-        logger.info(s"Opening: $rawHandFile")
+//        logger.info(s"Opening: $rawHandFile")
         val source = new FileInputStream(rawHandFile)
         val jsonContent = Source.fromInputStream(source).mkString
         val typeDecoder = for {
@@ -231,26 +239,49 @@ class HomeController @Inject() (
   def syndicateCompletedHands(hands: Seq[HandArchive]): Unit = {
     val handCount = hands.length
 
-    val completedHands = hands
-      .filter { handArchive => handArchive.hand.isComplete }
+    val (completedHands, incompleteHands) = hands
+      .partition { handArchive => handArchive.hand.isComplete }
 
     logger.info(s"${completedHands.length} completed out of $handCount")
 
-    completedHands.foreach { handArchive =>
-      {
-        handArchive.hand.playersDealtIn.foreach { player =>
-          val participant = Participant(player, 1)
-          ensurePlayerDirectoryExists(participant)
-          saveSerializedHand(handArchive, participant)
-        }
-
-        val compressedFile = compressSources(handArchive)
-        compressedFile.foreach(_ => {
-          handArchive.sources.foreach { sourceFile =>
-            val path = Paths.get(s"${HomeController.handSink}/$sourceFile")
-            Files.delete(path)
+    completedHands
+    // For now, don't save table-less hands, in the event it has not had a chance to
+    // catch up and receive a table list
+      .filter(_.hand.table.isDefined)
+      .foreach { handArchive =>
+        {
+          handArchive.hand.playersDealtIn.foreach { player =>
+            val participant = Participant(player, 1)
+            ensurePlayerDirectoryExists(participant)
+            saveSerializedHand(handArchive, participant)
           }
-        })
+
+          val compressedFile = compressSources(handArchive)
+          compressedFile.foreach(_ => {
+            handArchive.sources.foreach { sourceFile =>
+              val path = Paths.get(s"${HomeController.handSink}/$sourceFile")
+              Files.delete(path)
+            }
+          })
+        }
+      }
+
+    incompleteHands.foreach {
+      case HandArchive(hand, _, sources) => {
+        val ageInHours = Duration.between(hand.startDate, Instant.now()).toHours
+        logger.info(
+          s"Incomplete Hand [${hand.handId}]: ${hand.startDate} ($ageInHours)"
+        )
+        if (ageInHours > 5 * 24) {
+          // Over a week old, assume the data is safe to purge as incomplete
+          for {
+            sourceFile <- sources
+          } {
+            logger.info(s"Purging due to age: $sourceFile")
+            val source = Paths.get(s"${HomeController.handSink}/$sourceFile")
+            source.toFile.delete()
+          }
+        }
       }
     }
   }
