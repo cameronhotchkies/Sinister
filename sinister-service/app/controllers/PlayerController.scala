@@ -3,7 +3,7 @@ package controllers
 import io.circe.syntax.EncoderOps
 import io.circe.{Json, ParsingFailure, parser, Error => CError}
 import models.opponent.Profile
-import models.{Hand, HandArchive, Participant}
+import models.{Hand, HandArchive, HeroHand, Participant}
 import play.api.Logger
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -119,15 +119,8 @@ class PlayerController @Inject() (
 
       val handJson = parseResult
         .map(handArchive => {
-          val h = handArchive.hand
-          val bbWon = h.bigBlindsWonByPlayer(player)
-          val res = bbWon
-            .flatMap { winnings =>
-              h.asJson.asObject.map { _.add("bbWon", winnings.asJson).asJson }
-            }
-            .getOrElse(h.asJson)
-
-          res
+          val heroHand = HeroHand(player, handArchive.hand)
+          heroHand.asJson
         })
         .getOrElse("".asJson)
 

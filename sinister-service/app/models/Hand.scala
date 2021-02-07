@@ -50,6 +50,32 @@ case class Hand(
     smallBlindAction.flatMap(sba => seatedPlayers(sba.seatIndex))
   }
 
+  lazy val showdownOccurred: Boolean = {
+    val showingEvents = events.filter {
+      case ShowCards(_) => true
+      case ShowHand(_)  => true
+      case _            => false
+    }
+
+    val (showCards, showHands) =
+      showingEvents.partition(_.isInstanceOf[ShowCards])
+
+    val showCardCount = showCards.length
+    val showHandCount = showHands.length
+    if (showCardCount != showHandCount) {
+      logger.info(
+        s"[!] Unexpected show event imbalance: $handId ($showCardCount : $showHandCount)"
+      )
+    } else if (showingEvents.nonEmpty && !stages.contains(4)) {
+      logger.info(s"[!] Showing odd stages for $handId: ${stages}")
+    }
+
+    logger.info(s"Showing events: ${showingEvents}")
+
+    // Mucks can leave it at 2
+    showingEvents.length >= 2
+  }
+
   val playersDealtIn: Seq[String] = events
     .filter { event => event.isInstanceOf[DealPlayerCard] }
     .map(_.asInstanceOf[AppliesToPlayer].seatIndex)
@@ -63,41 +89,26 @@ case class Hand(
     seatedPlayers.indexWhere(_.exists(_.name == playerName))
   }
 
-  def bigBlindsWonByPlayer(player: String): Option[BigDecimal] = {
-    val playerSeat = positionForPlayer(player)
-
-    val chipMovementEvents = events.filter {
-      case subtractChipsFromStack: SubtractChipsFromStack =>
-        subtractChipsFromStack.seatIndex == playerSeat
-      case subtractChipsFromPot: SubtractChipsFromPot =>
-        subtractChipsFromPot.seatIndex == playerSeat
-      case _ => false
-    }
-
-    val chipDelta = chipMovementEvents.foldLeft(BigDecimal(0)) { (acc, event) =>
-      event match {
-        case SubtractChipsFromStack(_, chips)  => acc - chips
-        case SubtractChipsFromPot(_, _, chips) => acc + chips
-      }
-    }
-
-    table.map(chipDelta / _.bigBlind)
-  }
-
   lazy val preflopEvents: Seq[HandEvent] =
     events.takeWhile(!_.isInstanceOf[EnterNextStage])
 
-  val playersInvolvedInShowdown: Seq[Int] = events
-    .filter { event =>
-      {
-        val cardShowingBehavior =
-          event.isInstanceOf[ShowCards] || event.isInstanceOf[MuckCards]
-        cardShowingBehavior
-      }
+  val playersInvolvedInShowdown: Seq[Int] = {
+    if (showdownOccurred) {
+      events
+        .filter { event =>
+          {
+            val cardShowingBehavior =
+              event.isInstanceOf[ShowCards] || event.isInstanceOf[MuckCards]
+            cardShowingBehavior
+          }
+        }
+        .map(event => {
+          event.asInstanceOf[AppliesToPlayer].seatIndex
+        })
+    } else {
+      Nil
     }
-    .map(event => {
-      event.asInstanceOf[AppliesToPlayer].seatIndex
-    })
+  }
 
   def winners(): Seq[String] = {
     val winningPlayers = events

@@ -2,24 +2,39 @@ package models.opponent
 
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
-import models.Hand
+import models.{Hand, HeroHand}
 import models.gamestate.{AppliesToPlayer, HandEvent}
 import models.gamestate.playeraction.{Bet, Call, Raise}
 
 import scala.math.BigDecimal.RoundingMode
 
-case class Profile(playStyle: PlayStyle, winRate: BigDecimal) {}
+case class PostFlopStatistics(
+    wtsd: BigDecimal,
+    w$sd: BigDecimal,
+    wwsf: BigDecimal
+)
+object PostFlopStatistics {
+  implicit val encoder: Encoder[PostFlopStatistics] = deriveEncoder
+}
+
+case class Profile(
+    playStyle: PlayStyle,
+    winRate: BigDecimal,
+    postFlop: PostFlopStatistics
+) {}
 
 object Profile {
-  private val UnknownProfile = Profile(PlayStyle(0,0,0,0), 0)
+  private val UnknownProfile =
+    Profile(PlayStyle(0, 0, 0, 0), 0, PostFlopStatistics(0, 0, 0))
   implicit val encoder: Encoder[Profile] = deriveEncoder
 
   def apply(hands: Seq[Hand], player: String): Profile = {
     if (hands.nonEmpty) {
       val playStyle = generatePlayStyle(hands, player)
       val winRate = bbPer100(hands, player)
+      val postFlopStatistics = generatePostFlopStatistics(hands, player)
 
-      Profile(playStyle, winRate)
+      Profile(playStyle, winRate, postFlopStatistics)
     } else { UnknownProfile }
   }
 
@@ -27,10 +42,48 @@ object Profile {
     val handCount = hands.length
 
     if (handCount > 0) {
-      (hands.flatMap(_.bigBlindsWonByPlayer(player)).sum / handCount * 100)
+      (hands.flatMap { hand =>
+        HeroHand(player, hand).bigBlindsWon()
+      }.sum / handCount * 100)
         .setScale(2, RoundingMode.DOWN)
         .rounded
     } else { 0 }
+  }
+
+  def generatePostFlopStatistics(hands: Seq[Hand], player: String) = {
+    val heroHands = hands.map(HeroHand(player, _))
+
+    val postFlopPlay = heroHands.filter(_.postFlopEvents.nonEmpty)
+
+    if (postFlopPlay.length > 0) {
+      val denominator = BigDecimal(postFlopPlay.length)
+        .setScale(2, RoundingMode.HALF_UP)
+
+      val wtsdCount = BigDecimal(
+        postFlopPlay.count(_.wentToShowdown().getOrElse(false))
+      )
+
+      val w$sdCount = postFlopPlay.filter(_.w$sd().getOrElse(false))
+
+      val wwsfCount = postFlopPlay.filter(_.wonWhenSawFlop().getOrElse(false))
+
+      val w$sd = if (wtsdCount != 0) {
+        (100 * w$sdCount.length / wtsdCount).setScale(2, RoundingMode.HALF_UP)
+      } else BigDecimal(0)
+
+      val wwsf: BigDecimal =
+        (100 * wwsfCount.length / denominator)
+          .setScale(2, RoundingMode.HALF_UP)
+
+      PostFlopStatistics(
+        wtsd =
+          (100 * wtsdCount / denominator).setScale(2, RoundingMode.HALF_UP),
+        w$sd = w$sd,
+        wwsf = wwsf
+      )
+    } else {
+      PostFlopStatistics(0, 0, 0)
+    }
   }
 
   def generatePlayStyle(hands: Seq[Hand], player: String): PlayStyle = {

@@ -89,9 +89,7 @@ class HomeController @Inject() (
 
         parsed.map(bodyJson => {
           val ts = (bodyJson \\ "t")
-          if (ts.isEmpty) {
-            logger.info(s"BT: $bodyText")
-          } else {
+          if (ts.nonEmpty) {
             val t = (bodyJson \\ "t").head.as[String]
             t.getOrElse("--skipped--") match {
               case "GameState" =>
