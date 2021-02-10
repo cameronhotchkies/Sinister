@@ -20,6 +20,7 @@ object HandEvent {
   val WIN_POT = 12
   val TABLE_MESSAGE = 15
   val SHOW_HAND = 25
+  val UNKNOWN_EVENT_17 = 17
 
   implicit val decodeHandEvent: Decoder[HandEvent] = for {
     eventType <- Decoder[Int].prepare(_.downField("type"))
@@ -39,6 +40,7 @@ object HandEvent {
         WinHand.decoder
       }
       case WIN_POT => WinPot.decoder
+      case UNKNOWN_EVENT_17 => UnknownEvent.decoder
       case other => {
         ???
         Decoder.failedWithMessage(s"invalid type: $other")
@@ -77,5 +79,7 @@ object HandEvent {
       wh.asJsonObject.add("type", WIN_HAND.asJson)
     case wp: WinPot =>
       wp.asJsonObject.add("type", WIN_POT.asJson)
+    case ue: UnknownEvent =>
+     ue.asJsonObject.add("type", UNKNOWN_EVENT_17.asJson)
   }
 }
