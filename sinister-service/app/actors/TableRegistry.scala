@@ -1,6 +1,6 @@
 package actors
 
-import actors.TableRegistry.{AddTables, TableById}
+import actors.TableRegistry.{AddTables, ListTables, TableById}
 import akka.actor.{Actor, Props}
 import models.Table
 import play.api.Logger
@@ -29,7 +29,11 @@ class TableRegistry extends Actor {
         logger.info(s"Missing Table: $tableId from $tableResults")
       }
       sender() ! matchingTable
+
+    case ListTables =>
+      sender() ! registry.values.toSeq
   }
+
 }
 
 object TableRegistry {
@@ -37,4 +41,5 @@ object TableRegistry {
 
   case class TableById(tableId: Int)
   case class AddTables(tables: Seq[Table])
+  case object ListTables {}
 }

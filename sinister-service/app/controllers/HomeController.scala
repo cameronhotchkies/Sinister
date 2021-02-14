@@ -1,6 +1,6 @@
 package controllers
 
-import actors.{ActorRoot, TableRegistry}
+import actors.{ActorRoot, PlayerRegistry, TableRegistry}
 import cats.data._
 import cats.implicits._
 import io.circe.generic.semiauto._
@@ -24,7 +24,7 @@ import java.io.{BufferedWriter, File, FileInputStream, FileWriter}
 import java.nio.file.{Files, Paths}
 import java.time.{Duration, Instant}
 import javax.inject._
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source
 
 /**
@@ -41,7 +41,7 @@ class HomeController @Inject() (
 
   val logger: Logger = Logger("application")
 
-  implicit val ec = controllerComponents.executionContext
+  implicit val ec: ExecutionContext = controllerComponents.executionContext
 
   /**
     * Create an Action to render an HTML page.
@@ -97,8 +97,7 @@ class HomeController @Inject() (
               case "TablesList" =>
                 processIncomingTableList(bodyJson)
               case "PlayerTables" =>
-                logger.info(s"PlayerTables: $bodyJson")
-              case x => logger.warn(s"skipped: $x")
+              case x              => logger.warn(s"skipped: $x")
             }
           }
         })
@@ -248,9 +247,12 @@ class HomeController @Inject() (
       .filter(_.hand.table.isDefined)
       .foreach { handArchive =>
         {
-          handArchive.hand.playersDealtIn.foreach { player =>
-            val participant = Participant(player, 1)
+          val participants = handArchive.hand.playersDealtIn
+            .map(Participant(_))
+
+          participants.foreach { participant =>
             ensurePlayerDirectoryExists(participant)
+            registerParticipantAsSeen(participant)
             saveSerializedHand(handArchive, participant)
           }
 
@@ -282,6 +284,10 @@ class HomeController @Inject() (
         }
       }
     }
+  }
+
+  def registerParticipantAsSeen(participant: Participant): Unit = {
+    actorRoot.playerRegistry ! PlayerRegistry.PlayerSeen(participant.name)
   }
 
   def parseLogCache(): Action[AnyContent] =
@@ -371,7 +377,7 @@ class HomeController @Inject() (
           .groupBy(a => a)
           .map {
             case (a, b) =>
-              Participant(a, b.size)
+              Participant(a)
           }
           .toSeq
 

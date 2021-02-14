@@ -34,8 +34,8 @@ case class Hand(
 
     val bbEvents = events.filter(_.isInstanceOf[BigBlind])
     if (bbEvents.length > 1) {
-      logger.info(s"Too many (${bbEvents.length}) bb: $handId")
-      logger.info(s"BBE: ${bbEvents}")
+      // logger.info(s"Too many (${bbEvents.length}) bb: $handId")
+      // logger.info(s"BBE: ${bbEvents}")
       // this could be extra or dead blinds?
 
     }
@@ -67,10 +67,10 @@ case class Hand(
         s"[!] Unexpected show event imbalance: $handId ($showCardCount : $showHandCount)"
       )
     } else if (showingEvents.nonEmpty && !stages.contains(4)) {
-      logger.info(s"[!] Showing odd stages for $handId: ${stages}")
+      // logger.info(s"[!] Showing odd stages for $handId: ${stages}")
     }
 
-    logger.info(s"Showing events: ${showingEvents}")
+   // logger.info(s"Showing events: ${showingEvents}")
 
     // Mucks can leave it at 2
     showingEvents.length >= 2
