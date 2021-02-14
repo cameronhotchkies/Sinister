@@ -1,0 +1,57 @@
+@(players: Seq[models.Participant])
+
+@main("Recent Players") {
+<h1>Recent Players:</h1>
+
+<table>
+        <tr>
+            <th>
+                Player
+            </th>
+            <th>
+                Hands Seen
+            </th>
+            <th>
+                Style
+            </th>
+            <th>Win Rate</th>
+            <th>VPIP</th>
+            <th>PFR</th>
+            <th><abbr title="Went to showdown">WTSD</abbr></th>
+            <th><abbr title="Won money at showdown">W$SD</abbr></th>
+            <th><abbr title="Won when saw flop">WWSF</abbr></th>
+        </tr>
+    @for(p <- players) {
+        <tr>
+            <td rowspan="1">
+                @{p.name}
+            </td>
+            <td>
+                @{p.handsPlayed}
+            </td>
+            <td>
+                @{p.fullTableProfile.playStyle.playType}
+            </td>
+            <td>
+                @{p.fullTableWinRate}
+            </td>
+            <td>
+                @{p.fullTableProfile.playStyle.vpip}
+            </td>
+            <td>
+                @{p.fullTableProfile.playStyle.pfr}
+            </td>
+            <td>
+                @{p.fullTableProfile.postFlop.wtsd}
+            </td>
+            <td>
+                @{p.fullTableProfile.postFlop.w$sd}
+            </td>
+            <td>
+                @{p.fullTableProfile.postFlop.wwsf}
+            </td>
+        </tr>
+    }
+
+</table>
+}

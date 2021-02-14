@@ -19,7 +19,7 @@ class PlayerController @Inject() (
     with Circe {
 
   def handsStoredForPlayer(player: String): Seq[File] = {
-    val participant = Participant(player, -1)
+    val participant = Participant(player)
 
     val playerDataDir = s"${HomeController.playerData}/${participant.hash}"
 
@@ -100,7 +100,7 @@ class PlayerController @Inject() (
 
   def handStats(player: String, handId: Int): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      val participant = Participant(player, -1)
+      val participant = Participant(player)
 
       val handData =
         s"${HomeController.playerData}/${participant.hash}/$handId.json"
