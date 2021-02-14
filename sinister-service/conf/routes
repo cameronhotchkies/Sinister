@@ -18,6 +18,12 @@ GET     /player/:player/hands/:handId  controllers.PlayerController.handStats(pl
 
 +nocsrf
 POST    /diag/table                 controllers.DiagnosticController.addTable()
+GET     /diag/table                 controllers.DiagnosticController.listTables()
+GET     /diag/players               controllers.DiagnosticController.recentPlayers()
+
++nocsrf
+POST    /diag/players               controllers.DiagnosticController.setRecentPlayers()
+
 GET     /cache/parsed               controllers.HomeController.parseLogCache()
 
 GET     /sinister/players           controllers.SinisterController.recentPlayers()
