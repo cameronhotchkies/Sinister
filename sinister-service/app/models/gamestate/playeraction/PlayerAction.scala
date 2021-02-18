@@ -24,6 +24,7 @@ object PlayerAction {
   val SHOW_CARDS = 10
   val MUCK_CARDS = 11
   val UNKNOWN_PLACTION_13 = 13
+  val UNKNOWN_PLACTION_14 = 14
   val UNKNOWN_PLACTION = 15
   val DO_NOT_SHOW_CARDS = 16
   val UNKNOWN_PLACTION_25 = 25
@@ -47,6 +48,7 @@ object PlayerAction {
       case SMALL_BLIND         => SmallBlind.decoder
       case UNKNOWN_PLACTION    => UnknownPlayerAction.decoder
       case UNKNOWN_PLACTION_13 => UnknownPlayerAction.decoder
+      case UNKNOWN_PLACTION_14 => UnknownPlayerAction.decoder
       case UNKNOWN_PLACTION_25 => UnknownPlayerAction.decoder
       case other => {
         logger.error(s"Unhandled Plaction: $plactionType")

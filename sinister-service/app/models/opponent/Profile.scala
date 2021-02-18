@@ -157,15 +157,7 @@ object Profile {
 
   def voluntarilyPlayedHands(hands: Seq[Hand], player: String): Seq[Hand] = {
     val voluntarilyPlayed = hands.filter { hand =>
-      val playerPosition = hand.positionForPlayer(player)
-
-      val voluntaryAction = hand.preflopEvents.exists {
-        case c: Call  => c.seatIndex == playerPosition
-        case r: Raise => r.seatIndex == playerPosition
-        case _        => false
-      }
-
-      voluntaryAction
+      hand.voluntaryParticipants().contains(player)
     }
 
     voluntarilyPlayed

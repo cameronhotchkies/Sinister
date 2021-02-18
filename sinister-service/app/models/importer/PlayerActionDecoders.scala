@@ -15,6 +15,7 @@ import models.gamestate.playeraction.PlayerAction.{
   SMALL_BLIND,
   UNKNOWN_PLACTION,
   UNKNOWN_PLACTION_13,
+  UNKNOWN_PLACTION_14,
   UNKNOWN_PLACTION_25
 }
 import models.gamestate.playeraction._
@@ -96,6 +97,7 @@ object PlayerActionDecoders {
         case SMALL_BLIND         => smallBlind
         case UNKNOWN_PLACTION    => unknownPlayerAction
         case UNKNOWN_PLACTION_13 => unknownPlayerAction
+        case UNKNOWN_PLACTION_14 => unknownPlayerAction
         case UNKNOWN_PLACTION_25 => unknownPlayerAction
         case _ =>
           logger.info(s"PLACTION: $plactionType")

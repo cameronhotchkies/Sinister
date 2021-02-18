@@ -1,0 +1,96 @@
+@(player: models.Participant, winningBoundaries: Boundary)
+
+@main(s"Player: ${player.name}") {
+<h1>@{player.name}</h1>
+
+<table>
+    <tr>
+        <th>
+            Player
+        </th>
+        <th>
+            Hands Seen
+        </th>
+        <th>
+            Style
+        </th>
+        <th>Win Rate</th>
+        <th>VPIP</th>
+        <th>PFR</th>
+        <th><abbr title="Went to showdown">WTSD</abbr></th>
+        <th><abbr title="Won money at showdown">W$SD</abbr></th>
+        <th><abbr title="Won when saw flop">WWSF</abbr></th>
+    </tr>
+    <tr>
+        <td rowspan="1">
+            @{player.name}
+        </td>
+        <td>
+            @{player.handsPlayed}
+        </td>
+        <td>
+            @{player.fullTableProfile.playStyle.playType}
+        </td>
+        <td>
+            @{player.fullTableWinRate}
+        </td>
+        <td>
+            @{player.fullTableProfile.playStyle.vpip}
+        </td>
+        <td>
+            @{player.fullTableProfile.playStyle.pfr}
+        </td>
+        <td>
+            @{player.fullTableProfile.postFlop.wtsd}
+        </td>
+        <td>
+            @{player.fullTableProfile.postFlop.w$sd}
+        </td>
+        <td>
+            @{player.fullTableProfile.postFlop.wwsf}
+        </td>
+    </tr>
+
+</table>
+
+
+<h2>Hands</h2>
+
+Best Hand Result [@@ @{winningBoundaries.bestHands.length}]: @{winningBoundaries.max}
+<br>
+Worst Hand Result [@@ @{winningBoundaries.worstHands.length}]: @{winningBoundaries.min}
+
+<table>
+    <tr>
+        <th>Hand ID</th>
+        <th>Hole</th>
+        <th>VP / PFR</th>
+        <th>Chip Delta</th>
+    </tr>
+
+    @for(hand <- player.fullTableHands()) {
+      <tr>
+          <td>
+              @{hand.handId}
+          </td>
+          <td>
+              @{HeroHand(player.name, hand).cards}
+          </td>
+          <td>
+              @{hand.voluntaryParticipants().contains(player.name)}
+         /
+              @{hand.preflopRaisers().contains(player.name)}
+          </td>
+          <td>
+              @{HeroHand(player.name, hand).bigBlindsWon}
+              @if(HeroHand(player.name, hand).bigBlindsWon.map(_ == winningBoundaries.min).getOrElse(false)) {
+                *
+              } else if(HeroHand(player.name, hand).bigBlindsWon.map(_ == winningBoundaries.max).getOrElse(false)) {
+                **
+              }
+          </td>
+      </tr>
+    }
+
+</table>
+}

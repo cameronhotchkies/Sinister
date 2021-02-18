@@ -3,6 +3,7 @@ package models.gamestate.playeraction
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.{Decoder, Encoder, Json}
 import models.gamestate.HandEvent
+import play.api.Logger
 
 case class UnknownPlayerAction(subAction: Int, rawJson: Json)
     extends PlayerAction
@@ -12,6 +13,8 @@ case class UnknownPlayerAction(subAction: Int, rawJson: Json)
 }
 
 object UnknownPlayerAction {
+  val logger = Logger("application")
+
   implicit val encoder: Encoder.AsObject[UnknownPlayerAction] =
     Encoder.forProduct3(
       "undefinedPlayerAction",

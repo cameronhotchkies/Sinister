@@ -3,11 +3,14 @@ package models
 import io.circe.syntax.EncoderOps
 import io.circe.{Encoder, Json}
 import models.Hand.logger
-import models.gamestate.playeraction.Fold
 import models.gamestate._
+import models.gamestate.playeraction.Fold
 
 case class HeroHand(hero: String, hand: Hand) {
   private val position = hand.positionForPlayer(hero)
+
+  lazy val cards =
+    hand.seatedPlayers(position).map(_.dealtCards.map(_.readable))
 
   def bigBlindsWon(): Option[BigDecimal] = {
 

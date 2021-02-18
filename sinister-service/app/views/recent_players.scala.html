@@ -24,7 +24,9 @@
     @for(p <- players) {
         <tr>
             <td rowspan="1">
-                @{p.name}
+                <a href="@routes.SinisterController.playerOverview(p.name)">
+                    @{p.name}
+                </a>
             </td>
             <td>
                 @{p.handsPlayed}
@@ -54,4 +56,5 @@
     }
 
 </table>
+
 }

@@ -7,7 +7,9 @@ import models.Hand.logger
 import models.gamestate._
 import models.gamestate.playeraction.{
   BigBlind,
+  Call,
   MuckCards,
+  Raise,
   ShowCards,
   SmallBlind
 }
@@ -70,7 +72,7 @@ case class Hand(
       // logger.info(s"[!] Showing odd stages for $handId: ${stages}")
     }
 
-   // logger.info(s"Showing events: ${showingEvents}")
+    // logger.info(s"Showing events: ${showingEvents}")
 
     // Mucks can leave it at 2
     showingEvents.length >= 2
@@ -118,6 +120,23 @@ case class Hand(
       .map(seatedPlayers(_).get.name)
 
     winningPlayers
+  }
+
+  def voluntaryParticipants() = {
+    val voluntaryPositions = preflopEvents.collect {
+      case Call(position, _)  => position
+      case Raise(position, _) => position
+    }.distinct
+
+    voluntaryPositions.flatMap { qq => seatedPlayers(qq).map(_.name) }
+  }
+
+  def preflopRaisers() = {
+    val raisingPositions = preflopEvents.collect {
+      case Raise(position, _) => position
+    }.distinct
+
+    raisingPositions.flatMap { qq => seatedPlayers(qq).map(_.name) }
   }
 
   val isComplete: Boolean = {
