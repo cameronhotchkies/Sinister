@@ -3,6 +3,7 @@ package models
 import controllers.HomeController
 import io.circe.{Encoder, Json, parser, Error => CError}
 import models.opponent.Profile
+import play.api.Logger
 
 import java.io.{File, FileInputStream}
 import scala.io.Source
@@ -19,6 +20,8 @@ case class Participant(
   }
 
   lazy val handsPlayed: Int = pastHands.length
+
+  val logger = Logger("application")
 
   lazy val pastHands: Seq[HandArchive] = {
     val previousHands = handsStoredForPlayer()
@@ -58,10 +61,12 @@ case class Participant(
     Profile(recentHands, name)
   }
 
-  def fullTableHands() =
+  def fullTableHands(): Seq[Hand] =
     pastHands
       .map(_.hand)
       .filter(_.playersDealtIn.length >= 7)
+      .sortBy(_.handId)
+      .reverse
 
   def fullTableProfile(): Profile = {
 
