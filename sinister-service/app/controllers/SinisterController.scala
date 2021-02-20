@@ -3,6 +3,7 @@ package controllers
 import actors.{ActorRoot, PlayerRegistry}
 import akka.pattern.ask
 import akka.util.Timeout
+import models.gamestate.GameNarrative
 import models.{Boundary, HeroHand, Participant}
 import play.api.Logger
 import play.api.libs.circe.Circe
@@ -38,16 +39,35 @@ class SinisterController @Inject() (
 
   val logger = Logger("application")
 
+  def handOverview(playerName: String, handId: Int): Action[AnyContent] =
+    Action.async { implicit request: Request[AnyContent] =>
+      val participant = Participant(playerName)
+
+      participant
+        .handById(handId)
+        .fold {
+          Future.successful(NotFound("Hand Not Found"))
+        } { heroHand =>
+          val narrativeEvents = heroHand.hand.events
+            .filter(_.isInstanceOf[GameNarrative])
+
+          implicit val seats = heroHand.hand.seatedPlayers
+          val narratives = narrativeEvents
+            .map(_.asInstanceOf[GameNarrative].narrative)
+
+          Future.successful(
+            Ok(
+              views.html.hand_overview(heroHand, narratives)
+            )
+          )
+        }
+    }
+
   def playerOverview(playerName: String): Action[AnyContent] =
     Action.async { implicit request: Request[AnyContent] =>
       val participant = Participant(playerName)
 
       val fullTableHands = participant.fullTableHands()
-
-      val dealtIn = fullTableHands.length
-      val voluntarilyPlayedHands = fullTableHands.filter { hand =>
-        hand.voluntaryParticipants().contains(playerName)
-      }
 
       val winningExtremes =
         participant.fullTableHands().foldLeft(Boundary.ZERO) { (acc, hand) =>

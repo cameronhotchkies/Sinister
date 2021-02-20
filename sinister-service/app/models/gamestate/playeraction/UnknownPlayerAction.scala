@@ -2,6 +2,7 @@ package models.gamestate.playeraction
 
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.{Decoder, Encoder, Json}
+import models.HandPlayer
 import models.gamestate.HandEvent
 import play.api.Logger
 
@@ -10,6 +11,8 @@ case class UnknownPlayerAction(subAction: Int, rawJson: Json)
     with HandEvent {
   override val seatIndex: Int = -1
   val encoded: Json = UnknownPlayerAction.encoder(this)
+
+  override def narrative(implicit seats: Seq[Option[HandPlayer]]): String = s"Unknown Player action ${rawJson.toString()}"
 }
 
 object UnknownPlayerAction {

@@ -3,12 +3,12 @@ package controllers
 import actors.{ActorRoot, PlayerRegistry, TableRegistry}
 import cats.data._
 import cats.implicits._
+import io.circe._
 import io.circe.generic.semiauto._
 import io.circe.syntax._
-import io.circe._
-import models.gamestate.{GameNarrative, HandEvent}
+import models.gamestate.{DealCommunityCard, GameNarrative, HandEvent}
 import models.importer.GameState.toHandState
-import models.importer.GameStateEvent.toHandEvent
+import models.importer.GameStateEvent.{bettingRoundFor, toHandEvent}
 import models.importer.{
   GameStateMessage,
   HandComposer,
@@ -169,8 +169,33 @@ class HomeController @Inject() (
                 logger.warn(s"Source JSON: $jsonContent")
                 None
               case Right(value) =>
+                val originalEvents = value.events
+                val augmentedEvents =
+                  if (
+                    originalEvents.exists(_.isInstanceOf[DealCommunityCard])
+                  ) {
+                    val insertionPoint = originalEvents.lastIndexWhere(
+                      _.isInstanceOf[DealCommunityCard]
+                    )
+
+                    val (head, tail) =
+                      originalEvents.splitAt(insertionPoint + 1)
+
+                    val gameState = value.gameState
+                    val bettingRound = bettingRoundFor(
+                      gameState.additionalData.stage,
+                      gameState.dealer.cards
+                    )
+                    head :+ bettingRound :++ tail
+                  } else {
+                    originalEvents
+                  }
+
                 Option(
-                  MessageWithSource(value, rawHandFile)
+                  MessageWithSource(
+                    value.copy(events = augmentedEvents),
+                    rawHandFile
+                  )
                 )
             }
           case _ => None

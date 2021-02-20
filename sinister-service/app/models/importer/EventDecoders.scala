@@ -6,7 +6,7 @@ import models.gamestate.{
   DealCommunityCard,
   DealPlayerCard,
   DealerRake,
-  EnterNextStage,
+  BettingCompleted,
   ShowHand,
   SubtractChipsFromPot,
   SubtractChipsFromStack,
@@ -30,10 +30,10 @@ object EventDecoders {
 
   val dealerRake: Decoder[DealerRake] = deriveDecoder
 
-  val enterNextStage: Decoder[EnterNextStage] = (c: HCursor) => {
+  val bettingEnds: Decoder[BettingCompleted] = (c: HCursor) => {
     for {
       _ <- c.downField("action").as[Int]
-    } yield EnterNextStage(-1)
+    } yield BettingCompleted()
   }
 
   val showHand: Decoder[ShowHand] = Decoder.forProduct1(
@@ -49,8 +49,8 @@ object EventDecoders {
       } yield SubtractChipsFromPot(seatIndex, sidePotIndex, amount)
     }
 
-  val subtractChipsFromStack: Decoder[SubtractChipsFromStack] = (c: HCursor) =>
-    {
+  val subtractChipsFromStack: Decoder[SubtractChipsFromStack] =
+    (c: HCursor) => {
       for {
         chipTarget <- c.downField("seat-idx").as[Int]
         amount <- c.downField("amount").as[Int]

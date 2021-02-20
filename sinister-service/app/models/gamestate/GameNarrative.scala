@@ -1,3 +1,7 @@
 package models.gamestate
 
-trait GameNarrative {}
+import models.HandPlayer
+
+trait GameNarrative {
+  def narrative(implicit seats: Seq[Option[HandPlayer]]):String
+}

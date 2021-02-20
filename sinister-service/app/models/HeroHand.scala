@@ -38,7 +38,7 @@ case class HeroHand(hero: String, hand: Hand) {
     if (hand.stages.contains(1)) {
 
       val collected = hand.events.collectFirst {
-        case EnterNextStage(_)              => true
+        case _: BettingCompleted            => true
         case Fold(seat) if seat == position => false
       }
 
@@ -58,7 +58,7 @@ case class HeroHand(hero: String, hand: Hand) {
   }
 
   def postFlopEvents: Seq[HandEvent] = {
-    hand.events.dropWhile(_.isInstanceOf[EnterNextStage] == false)
+    hand.events.dropWhile(_.isInstanceOf[BettingCompleted] == false)
   }
 
   def wonWhenSawFlop(): Option[Boolean] = {

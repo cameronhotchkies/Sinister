@@ -1,7 +1,9 @@
 package models.importer
 
 import io.circe.Decoder
-import models.gamestate.HandEvent
+import models.Card
+import models.GameStateAddition.{Flop, PreFlop, River, Turn}
+import models.gamestate.{BettingRound, HandEvent, Preflop}
 import models.gamestate.HandEvent._
 import play.api.Logger
 
@@ -14,7 +16,7 @@ object GameStateEvent {
     value <- eventType match {
       case DEAL_PLAYER               => EventDecoders.dealPlayerCard
       case DEAL_COMMUNITY            => EventDecoders.dealCommunityCard
-      case NEXT_STAGE                => EventDecoders.enterNextStage
+      case BETTING_COMPLETED         => EventDecoders.bettingEnds
       case SUBTRACT_CHIPS_FROM_STACK => EventDecoders.subtractChipsFromStack
       case TRANSFER_BUTTON           => EventDecoders.transferButton
       case HandEvent.TRANSFER_ACTION => EventDecoders.transferAction
@@ -38,6 +40,24 @@ object GameStateEvent {
       case h =>
         logger.debug(s"HAND EVENT: ${h.getClass}")
         ???
+    }
+  }
+
+  def communityForRound(stage: Int): Int = {
+    if (stage == 2) { 3 }
+    else if (stage == 3 || stage == 4) { 1 }
+    else { 0 }
+  }
+
+  def bettingRoundFor(roundId: Int, cards: Seq[Card]): BettingRound = {
+    roundId match {
+      case PreFlop => Preflop
+      case Flop =>
+        models.gamestate.Flop(cards.takeRight(communityForRound(roundId)))
+      case Turn =>
+        models.gamestate.Turn(cards.takeRight(communityForRound(roundId)))
+      case River =>
+        models.gamestate.River(cards.takeRight(communityForRound(roundId)))
     }
   }
 }
