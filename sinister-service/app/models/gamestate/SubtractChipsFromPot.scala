@@ -7,7 +7,6 @@ import models.importer.GameStateEvent
 case class SubtractChipsFromPot(seatIndex: Int, sidePotIndex: Int, amount: Int)
     extends GameStateEvent
     with AppliesToPlayer
-    with GameNarrative
     with HandEvent {}
 
 object SubtractChipsFromPot {

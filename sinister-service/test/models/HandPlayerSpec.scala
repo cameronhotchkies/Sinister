@@ -11,11 +11,12 @@ class HandPlayerSpec extends AnyWordSpecLike with must.Matchers {
       val playerName = "test39"
       val playerLevel = Option(40)
       val player1a =
-        HandPlayer(name = playerName, level = playerLevel, dealtCards = Nil)
+        HandPlayer(name = playerName, level = playerLevel, dealtCards = Nil, startingChips = 14)
       val player1b = HandPlayer(
         name = playerName,
         level = playerLevel,
-        dealtCards = List(Card(33), Card(34))
+        dealtCards = List(Card(33), Card(34)),
+        startingChips = 19
       )
 
       val merged = player1a.merge(player1b)
@@ -28,11 +29,12 @@ class HandPlayerSpec extends AnyWordSpecLike with must.Matchers {
       val playerName = "test39"
       val playerLevel = Option(57)
       val player1a =
-        HandPlayer(name = "RESERVED", level = None, dealtCards = Nil)
+        HandPlayer(name = "RESERVED", level = None, dealtCards = Nil, startingChips = 0)
       val player1b = HandPlayer(
         name = playerName,
         level = playerLevel,
-        dealtCards = List(Card(33), Card(34))
+        dealtCards = List(Card(33), Card(34)),
+        startingChips = 37
       )
 
       val merged = player1a.merge(player1b)
@@ -51,12 +53,14 @@ class HandPlayerSpec extends AnyWordSpecLike with must.Matchers {
           dealtCards = List(
             Card(15),
             Card(16)
-          )
+          ),
+          startingChips = 57
         )
       val player1b = HandPlayer(
         name = playerName,
         level = Option(playerLevel),
-        dealtCards = Nil
+        dealtCards = Nil,
+        startingChips = 63
       )
 
       val merged = player1a.merge(player1b)

@@ -26,5 +26,6 @@ POST    /diag/players               controllers.DiagnosticController.setRecentPl
 
 GET     /cache/parsed               controllers.HomeController.parseLogCache()
 
-GET     /sinister/players               controllers.SinisterController.recentPlayers()
-GET     /sinister/players/:playerName   controllers.SinisterController.playerOverview(playerName:String)
+GET     /sinister/players                           controllers.SinisterController.recentPlayers()
+GET     /sinister/players/:playerName               controllers.SinisterController.playerOverview(playerName:String)
+GET     /sinister/players/:playerName/hands/:handId controllers.SinisterController.handOverview(playerName:String, handId: Int )

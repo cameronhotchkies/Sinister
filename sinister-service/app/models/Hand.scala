@@ -92,7 +92,7 @@ case class Hand(
   }
 
   lazy val preflopEvents: Seq[HandEvent] =
-    events.takeWhile(!_.isInstanceOf[EnterNextStage])
+    events.takeWhile(!_.isInstanceOf[BettingCompleted])
 
   val playersInvolvedInShowdown: Seq[Int] = {
     if (showdownOccurred) {

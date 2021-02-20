@@ -23,6 +23,21 @@ case class Participant(
 
   val logger = Logger("application")
 
+  def handById(handId: Int): Option[HeroHand] = {
+    val handFile = s"${HomeController.playerData}/${hash}/${handId}.json"
+
+   val hand = if (new File(handFile).exists()) {
+     val fis = new FileInputStream(handFile)
+     val jsonContent = Source.fromInputStream(fis).mkString
+     val parsed = parser.decode[HandArchive](jsonContent)
+     parsed.fold[Option[HeroHand]](_ => None, ha => Some(HeroHand(name, ha.hand)))
+  } else {
+    None
+  }
+
+    hand
+  }
+
   lazy val pastHands: Seq[HandArchive] = {
     val previousHands = handsStoredForPlayer()
     val parseResults = if (previousHands != null) {

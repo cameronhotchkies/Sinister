@@ -71,7 +71,10 @@ Worst Hand Result [@@ @{winningBoundaries.worstHands.length}]: @{winningBoundari
     @for(hand <- player.fullTableHands()) {
       <tr>
           <td>
-              @{hand.handId}
+              <a href="@routes.SinisterController.handOverview(player.name, hand.handId)">
+                  @{hand.handId}
+              </a>
+
           </td>
           <td>
               @{HeroHand(player.name, hand).cards}

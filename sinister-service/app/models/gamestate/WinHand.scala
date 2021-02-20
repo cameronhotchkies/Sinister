@@ -2,6 +2,7 @@ package models.gamestate
 
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder, Json}
+import models.{Card, HandPlayer}
 import models.importer.GameStateEvent
 
 case class WinHand(
@@ -15,7 +16,12 @@ case class WinHand(
 
   def extrapolateHandRank(): String = {
     if (rawHandDetail.nonEmpty) {
-      rawHandDetail.charAt(0) match {
+      val rawCards = rawHandDetail
+        .split("\\.")
+        .drop(1).head
+        .split(";")
+        .map(_.toInt).map(Card.apply)
+      val overallResult = rawHandDetail.charAt(0) match {
         case 'A' => "?? Royal Flush ??"
         case 'B' => "?? Straight Flush ??"
         case 'C' => "?? Four of a Kind ??"
@@ -28,7 +34,14 @@ case class WinHand(
         case 'J' => "High Card"
         case _   => "???"
       }
+      s"$overallResult + [${rawCards.map(_.readable).mkString(" ")}]"
     } else "n/a"
+  }
+
+  override def narrative(implicit seats: Seq[Option[HandPlayer]]): String = {
+    seats(seatIndex).fold(s"A spectral cheat absconds with ${amount/100.00} chips"){ player =>
+      f"${player.name} wins ${amount/100.0}%.2f chips with ${extrapolateHandRank()}"
+    }
   }
 }
 

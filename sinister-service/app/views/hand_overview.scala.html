@@ -1,0 +1,14 @@
+@(hand: models.HeroHand, narrative: Seq[String])
+
+@main(s"Hand: ${hand.hand.handId}") {
+<h1>Hand #@{hand.hand.handId}</h1>
+
+
+<ul>
+    @for(narrationLine <- narrative) {
+    <li>
+        @narrationLine
+    </li>
+    }
+</ul>
+}
