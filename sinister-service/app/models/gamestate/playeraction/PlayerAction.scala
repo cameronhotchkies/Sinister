@@ -17,6 +17,7 @@ object PlayerAction {
   val FOLD = 1
   val CHECK = 2
   val CALL = 3
+  val ANTE = 4
   val SMALL_BLIND = 6
   val BIG_BLIND = 7
   val BET = 8
@@ -39,6 +40,7 @@ object PlayerAction {
       case BIG_BLIND           => BigBlind.decoder
       case CALL                => Call.decoder
       case CHECK               => Check.decoder
+      case ANTE                => Ante.decoder
       case DO_NOT_SHOW_CARDS   => DoNotShowCards.decoder
       case FIRST_TO_ACT        => FirstToAct.decoder
       case FOLD                => Fold.decoder
@@ -59,7 +61,8 @@ object PlayerAction {
 
   implicit val encodePlayerAction: Encoder.AsObject[PlayerAction] =
     Encoder.AsObject {
-      case b: Bet => b.asJsonObject.add("plaction", BET.asJson)
+      case a: Ante => a.asJsonObject.add("plaction", ANTE.asJson)
+      case b: Bet  => b.asJsonObject.add("plaction", BET.asJson)
       case bb: BigBlind =>
         bb.asJsonObject.add("plaction", BIG_BLIND.asJson)
       case c: Call  => c.asJsonObject.add("plaction", CALL.asJson)
