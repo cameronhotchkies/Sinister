@@ -2,6 +2,7 @@ package models.importer
 
 import io.circe.{Decoder, HCursor}
 import models.gamestate.playeraction.PlayerAction.{
+  ANTE,
   BET,
   BIG_BLIND,
   CALL,
@@ -22,6 +23,11 @@ import models.gamestate.playeraction._
 import play.api.Logger
 
 object PlayerActionDecoders {
+
+  val ante: Decoder[Ante] = Decoder.forProduct2(
+    "seat-idx",
+    "amount"
+  )(Ante.apply)
 
   val bet: Decoder[Bet] = Decoder.forProduct2(
     "seat-idx",
@@ -84,6 +90,7 @@ object PlayerActionDecoders {
     for {
       plactionType <- Decoder[Int].prepare(_.downField("action"))
       value <- plactionType match {
+        case ANTE                => ante
         case BET                 => bet
         case BIG_BLIND           => bigBlind
         case CALL                => call
