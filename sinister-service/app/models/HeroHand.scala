@@ -9,8 +9,8 @@ import models.gamestate.playeraction.Fold
 case class HeroHand(hero: String, hand: Hand) {
   private val position = hand.positionForPlayer(hero)
 
-  lazy val cards =
-    hand.seatedPlayers(position).map(_.dealtCards.map(_.readable))
+  lazy val cards: Option[Seq[Card]] = hand.seatedPlayers(position).map(_.dealtCards)
+  lazy val readableCards: Option[Seq[String]] = cards.map(_.map(_.readable))
 
   def bigBlindsWon(): Option[BigDecimal] = {
 
