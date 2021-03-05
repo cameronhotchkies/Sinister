@@ -24,6 +24,8 @@ GET     /diag/players               controllers.DiagnosticController.recentPlaye
 +nocsrf
 POST    /diag/players               controllers.DiagnosticController.setRecentPlayers()
 
+GET     /diag/monitor/handlog       controllers.DiagnosticController.setHandMonitorActive(active: Option[Boolean])
+
 GET     /cache/parsed               controllers.HomeController.parseLogCache()
 
 GET     /sinister/players                           controllers.SinisterController.recentPlayers()
