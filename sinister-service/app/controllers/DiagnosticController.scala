@@ -1,5 +1,6 @@
 package controllers
 
+import actors.HandLogMonitor.{Activate, Deactivate}
 import actors.PlayerRegistry.{PlayerSeen, RecentPlayers}
 import actors.TableRegistry.ListTables
 import actors.{ActorRoot, TableRegistry}
@@ -88,5 +89,22 @@ class DiagnosticController @Inject() (
         case players: Seq[String] =>
           Ok(players.asJson)
       }
+    }
+
+  def setHandMonitorActive(active: Option[Boolean]): Action[AnyContent] =
+    Action { request =>
+      active
+        .map(shouldActivate => {
+          if (shouldActivate) {
+            actorRoot.handLogMonitor ! Activate
+            Ok("Activating")
+          } else {
+            actorRoot.handLogMonitor ! Deactivate
+            Ok("Deactivating")
+          }
+        })
+        .getOrElse(
+          Ok(s"Skipping activation")
+        )
     }
 }
