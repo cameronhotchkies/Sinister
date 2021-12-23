@@ -12,6 +12,7 @@ import models.importer.GameStateEvent.{bettingRoundFor, toHandEvent}
 import models.importer.{
   GameStateMessage,
   HandComposer,
+  MessageWithSource,
   TablesList,
   Table => ImportTable
 }
