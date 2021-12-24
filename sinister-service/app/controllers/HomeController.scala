@@ -44,7 +44,7 @@ class HomeController @Inject() (
     val controllerComponents: ControllerComponents,
     val actorRoot: ActorRoot,
     val handComposer: HandComposer,
-    @Named("gamestate-collector") val sinkCache: ActorRef
+    @Named("gamestate-collector") val gamestateCollector: ActorRef
 ) extends BaseController
     with Circe {
 
@@ -115,10 +115,6 @@ class HomeController @Inject() (
       Ok("sunk")
     }
 
-  case class MicroGameState(
-      gi: Int
-  )
-
   def logGameState(rawState: Json): Unit = {
     val stateId =
       (rawState \\ "id").head
@@ -140,7 +136,7 @@ class HomeController @Inject() (
       .as[Int]
       .map { gameId =>
         logger.debug(s"Signalling GameID: ${gameId}")
-        sinkCache ! IntakeGamestate(gameId, rawState)
+        gamestateCollector ! IntakeGamestate(gameId, rawState)
       }
   }
 
