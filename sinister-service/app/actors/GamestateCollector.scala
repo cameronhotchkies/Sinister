@@ -5,9 +5,9 @@ import io.circe.Json
 import play.api.Logger
 
 case class IntakeGamestate(
-                            gameId: Int,
-                            gamestateData: Json
-                          )
+    gameId: Int,
+    gamestateData: Json
+)
 
 class GamestateCollector extends Actor {
   override def receive: Receive = {
