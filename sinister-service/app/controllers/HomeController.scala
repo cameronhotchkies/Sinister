@@ -1,6 +1,13 @@
 package controllers
 
-import actors.{ActorRoot, PlayerRegistry, TableRegistry}
+import actors.{
+  ActorRoot,
+  IntakeGamestate,
+  PlayerRegistry,
+  GamestateCollector,
+  TableRegistry
+}
+import akka.actor.ActorRef
 import cats.data._
 import cats.implicits._
 import io.circe._
@@ -36,7 +43,8 @@ import scala.io.Source
 class HomeController @Inject() (
     val controllerComponents: ControllerComponents,
     val actorRoot: ActorRoot,
-    val handComposer: HandComposer
+    val handComposer: HandComposer,
+    @Named("gamestate-collector") val sinkCache: ActorRef
 ) extends BaseController
     with Circe {
 
@@ -107,6 +115,10 @@ class HomeController @Inject() (
       Ok("sunk")
     }
 
+  case class MicroGameState(
+      gi: Int
+  )
+
   def logGameState(rawState: Json): Unit = {
     val stateId =
       (rawState \\ "id").head
@@ -115,7 +127,21 @@ class HomeController @Inject() (
         .getOrElse("mismatch")
 
     val ts = Instant.now().toEpochMilli
+
+    publishGamestateDataToActor(rawState)
+
     writeFile(s"$ts-$stateId.json", rawState.toString())
+  }
+
+  def publishGamestateDataToActor(rawState: Json): Unit = {
+    rawState.hcursor
+      .downField("gameState")
+      .downField("gi")
+      .as[Int]
+      .map { gameId =>
+        logger.debug(s"Signalling GameID: ${gameId}")
+        sinkCache ! IntakeGamestate(gameId, rawState)
+      }
   }
 
   def writeFile(filename: String, s: String): Unit = {

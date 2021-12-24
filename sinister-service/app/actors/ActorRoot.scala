@@ -9,7 +9,8 @@ import javax.inject.{Inject, Named, Singleton}
 class ActorRoot @Inject() (
     system: ActorSystem,
     cc: ControllerComponents,
-    @Named("hand-log-monitor") val handLogMonitor: ActorRef
+    @Named("hand-log-monitor") val handLogMonitor: ActorRef,
+    @Named("gamestate-collector") val sinkCache: ActorRef
 ) extends AbstractController(cc) {
   val tableRegistry: ActorRef =
     system.actorOf(TableRegistry.props, "table-registry")
