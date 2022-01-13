@@ -11,8 +11,7 @@ class ActorRoot @Inject() (
     cc: ControllerComponents,
     @Named("hand-log-monitor") val handLogMonitor: ActorRef,
     @Named("gamestate-collector") val sinkCache: ActorRef,
-    @Named("table-registry") val tableRegistry: ActorRef
+    @Named("table-registry") val tableRegistry: ActorRef,
+    @Named("player-registry") val playerRegistry: ActorRef
 ) extends AbstractController(cc) {
-  val playerRegistry: ActorRef =
-    system.actorOf(PlayerRegistry.props, "player-registry")
 }
